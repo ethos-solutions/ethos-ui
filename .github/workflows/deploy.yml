@@ -46,9 +46,7 @@ jobs:
           
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 8
-          
+        
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
