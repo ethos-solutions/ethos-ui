@@ -55,6 +55,9 @@ export const Login = () => {
           <div className="flex flex-col gap-5 w-full md:w-80 mx-auto">
             <EthosLogo className="h-12 mx-auto" />
             <Heading variant="h3" weight="bold">
+              Customer Order Status  
+            </Heading>
+            <Heading variant="h4" weight="bold">
               {t('auth.signIn')}
             </Heading>
             <LoginForm onSubmit={onSubmit} orderStatus={true} />

@@ -1,6 +1,6 @@
 enum STATIC {
   ADMIN = 'admin',
-  EMPLOYEE = 'employee'
+  EMPLOYEE = 'employee',
 }
 
 export const API_URL = {
@@ -49,7 +49,8 @@ export const API_URL = {
   activeOrg: `${STATIC.ADMIN}/organisation/activeOrgs`,
   blockOrg: `${STATIC.ADMIN}/organisation/status`,
   app: `${STATIC.ADMIN}/setting/app`,
-  logout: `${STATIC.ADMIN}/logout`
+  logout: `${STATIC.ADMIN}/logout`,
+  stripeDashboardLink: `${STATIC.ADMIN}/organisation/stripe-dashboard-link`,
 };
 
 export const EMPLOYEE_API_URL = {

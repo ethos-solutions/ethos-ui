@@ -590,6 +590,15 @@
     "finish": "Avsluta",
     "payNow": "Betala nu",
     "orderAgain": "Beställ igen",
+    "invoiceType": "Vill du ha en förenklad faktura eller en faktura med dina skatteuppgifter?",
+    "simplifiedInvoice": "Förenklad faktura",
+    "fiscalInvoice": "Faktura med skatteinformation",
+    "fiscalName": "Namn",
+    "enterName": "Ange ditt namn",
+    "fiscalId": "Personnummer / Skatte-ID",
+    "enterFiscalId": "Ange ditt personnummer / Skatte-ID",
+    "fiscalAddress": "Adress",
+    "enterFiscalAddress": "Ange din adress",
     "success": {
       "order": "Beställning lyckades",
       "payment": "Betalning lyckades",
@@ -620,6 +629,7 @@
       "cart": "Se och redigera artiklar i varukorgen.",
       "payment": "Betala säkert online.",
       "paymentConfirmation": "Se orderdetaljer och betalningskvittens. Tack för att du valde oss!"
-    }
+    },
+    "paymentDetails": "Betalningsdetaljer"
   }
 }

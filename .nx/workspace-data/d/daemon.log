@@ -7049,3 +7049,17 @@ Error: Invalid Nx Cloud access token. Token: Yjk5ZDgzY2QtMThkMS00NTYwLTkwNTgtN2M
     at Timeout._onTimeout (/Users/prashantverma/projects/github/ethos-ui/.nx/cache/cloud/2508.22.6/lib/daemon/process-run-end.js:1:939155)
     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
 [NX Daemon Server] - 2025-08-24T19:57:26.475Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2025-08-24T20:38:24.815Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2025-08-24T20:38:24.829Z - [WATCHER]: ui/src/constants/apiUrl.ts was modified
+[NX Daemon Server] - 2025-08-24T20:38:24.939Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX Daemon Server] - 2025-08-24T20:38:24.940Z - [REQUEST]: ui/src/constants/apiUrl.ts
+[NX Daemon Server] - 2025-08-24T20:38:24.940Z - [REQUEST]: 
+[NX Daemon Server] - 2025-08-24T20:38:24.954Z - Time taken for 'hash changed files from watcher' 8.950958728790283ms
+[NX Daemon Server] - 2025-08-24T20:38:25.128Z - Time taken for 'build-project-configs' 146.9397497177124ms
+[NX Daemon Server] - 2025-08-24T20:38:25.334Z - [SYNC]: collect registered sync generators
+[NX Daemon Server] - 2025-08-24T20:38:25.337Z - [SYNC]: project graph hash is the same, not collecting task sync generators
+[NX Daemon Server] - 2025-08-24T20:38:25.337Z - [SYNC]: nx.json hash is the same, not collecting global sync generators
+[NX Daemon Server] - 2025-08-24T20:38:25.338Z - Time taken for 'total execution time for createProjectGraph()' 132.74241733551025ms
+[NX Daemon Server] - 2025-08-24T23:38:24.631Z - [WATCHER]: Stopping the watcher for /Users/prashantverma/projects/github/ethos-ui (sources)
+[NX Daemon Server] - 2025-08-24T23:38:24.634Z - [WATCHER]: Stopping the watcher for /Users/prashantverma/projects/github/ethos-ui (outputs)
+[NX Daemon Server] - 2025-08-24T23:38:24.660Z - Server stopped because: "10800000ms of inactivity"

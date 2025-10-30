@@ -36,6 +36,7 @@ export interface IOrder {
   _id?: string;
   status?: string;
   productItems?: any;
+  edocNeedsVerification?: boolean;
 }
 
 const transformData = (order: any): IOrder => ({
@@ -51,6 +52,7 @@ const transformData = (order: any): IOrder => ({
   items: order?.items?.length,
   invoiceUrl: order.invoiceUrl,
   paymentType: order.paymentType,
+  edocNeedsVerification: order.edocNeedsVerification,
 });
 
 export const OrderList = ({ permissions }: { permissions?: string[] }) => {
@@ -86,6 +88,7 @@ export const OrderList = ({ permissions }: { permissions?: string[] }) => {
       case '/orders/ready':
         return ORDER_STATUS.READY;
       case '/orders/cancelled':
+        // Cancelled tab shows both CANCELLED and REFUNDED orders
         return ORDER_STATUS.CANCELLED;
       case '/orders/completed':
         return ORDER_STATUS.COMPLETED;

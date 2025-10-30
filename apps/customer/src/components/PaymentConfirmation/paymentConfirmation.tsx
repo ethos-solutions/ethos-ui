@@ -31,12 +31,15 @@ export const PaymentConfirmation = () => {
   const [order, setOrder] = useState('');
   const [org, setOrg] = useState('');
   const [method, setMethod] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState('approved');
 
   useEffect(() => {
     setCustomerEmail(getStorage('email') || '');
     const orderNo = getStorage('orderNo') || '';
     const orgId = getStorage('orgId') || '';
     const paymentMethod = getStorage('paymentMethod') || '';
+    const status = getStorage('payment-status') || 'approved';
+    setPaymentStatus(status);
     setStorage('order-payment', 'success');
     setMethod(paymentMethod);
     setOrg(orgId);
@@ -62,7 +65,7 @@ export const PaymentConfirmation = () => {
   );
 
   useEffect(() => {
-    const homepageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${org}`;
+    const homepageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${org}`;
     window.history.replaceState(null, '', homepageUrl);
     const handleBackButton = () => {
       window.location.href = `/${org}`;
@@ -78,19 +81,48 @@ export const PaymentConfirmation = () => {
   return (
     <>
       <div className="orderCon payment_confirmation text-center">
-        <Image
-          src="/Payment-Successful-icon.svg"
-          alt="logo"
-          width={228}
-          height={90}
-          className="mx-auto"
-        />
-        <Heading variant="h5" className="py-3">
-          {t(`customer.success.${method ? 'order' : 'payment'}`)}
-        </Heading>
-        <Paragraph variant="h5" className="pb-2">
-          {t('customer.success.orderProcessed', { order: order })}
-        </Paragraph>
+        {paymentStatus === 'pending' ? (
+          <>
+            <Image
+              src="/Payment-Pending-icon.svg"
+              alt="pending"
+              width={228}
+              height={90}
+              className="mx-auto"
+              onError={(e) => {
+                // Fallback to success icon if pending icon doesn't exist
+                (e.target as HTMLImageElement).src = "/Payment-Successful-icon.svg";
+              }}
+            />
+            <Heading variant="h5" className="py-3">
+              {t('customer.pending.payment') || 'Payment Under Review'}
+            </Heading>
+            <Paragraph variant="h5" className="pb-2">
+              {t('customer.pending.orderReceived', { order: order }) || 
+                `Your order (${order}) has been received and is pending payment approval.`}
+            </Paragraph>
+            <Paragraph variant="h5" className="pb-2">
+              {t('customer.pending.notification') || 
+                'You will be notified once your payment is approved and your order is confirmed.'}
+            </Paragraph>
+          </>
+        ) : (
+          <>
+            <Image
+              src="/Payment-Successful-icon.svg"
+              alt="logo"
+              width={228}
+              height={90}
+              className="mx-auto"
+            />
+            <Heading variant="h5" className="py-3">
+              {t(`customer.success.${method ? 'order' : 'payment'}`)}
+            </Heading>
+            <Paragraph variant="h5" className="pb-2">
+              {t('customer.success.orderProcessed', { order: order })}
+            </Paragraph>
+          </>
+        )}
         {customerEmail && (
           <Paragraph variant="h5">
             {t('customer.success.customerEmail', {

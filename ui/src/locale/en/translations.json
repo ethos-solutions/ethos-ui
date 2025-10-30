@@ -521,7 +521,9 @@
     "cannotBeUndone": "This action can't be undone!",
     "title": "Orders",
     "exportOrders": "Export Orders",
-    "exportOrdersReports": "Export Orders Report"
+    "exportOrdersReports": "Export Orders Report",
+    "verifying": "Verifying",
+    "invoiceVerificationPending": "Electronic invoice verification pending"
   },
   "kitchen": {
     "combo": "Combo Products",
@@ -595,6 +597,15 @@
     "finish": "Finish",
     "payNow": "Pay Now",
     "orderAgain": "Order Again",
+    "invoiceType": "Would you require a Simplified Invoice or an Invoice with your fiscal information?",
+    "simplifiedInvoice": "Simplified Invoice",
+    "fiscalInvoice": "Invoice with fiscal information",
+    "fiscalName": "Name",
+    "enterName": "Enter your Name",
+    "fiscalId": "Person ID / Tax ID",
+    "enterFiscalId": "Enter your Person ID / Tax ID",
+    "fiscalAddress": "Address",
+    "enterFiscalAddress": "Enter your Address",
     "success": {
       "order": "Order Successful",
       "payment": "Payment Successful",
@@ -625,6 +636,7 @@
       "cart": "View the items in your cart and make necessary changes before checkout.",
       "payment": "Make secure payments online with ease.",
       "paymentConfirmation": "Review your order details and payment confirmation. Thank you for choosing our service!"
-    }
+    },
+    "paymentDetails": "Payment Details"
   }
 }

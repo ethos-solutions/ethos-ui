@@ -51,6 +51,10 @@ const columns = (
     (row) => row.status === ORDER_STATUS.CANCELLED,
   );
 
+  const hasRefundedOrder = rows?.some(
+    (row) => row.status === ORDER_STATUS.REFUNDED,
+  );
+
   const commonColumns = [
     {
       field: 'orderNo',
@@ -60,14 +64,23 @@ const columns = (
       renderCell: (params: GridRenderCellParams) => {
         const order = params.row.id;
         return (
-          <PrimaryButton
-            variant="text"
-            size="small"
-            onClick={() => navigate?.(`/orders/${order}`)}
-          >
-            {params.row.orderNo}
-          </PrimaryButton>
-        );
+          <div className="flex items-center gap-2">
+            <PrimaryButton
+              variant="text"
+              size="small"
+              onClick={() => navigate?.(`/orders/${order}`)}
+            >
+              {params.row.orderNo}
+            </PrimaryButton>
+            {params.row.edocNeedsVerification && (
+              <PrimaryButton
+                color="warning"
+                size="small"
+                tooltip={t('order.invoiceVerificationPending')}
+              >{t('order.verifying')}</PrimaryButton>
+            )}
+          </div>
+        );  
       },
     },
     !isHotel && {
@@ -169,6 +182,13 @@ const columns = (
                 {t('order.completed')}
               </Label>
             );
+          } else if (status === ORDER_STATUS.REFUNDED) {
+            // Refunded orders shown in Cancelled tab
+            return (
+              <Label variant="subtitle2" color="orange">
+                {t('order.refunded')}
+              </Label>
+            );
           } else if (status === ORDER_STATUS.CANCELLED) {
             return (
               <Label variant="subtitle2" color="red">
@@ -223,7 +243,7 @@ const columns = (
     },
   ].filter(Boolean);
 
-  if (!hasCompletedOrder && !hasCancelledOrder) {
+  if (!hasCompletedOrder && !hasCancelledOrder && !hasRefundedOrder) {
     commonColumns.splice(5, 0, {
       headerName: t('order.payment'),
       field: 'payment',

@@ -591,6 +591,15 @@
     "finish": "Terminer",
     "payNow": "Payer maintenant",
     "orderAgain": "Commander à nouveau",
+    "invoiceType": "Souhaitez-vous une facture simplifiée ou une facture avec vos informations fiscales ?",
+    "simplifiedInvoice": "Facture simplifiée",
+    "fiscalInvoice": "Facture avec informations fiscales",
+    "fiscalName": "Nom",
+    "enterName": "Entrez votre nom",
+    "fiscalId": "ID personnel / Numéro fiscal",
+    "enterFiscalId": "Entrez votre ID personnel / numéro fiscal",
+    "fiscalAddress": "Adresse",
+    "enterFiscalAddress": "Entrez votre adresse",
     "success": {
       "order": "Commande réussie",
       "payment": "Paiement réussi",
@@ -621,6 +630,7 @@
       "cart": "Consultez les articles dans votre panier et modifiez-les si nécessaire.",
       "payment": "Effectuez un paiement en ligne en toute sécurité.",
       "paymentConfirmation": "Vérifiez les détails de votre commande et confirmation de paiement. Merci d’avoir choisi notre service !"
-    }
+    },
+    "paymentDetails": "Détails du paiement"
   }
 }

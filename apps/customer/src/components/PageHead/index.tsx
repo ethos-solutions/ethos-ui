@@ -17,7 +17,7 @@ export function PageHead({ ...props }: PageHeadProps) {
   return (
     <Head>
       <title>{pageTitle}</title>
-      <meta name="description" content={t(props.description || '')} />
+      <meta name="description" content={props.description || ''} />
       <meta name="keywords" content={props.keywords} />
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       <meta

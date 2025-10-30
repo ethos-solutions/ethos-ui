@@ -24,8 +24,10 @@ const getModalStyle = (size?: 'xs' | 'md' | 'lg' | 'xl'): SxProps => ({
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width:
-    size === 'xs'
+  width: {
+    xs: '95%', // Mobile phones
+    sm: '90%', // Small tablets
+    md: size === 'xs'
       ? '90%'
       : size === 'md'
       ? '550px'
@@ -34,13 +36,23 @@ const getModalStyle = (size?: 'xs' | 'md' | 'lg' | 'xl'): SxProps => ({
       : size === 'xl'
       ? '1200px'
       : '400px',
+  },
+  maxWidth: {
+    xs: '100%',
+    sm: '100%',
+    md: size === 'md' ? '550px' : size === 'lg' ? '800px' : size === 'xl' ? '1200px' : '400px',
+  },
   bgcolor: theme.palette.common.white,
   borderRadius: '8px',
   boxShadow: 24,
   p: 0,
   display: 'flex',
   flexDirection: 'column',
-  maxHeight: '90%',
+  maxHeight: {
+    xs: '95vh', // Mobile - leave some space at top/bottom
+    sm: '90vh', // Tablet
+    md: '90%',  // Desktop
+  },
 });
 
 const modalHeaderStyle: SxProps = {

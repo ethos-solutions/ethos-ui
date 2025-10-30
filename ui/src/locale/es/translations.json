@@ -517,7 +517,9 @@
     "cannotBeUndone": "¡Esta acción no se puede deshacer!",
     "title": "Pedidos",
     "exportOrders": "Exportar pedidos",
-    "exportOrdersReports": "Exportar informe de pedidos"
+    "exportOrdersReports": "Exportar informe de pedidos",
+    "verifying": "Verificando",
+    "invoiceVerificationPending": "Verificación de factura electrónica pendiente"
   },
   "kitchen": {
     "combo": "Productos del combo",
@@ -591,6 +593,15 @@
     "finish": "Finalizar",
     "payNow": "Pagar ahora",
     "orderAgain": "Ordenar de nuevo",
+    "invoiceType": "¿Requiere una factura simplificada o una factura con información fiscal?",
+"simplifiedInvoice": "Factura simplificada",
+"fiscalInvoice": "Factura con información fiscal",
+"fiscalName": "Nombre",
+"enterName": "Ingrese su nombre",
+"fiscalId": "ID personal / Identificación fiscal",
+"enterFiscalId": "Ingrese su ID personal / Identificación fiscal",
+"fiscalAddress": "Dirección",
+"enterFiscalAddress": "Ingrese su dirección",
     "success": {
       "order": "Pedido exitoso",
       "payment": "Pago exitoso",
@@ -621,6 +632,7 @@
       "cart": "Visualiza los artículos en tu carrito y haz cambios.",
       "payment": "Realiza pagos en línea de forma segura.",
       "paymentConfirmation": "Revisa tu pedido y confirmación de pago. ¡Gracias por elegir nuestro servicio!"
-    }
+    },
+    "paymentDetails": "Detalles del Pago"
   }
 }

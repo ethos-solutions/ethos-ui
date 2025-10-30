@@ -61,6 +61,7 @@ export default async function handler(
           colorCode
           background
           default_language
+          country
           serviceFee {
             valueType
             value

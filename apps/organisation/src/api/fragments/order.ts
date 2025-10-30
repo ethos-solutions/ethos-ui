@@ -20,6 +20,7 @@ export const ORDER_DETAILS_FRAGMENT = gql`
     paymentType
     createdAt
     invoiceUrl
+    edocNeedsVerification
     items {
       _id
       name

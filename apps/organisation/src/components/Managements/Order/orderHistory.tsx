@@ -23,6 +23,7 @@ const statusMap: { [key in ORDER_STATUS]: number } = {
   [ORDER_STATUS.READY]: 2,
   [ORDER_STATUS.COMPLETED]: 3,
   [ORDER_STATUS.CANCELLED]: 4,
+  [ORDER_STATUS.REFUNDED]: 5,
 };
 
 const initialSteps: Step[] = [
@@ -49,6 +50,20 @@ export const OrderHistory = ({ orderDetailsData, refetch }: IOrderHistory) => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [stepsWithDates, setStepsWithDates] = useState<Step[]>(initialSteps);
 
+  const normalSteps = initialSteps.slice(0, 4);
+
+  // the single "Cancel" step
+  const cancelStep: Step = {
+    label: <div>{t('order.cancel')}</div>,
+    description: null,
+  };
+
+  // the single "Refunded" step
+  const refundedStep: Step = {
+    label: <div>{t('order.refunded')}</div>,
+    description: null,
+  };
+
   const updateStepsWithSocketData = (status: string, createdAt: string) => {
     console.log('status');
     if (status === ORDER_STATUS.CANCELLED) {
@@ -56,6 +71,17 @@ export const OrderHistory = ({ orderDetailsData, refetch }: IOrderHistory) => {
       setStepsWithDates([
         {
           ...cancelStep,
+          description: <div>{formatDateTime(createdAt)}</div>,
+        },
+      ]);
+      setActiveStep(0);
+      return;
+    }
+    if (status === ORDER_STATUS.REFUNDED) {
+      // only show the Refunded step
+      setStepsWithDates([
+        {
+          ...refundedStep,
           description: <div>{formatDateTime(createdAt)}</div>,
         },
       ]);
@@ -98,6 +124,20 @@ export const OrderHistory = ({ orderDetailsData, refetch }: IOrderHistory) => {
   useEffect(() => {
     if (!Array.isArray(orderDetailsData.statusHistory)) return;
   
+    // find a Refunded entry (takes priority over Cancel)
+    const refundedEntry = orderDetailsData.statusHistory
+      .find(e => e.status === ORDER_STATUS.REFUNDED);
+  
+    if (refundedEntry) {
+      // only render Refunded
+      setStepsWithDates([{
+        ...refundedStep,
+        description: <div>{formatDateTime(refundedEntry.date)}</div>
+      }]);
+      setActiveStep(0);
+      return;
+    }
+
     // find a Cancel entry
     const cancelEntry = orderDetailsData.statusHistory
       .find(e => e.status === ORDER_STATUS.CANCELLED);
@@ -132,14 +172,6 @@ export const OrderHistory = ({ orderDetailsData, refetch }: IOrderHistory) => {
       last === ORDER_STATUS.COMPLETED ? lastIdx + 1 : lastIdx
     );
   }, [orderDetailsData]);
-
-  const normalSteps = initialSteps.slice(0, 4);
-
-  // the single “Cancel” step
-  const cancelStep: Step = {
-    label: <div>{t('order.cancel')}</div>,
-    description: null,
-  };
 
   if (!orderDetailsData) {
     return <CircularProgress />;

@@ -5,6 +5,7 @@ import { Extra, IProductList } from '../../types/product';
 import { CREATE_ORDER } from '../../api/Mutation/createOrder';
 import { Heading, Modal, PrimaryButton, Radio } from '@ethos-frontend/ui';
 import CheckoutSession from '../Stripe/CheckoutSession';
+import { PaymentBricks } from './PaymentBricks';
 import { useMutation as useGraphMutation } from '@apollo/client';
 import { CircularProgress } from '@mui/material';
 import { toast } from 'react-toastify';
@@ -42,9 +43,12 @@ export const Payment = () => {
   const [orderName, setOrderName] = useState('');
   const [restaurantName, setRestaurantName] = useState('');
   const [currentSymbol, setCurrencySymbol] = useState('');
+  const [country, setCountry] = useState('');
   const [loading, setLoading] = useState(false);
   const [totalTax, setTotalTax] = useState<number>(0);
   const [roomNumber, setRoomNumber] = useState<number>(0);
+  const [showPaymentBricks, setShowPaymentBricks] = useState(false);
+  const [orderNumber, setOrderNumber] = useState('');
   const hasSubmittedRef = useRef(false);
 
   useEffect(() => {
@@ -67,9 +71,10 @@ export const Payment = () => {
     setTableNumber(Number(getStorage('tableNumber')));
     setOrderName(getStorage('orderName') || '');
     setRoomNumber(Number(getStorage('roomNo')));
-    const { restaurantName, currencyCode } = JSON.parse(
+    const { restaurantName, currencyCode, country } = JSON.parse(
       getStorage('restaurantData') || '{}',
     );
+    setCountry(country);
     setRestaurantName(restaurantName);
     setCurrencySymbol(currencyCode);
     setEmail(getStorage('email') || '');
@@ -143,7 +148,7 @@ export const Payment = () => {
 
   const [createOrder] = useGraphMutation(CREATE_ORDER);
 
-  const createStripeSession = useRestMutation<any, any, any>(
+  const createStripeSession = useRestMutation(
     `${process.env.NEXT_PUBLIC_API_URL}admin/organisation/create-order-stripe-session`,
     {
       method: API_METHODS.POST,
@@ -177,10 +182,18 @@ export const Payment = () => {
       getStorage('selectedOptions') || '[]',
     ).filter((choice: string) => choice !== 'not');
 
+    // Get fiscal information
+    const invoiceType = getStorage('invoiceType') || 'simplified';
+    const fiscalName = getStorage('fiscalName') || '';
+    const fiscalId = getStorage('fiscalId') || '';
+    const fiscalAddress = getStorage('fiscalAddress') || '';
+
     const orderData = {
       type: orderType,
       payment:
-        orderType === ORDER_TYPE.roomService ? 'room_charge' : selectPaymentMethod,
+        orderType === ORDER_TYPE.roomService
+          ? 'room_charge'
+          : selectPaymentMethod,
       total: finalPrice,
       ...(orderType === ORDER_TYPE.roomService
         ? { roomNo: roomNumber }
@@ -195,26 +208,43 @@ export const Payment = () => {
       serviceTax: serviceCharge,
       name: orderName,
       totalTax: totalTax,
+      // Fiscal information for DIAN invoice
+      invoiceType: invoiceType,
+      fiscalName: fiscalName,
+      fiscalId: fiscalId,
+      fiscalAddress: fiscalAddress,
     };
 
     try {
       const { data } = await createOrder({ variables: { data: orderData } });
       const orderNo = data.createOrder.data.orderNo;
       setStorage('paymentMethod', selectPaymentMethod);
-      if (selectPaymentMethod === 'online') {
-        const orderGenerated = {
-          customerEmail: email,
-          organisationId: orgId,
-          orderId: orderNo,
-          products: productList,
-          total: finalPrice,
-          restaurantName: restaurantName,
-          currency: currentSymbol,
-        };
-        createStripeSession.mutate(orderGenerated);
-      } else {
+      if (selectPaymentMethod === 'offline') {
         setStorage('orderNo', orderNo);
         router.push('/payment-confirmation');
+        return;
+      }
+
+      if (selectPaymentMethod === 'online') {
+        // Use Payment Bricks for Colombia (COP currency)
+        if (country === 'CO' || (currentSymbol || '').toUpperCase() === 'COP') {
+          setOrderNumber(orderNo);
+          setShowPaymentBricks(true);
+          setLoading(false);
+        } else {
+          // Use Stripe for other countries
+          const orderGenerated = {
+            customerEmail: email,
+            organisationId: orgId,
+            orderId: orderNo,
+            products: productList,
+            total: finalPrice,
+            restaurantName,
+            currency: currentSymbol,
+          };
+          createStripeSession.mutate(orderGenerated);
+        }
+        return;
       }
     } catch (error) {
       toast.error(t('customer.error.general'));
@@ -248,6 +278,36 @@ export const Payment = () => {
       submitOrder();
     }
   }, [orderType, submitOrder]);
+
+  const handlePaymentSuccess = (paymentResult: any) => {
+    console.log('Payment successful:', paymentResult);
+    setStorage('orderNo', orderNumber);
+    setStorage('paymentMethod', 'online');
+    
+    // Check if payment is pending review
+    if (paymentResult.isPending || paymentResult.status === 'pending' || paymentResult.status === 'in_process') {
+      // Payment is being reviewed - show pending status
+      setStorage('order-payment', 'pending');
+      setStorage('payment-status', 'pending');
+      toast.info('Your payment is being reviewed. You will be notified once approved.');
+      router.push('/payment-confirmation');
+    } else {
+      // Payment approved - show success
+      setStorage('order-payment', 'success');
+      setStorage('payment-status', 'approved');
+      router.push('/payment-confirmation');
+    }
+  };
+
+  const handlePaymentError = (error: any) => {
+    console.error('Payment failed:', error);
+    toast.error('Payment failed. Please try again.');
+    setShowPaymentBricks(false);
+  };
+
+  const handlePaymentCancel = () => {
+    setShowPaymentBricks(false);
+  };
 
   if (orderType === ORDER_TYPE.roomService) {
     return <CircularProgress />;
@@ -285,12 +345,41 @@ export const Payment = () => {
         </PrimaryButton>
       </div>
 
+      {/* Stripe Payment Modal */}
       <Modal open={open} onClose={() => setOpen(false)}>
         <div className="overflow-y-auto" style={{ height: '80vh' }}>
           {clientSecret && stripeAccountId && (
             <CheckoutSession
               clientSecret={clientSecret}
               stripeAccountId={stripeAccountId}
+            />
+          )}
+        </div>
+      </Modal>
+
+      {/* Mercado Pago Payment Bricks Modal */}
+      <Modal 
+        open={showPaymentBricks} 
+        onClose={() => {}} 
+        size='md'
+        showCloseButton={false}
+        disableEscapeKeyDown
+        slotProps={{
+          backdrop: {
+            onClick: (e) => e.stopPropagation()
+          }
+        }}
+      >
+        <div className="overflow-y-auto" style={{ height: '80vh' }}>
+          {showPaymentBricks && (
+            <PaymentBricks
+              organisationId={orgId}
+              orderId={orderNumber}
+              amount={finalPrice}
+              description={`Payment to ${restaurantName}`}
+              onSuccess={handlePaymentSuccess}
+              onError={handlePaymentError}
+              onCancel={handlePaymentCancel}
             />
           )}
         </div>

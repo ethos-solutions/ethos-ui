@@ -44,7 +44,7 @@ export const UserCashierDetail = ({
         flex: 1,
         sortable: false,
         renderCell: (params: GridRenderCellParams) => {
-          const order = params.row.id;
+          const order = params.row.orderId;
           return (
             <PrimaryButton
               variant="text"
@@ -61,13 +61,13 @@ export const UserCashierDetail = ({
         headerName: t('tableData.orderPaid'),
         flex: 1,
       },
-      {
-        field: 'initialBalance',
-        headerName: t('tableData.initialBalance'),
-        flex: 1,
-        renderCell: (params: GridRenderCellParams) =>
-          priceWithSymbolAdmin(params?.row?.initialBalance, userData?.currency),
-      },
+      // {
+      //   field: 'initialBalance',
+      //   headerName: t('tableData.initialBalance'),
+      //   flex: 1,
+      //   renderCell: (params: GridRenderCellParams) =>
+      //     priceWithSymbolAdmin(params?.row?.initialBalance, userData?.currency),
+      // },
       {
         field: 'balance',
         headerName: t('tableData.transactionAmount'),
@@ -75,13 +75,13 @@ export const UserCashierDetail = ({
         renderCell: (params: GridRenderCellParams) =>
           priceWithSymbolAdmin(params?.row?.balance, userData?.currency),
       },
-      {
-        field: 'finalBalance',
-        headerName: t('tableData.finalBalance'),
-        flex: 1,
-        renderCell: (params: GridRenderCellParams) =>
-          priceWithSymbolAdmin(params?.row?.finalBalance, userData?.currency),
-      },
+      // {
+      //   field: 'finalBalance',
+      //   headerName: t('tableData.finalBalance'),
+      //   flex: 1,
+      //   renderCell: (params: GridRenderCellParams) =>
+      //     priceWithSymbolAdmin(params?.row?.finalBalance, userData?.currency),
+      // },
       {
         field: 'paymentType',
         headerName: t('tableData.paymentMode'),

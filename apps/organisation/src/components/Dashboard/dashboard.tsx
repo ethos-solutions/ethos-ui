@@ -17,6 +17,7 @@ import {
   API_URL,
   ERROR_MESSAGES,
   ORDER_STATUS,
+  ROLES,
 } from '@ethos-frontend/constants';
 import { TopSelling } from './topSelling';
 import { RevenueChart } from './revenueChart';
@@ -27,6 +28,7 @@ import { TotalCashPie } from './totalCashPie';
 import { useUser } from '../../context/user';
 import { DateRangePicker, Heading, PrimaryButton } from '@ethos-frontend/ui';
 import { toast } from 'react-toastify';
+import { STRIPE_CONNECT_STATUS } from '../../constants';
 
 export const Dashboard = () => {
   const { t } = useTranslation();
@@ -193,6 +195,17 @@ export const Dashboard = () => {
     },
   );
 
+  const { refetch: openStripeDashboard, isLoading: openingStripe } =
+    useRestQuery(['stripe_dashboard_link'], API_URL.stripeDashboardLink, {
+      enabled: false,
+      onSuccess: (res) => {
+        const url = res.data?.url || res.data?.onboardingUrl;
+        if (url) window.open(url, '_blank', 'noopener,noreferrer');
+        else toast.error(t(ERROR_MESSAGES.GENERAL));
+      },
+      onError: () => toast.error(t(ERROR_MESSAGES.GENERAL)),
+    });
+
   return (
     <>
       <div className="flex items-stretch gap-5 mb-5">
@@ -204,7 +217,7 @@ export const Dashboard = () => {
           disableFuture
           maxDate={new Date()}
         />
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-1">
           <PrimaryButton
             variant="outlined"
             onClick={() => setDateRange([null, null])}
@@ -221,6 +234,16 @@ export const Dashboard = () => {
           >
             {t('dashboard.export')}
           </PrimaryButton>
+           {userData?.stripeConnectStatus === STRIPE_CONNECT_STATUS.CONNECTED && userData?.type === ROLES.ORGANISATION ? (
+            <div style={{ marginLeft: 'auto' }}>
+              <PrimaryButton
+                onClick={() => openStripeDashboard()}
+                loading={openingStripe}
+              >
+                Open stripe Dashboard
+              </PrimaryButton>
+            </div>
+          ) : null}
         </div>
       </div>
       <GridContainer columns={12}>
@@ -251,7 +274,7 @@ export const Dashboard = () => {
 
           <CountCard
             loading={isDashboardLoading}
-            title={t("totalRevenue")}
+            title={t('totalRevenue')}
             icon={<IoFastFoodOutline size={30} color="var(--primary)" />}
             onlineCount={dashboardReport?.data?.totalOnlineRevenue}
             offlineCount={dashboardReport?.data?.totalOfflineRevenue}

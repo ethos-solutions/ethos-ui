@@ -65,8 +65,14 @@ const AccountPreferences = () => {
     stripeConnectStatus: string;
     stripeConnectAcctId: string;
   }>();
+  const [mpConnected, setMpConnected] = useState<{
+    connected: boolean;
+    status: string;
+    userId: string | null;
+  }>({ connected: false, status: 'NOT_CONNECTED', userId: null });
   const [paymentType, setPaymentType] = useState<ICheckbox[]>([]);
   const [loading, setLoading] = useState(false);
+  const [mpLoading, setMpLoading] = useState(false);
   const [orderType, setOrderType] = useState<ICheckbox[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [defaultLanguage, setDefaultLanguage] = useState<string>('');
@@ -149,6 +155,37 @@ const AccountPreferences = () => {
     },
   );
 
+  const { refetch: fetchMpStatus } = useRestQuery(
+    'mp-status',
+    `admin/organisation/mp/status`,
+    {
+      enabled: false,
+      onSuccess: (data: any) => {
+        setMpConnected({
+          connected: data.data.connected,
+          status: data.data.status,
+          userId: data.data.userId,
+        });
+      },
+    },
+  );
+
+  const { refetch: fetchMpOAuthLink } = useRestQuery(
+    'mp-oauth-link',
+    `admin/organisation/mp/oauth/initiate`,
+    {
+      enabled: false,
+    },
+  );
+
+  const { refetch: fetchMpDashboardLink } = useRestQuery(
+    'mp-dashboard-link',
+    `admin/organisation/mp-dashboard-link`,
+    {
+      enabled: false,
+    },
+  );
+
   const [updateAccount, { loading: updateAccountLoading }] = useMutation(
     UPDATE_ACCOUNT,
     {
@@ -191,8 +228,27 @@ const AccountPreferences = () => {
         stripeConnectStatus: userData.stripeConnectStatus || '',
         stripeConnectAcctId: userData.stripeConnectAcctId || '',
       });
+      // Fetch MP status
+      fetchMpStatus();
     }
   }, [userData, regenerateLink]);
+
+  // Handle MP OAuth callback
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mpConnected = urlParams.get('mp_connected');
+    
+    if (mpConnected === 'true') {
+      toast.success(t('success.mpConnected') || 'Successfully connected to Mercado Pago!');
+      fetchMpStatus(); // Refresh status
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    } else if (mpConnected === 'false') {
+      toast.error(t('errors.mpConnectionFailed') || 'Failed to connect to Mercado Pago. Please try again.');
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
 
   const handleConnectWithStripe = async () => {
     setLoading(true);
@@ -211,6 +267,36 @@ const AccountPreferences = () => {
       toast.error('Failed to connect with Stripe. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleConnectWithMercadoPago = async () => {
+    setMpLoading(true);
+
+    try {
+      // @ts-ignore
+      const linkResponse: { data?: { data?: { url?: string } } } = await fetchMpOAuthLink();
+
+      if (linkResponse?.data?.data?.url) {
+        // Redirect to Mercado Pago OAuth (full page redirect)
+        window.location.href = linkResponse.data.data.url;
+      }
+    } catch (error) {
+      toast.error('Failed to connect with Mercado Pago. Please try again.');
+      setMpLoading(false);
+    }
+  };
+
+  const handleOpenMpDashboard = async () => {
+    try {
+      // @ts-ignore
+      const response: { data?: { data?: { url?: string } } } = await fetchMpDashboardLink();
+
+      if (response?.data?.data?.url) {
+        window.open(response.data.data.url, '_blank');
+      }
+    } catch (error) {
+      toast.error('Failed to open Mercado Pago dashboard. Please try again.');
     }
   };
 
@@ -310,25 +396,62 @@ const AccountPreferences = () => {
     },
   );
 
+  // Check if organization is in Colombia with COP currency
+  const showMercadoPago = userData?.country === 'CO' || userData?.currency?.code === 'COP';
+  const showStripe = !showMercadoPago; // Hide Stripe for Colombia, show for others
+
   return (
     <>
-      <div className="pb-5 flex gap-5">
-        {connected?.stripeConnectStatus === STRIPE_CONNECT_STATUS.CONNECTED ? (
-          <Paragraph variant="h5" weight="semibold" color="primary">
-            {t('account.preferenceTab.connectedWithStripe')}
-          </Paragraph>
-        ) : (
-          <PrimaryButton onClick={handleConnectWithStripe}>
-            {loading ? (
-              <CircularProgress color="inherit" size={30} />
+      <div className="pb-5 flex flex-col gap-5">
+        {/* Stripe Connection - Not visible for Colombia */}
+        {showStripe && (
+          <div className="flex gap-5 items-center">
+            {connected?.stripeConnectStatus === STRIPE_CONNECT_STATUS.CONNECTED ? (
+              <Paragraph variant="h5" weight="semibold" color="primary">
+                {t('account.preferenceTab.connectedWithStripe')}
+              </Paragraph>
             ) : (
-              stripeStateButtonText()
+              <PrimaryButton onClick={handleConnectWithStripe}>
+                {loading ? (
+                  <CircularProgress color="inherit" size={30} />
+                ) : (
+                  stripeStateButtonText()
+                )}
+              </PrimaryButton>
             )}
-          </PrimaryButton>
+          </div>
         )}
-        <PrimaryButton onClick={() => mutate(undefined)}>
-          {t('account.preferenceTab.resetCustomerOrderPassword')}
-        </PrimaryButton>
+
+        {/* Mercado Pago Connection - Only for Colombia */}
+        {showMercadoPago && (
+          <div className="flex gap-5 items-center">
+            {mpConnected.connected ? (
+              <>
+                <Paragraph variant="h5" weight="semibold" color="primary">
+                  ✅ {t('account.preferenceTab.connectedWithMercadoPago') || 'Connected to Mercado Pago'}
+                </Paragraph>
+                <PrimaryButton onClick={handleOpenMpDashboard}>
+                  {t('account.preferenceTab.openMpDashboard') || 'Open Mercado Pago Dashboard'}
+                </PrimaryButton>
+              </>
+            ) : (
+              <PrimaryButton onClick={handleConnectWithMercadoPago}>
+                {mpLoading ? (
+                  <CircularProgress color="inherit" size={30} />
+                ) : (
+                  t('account.preferenceTab.connectWithMercadoPago') || 'Connect with Mercado Pago'
+                )}
+              </PrimaryButton>
+            )}
+          </div>
+        )}
+
+        {/* Reset Customer Password */}
+        <div>
+          <PrimaryButton onClick={() => mutate(undefined)}>
+            {t('account.preferenceTab.resetCustomerOrderPassword')}
+          </PrimaryButton>
+        </div>
       </div>
       <GridContainer
         columns={getNumberOfCols({

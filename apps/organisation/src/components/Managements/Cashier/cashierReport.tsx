@@ -32,7 +32,7 @@ export const CashierReport = () => {
   const getPaymentType = types();
 
   const userIdBoolean =
-    userData?.role === 'EMPLOYEE' || userData?.type === 'ORGANISATION';
+    userData?.role === ROLES.EMPLOYEE || userData?.type === ROLES.ORGANISATION;
   const userId = userIdBoolean && !name ? userData?._id : id;
 
   const [cashierData, setCashierData] = useState([]);
@@ -108,6 +108,7 @@ export const CashierReport = () => {
           initialBalance,
           paymentType,
           orderId,
+          _id
         }: {
           createdAt: string;
           balance: string;
@@ -116,8 +117,10 @@ export const CashierReport = () => {
           initialBalance: number;
           orderNo: string;
           paymentType: string;
+          _id: string
         }) => ({
-          id: orderId,
+          id: _id,
+          orderId,
           orderNo,
           createdAt: dateFormatInUtc(createdAt),
           balance,
