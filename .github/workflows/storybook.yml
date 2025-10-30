@@ -4,9 +4,19 @@ on:
   push:
     branches: [main]
     paths:
-      - 'ui/**'
       - '.storybook/**'
-      - 'storybook-**'
+      - 'ui/**'
+      - 'packages/ui/**'
+      - 'storybook/**'
+      - 'storybook-*'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - '.storybook/**'
+      - 'ui/**'
+      - 'packages/ui/**'
+      - 'storybook/**'
+      - 'storybook-*'
   workflow_dispatch:
     inputs:
       deploy_target:
@@ -81,11 +91,6 @@ jobs:
           
       - name: Deploy to CloudFront (if configured)
         run: |
-          # Optional: Invalidate CloudFront distribution if you have one
-          # DISTRIBUTION_ID=$(aws ssm get-parameter --name "STORYBOOK_CF_DISTRIBUTION_ID" --query "Parameter.Value" --output text 2>/dev/null || true)
-          # if [ -n "$DISTRIBUTION_ID" ]; then
-          #   aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
-          # fi
           echo "Storybook deployment completed successfully!"
           
       - name: Generate deployment summary
