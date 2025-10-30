@@ -1,0 +1,241 @@
+name: Deploy Ethos Applications
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      app_to_build:
+        description: 'Application to build (fe, ui, admin, customer)'
+        required: true
+        default: 'customer'
+        type: choice
+        options:
+          - fe
+          - ui
+          - admin
+          - customer
+      build_env:
+        description: 'Build environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  S3_BUCKET_NAME: "ethos-build"
+  BUILD_ENV: ${{ github.event.inputs.build_env || 'production' }}
+  APP_TO_BUILD: ${{ github.event.inputs.app_to_build || 'customer' }}
+  AWS_REGION: us-east-1
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+          
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          
+      - name: Get NX Cloud token from Parameter Store
+        run: |
+          NX_TOKEN=$(aws ssm get-parameter --name "NX_CLOUD_ACCESS_TOKEN" --query "Parameter.Value" --output text)
+          echo "NX_CLOUD_ACCESS_TOKEN=$NX_TOKEN" >> $GITHUB_ENV
+          echo "NX_CLOUD_ACCESS_TOKEN=$NX_TOKEN" > .env
+          
+      - name: Restore pnpm cache
+        run: |
+          if aws s3 ls s3://$S3_BUCKET_NAME/cache/pnpm-store-cache.tgz >/dev/null 2>&1; then
+            echo "Found pnpm cache tarball; downloading..."
+            aws s3 cp s3://$S3_BUCKET_NAME/cache/pnpm-store-cache.tgz /tmp/pnpm-store-cache.tgz
+            mkdir -p ~/.local/share/pnpm/store
+            tar -xzf /tmp/pnpm-store-cache.tgz -C ~/.local/share/pnpm/store
+            rm -f /tmp/pnpm-store-cache.tgz
+          else
+            echo "No pnpm cache tarball found"
+          fi
+          
+      - name: Install dependencies
+        run: |
+          echo "Running pnpm install for workspace"
+          pnpm install --frozen-lockfile || pnpm install
+          
+      - name: Set environment variables
+        run: |
+          case "$APP_TO_BUILD" in
+            "fe")
+              echo "VITE_APP_API_URL=$(aws ssm get-parameter --name 'VITE_APP_API_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "VITE_APP_API_GRAPH_URL=$(aws ssm get-parameter --name 'VITE_APP_API_GRAPH_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "VITE_APP_SOCKET_URL=$(aws ssm get-parameter --name 'VITE_APP_SOCKET_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "VITE_APP_S3_BUCKET_NAME=$(aws ssm get-parameter --name 'VITE_APP_S3_BUCKET_NAME' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "VITE_APP_IDENTITY_POOL_ID=$(aws ssm get-parameter --name 'VITE_APP_IDENTITY_POOL_ID' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "VITE_APP_PLACES_API=$(aws ssm get-parameter --name 'VITE_APP_PLACES_API' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              ;;
+            "admin")
+              echo "VITE_APP_API_URL=$(aws ssm get-parameter --name 'VITE_APP_API_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              ;;
+            "customer")
+              echo "NEXT_PUBLIC_API_URL=$(aws ssm get-parameter --name 'NEXT_PUBLIC_API_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "NEXT_PUBLIC_API_GRAPH_URL=$(aws ssm get-parameter --name 'NEXT_PUBLIC_API_GRAPH_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "NEXT_PUBLIC_STRIPE_KEY=$(aws ssm get-parameter --name 'NEXT_PUBLIC_STRIPE_KEY' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "NEXT_PUBLIC_FIREBASE_VAPID_TOKEN=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_VAPID_TOKEN' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "NEXT_PUBLIC_MP_PUBLIC_KEY=$(aws ssm get-parameter --name 'NEXT_PUBLIC_MP_PUBLIC_KEY' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              ;;
+          esac
+          
+      - name: Build application
+        run: |
+          case "$APP_TO_BUILD" in
+            "fe")
+              echo "Building FE (organisation)..."
+              pnpm run build:org --configuration=$BUILD_ENV
+              ;;
+            "ui")
+              echo "Building UI (storybook)..."
+              pnpm run build:storybook --configuration=$BUILD_ENV
+              ;;
+            "admin")
+              echo "Building Admin..."
+              pnpm run build:admin --configuration=$BUILD_ENV
+              ;;
+            "customer")
+              echo "Building Customer..."
+              pnpm run build:customer --configuration=$BUILD_ENV
+              
+              if [ ! -d dist/apps/customer ]; then
+                echo "ERROR: dist/apps/customer not found after build"
+                exit 1
+              fi
+              
+              echo "Preparing customer runtime package..."
+              cp package.json dist/apps/customer/
+              
+              echo "Pruning to production dependencies..."
+              pnpm -w prune --prod || true
+              
+              echo "Copying node_modules..."
+              mkdir -p dist/apps/customer/node_modules
+              rsync -a --del --exclude='.bin' ./node_modules/ dist/apps/customer/node_modules/
+              
+              echo "Copying .nx-helpers..."
+              find dist -type d -name ".nx-helpers" -exec cp -r {} dist/apps/customer/ \; || true
+              
+              echo "Cleaning trace files..."
+              rm -rf dist/apps/customer/.next/trace || true
+              
+              echo "Creating runtime tarball..."
+              cd dist/apps/customer
+              tar -czf ../../../customer-runtime.tgz .next public .nx-helpers node_modules package.json next.config.js || exit 1
+              cd ../../../
+              
+              echo "Verifying tarball contents..."
+              tar -tf customer-runtime.tgz | grep -i nx-helpers || echo "WARNING: no nx-helpers in tarball"
+              ;;
+            *)
+              echo "Invalid APP_TO_BUILD: $APP_TO_BUILD"
+              exit 1
+              ;;
+          esac
+          
+      - name: Upload to S3
+        run: |
+          case "$APP_TO_BUILD" in
+            "ui")
+              aws s3 sync dist/lib s3://$S3_BUCKET_NAME/prod/dist/lib --sse aws:kms
+              ;;
+            "fe")
+              aws s3 sync dist/apps/organisation/ s3://$S3_BUCKET_NAME/prod/dist/apps/organisation/ --sse aws:kms --exact-timestamps --exclude "node_modules/*"
+              ;;
+            "customer")
+              if [ -f customer-runtime.tgz ]; then
+                echo "Uploading customer-runtime.tgz to S3..."
+                aws s3 cp customer-runtime.tgz s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz --sse aws:kms
+                rm -f customer-runtime.tgz
+              else
+                echo "WARNING: customer-runtime.tgz missing; fallback to sync"
+                aws s3 sync dist/apps/customer/ s3://$S3_BUCKET_NAME/prod/dist/apps/customer/ --sse aws:kms --exact-timestamps --exclude "node_modules/*" --exclude "pnpm-lock.yaml" --exclude "package-lock.json"
+              fi
+              ;;
+            "admin")
+              aws s3 sync dist/apps/admin/ s3://$S3_BUCKET_NAME/prod/dist/apps/admin/ --sse aws:kms --exact-timestamps --exclude "node_modules/*" --exclude "pnpm-lock.yaml" --exclude "package-lock.json"
+              ;;
+          esac
+          
+      - name: Deploy to EC2 (Customer App)
+        if: env.APP_TO_BUILD == 'customer'
+        run: |
+          echo "Retrieving PEM key from SSM..."
+          aws ssm get-parameter --name "ethos-fe" --query "Parameter.Value" --output text > /tmp/private_key.pem
+          chmod 400 /tmp/private_key.pem
+          
+          echo "Deploying to EC2..."
+          ssh -i /tmp/private_key.pem -p 7172 -o StrictHostKeyChecking=no ubuntu@3.210.120.239 "
+            set -euo pipefail
+            echo 'Cleaning old dist on EC2...'
+            sudo rm -rf /var/www/html/ethos-multi/dist/apps/customer/* || true
+            sudo mkdir -p /var/www/html/ethos-multi/dist/apps/customer || true
+            
+            if aws s3 ls s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz >/dev/null 2>&1; then
+              echo 'Downloading runtime tarball from S3...'
+              aws s3 cp s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz /tmp/customer-runtime.tgz --sse aws:kms
+              echo 'Extracting runtime tarball to target directory...'
+              sudo tar -xzf /tmp/customer-runtime.tgz -C /var/www/html/ethos-multi/dist/apps/customer
+              rm -f /tmp/customer-runtime.tgz || true
+            else
+              echo 'Runtime tarball not found in S3; aborting'
+              exit 1
+            fi
+            
+            echo 'Fixing ownership on deployed files'
+            sudo chown -R www-data:www-data /var/www/html/ethos-multi/dist/apps/customer || true
+            
+            echo 'Recording version from package.json'
+            node -e \"console.log(require('/var/www/html/ethos-multi/dist/apps/customer/package.json').version || 'unknown')\" > /tmp/CUSTOMER_VERSION || true
+            sudo mv /tmp/CUSTOMER_VERSION /var/www/html/ethos-multi/dist/apps/customer/VERSION || true
+            sudo chown www-data:www-data /var/www/html/ethos-multi/dist/apps/customer/VERSION || true
+            
+            echo 'Starting the customer app with pm2'
+            cd /var/www/html/ethos-multi || true
+            sudo pm2 delete customer || true
+            sudo pm2 start npx --name customer --interpreter node -- next start /var/www/html/ethos-multi/dist/apps/customer -p 4200
+            sudo pm2 save || true
+            
+            echo 'Deploy finished on EC2.'
+          "
+          
+      - name: Cache pnpm store
+        run: |
+          echo "Creating pnpm cache tarball..."
+          if [ -d ~/.local/share/pnpm/store ]; then
+            tar -czf pnpm-store-cache.tgz -C ~/.local/share/pnpm/store .
+            aws s3 cp pnpm-store-cache.tgz s3://$S3_BUCKET_NAME/cache/pnpm-store-cache.tgz --sse aws:kms || true
+            rm -f pnpm-store-cache.tgz || true
+          fi
+          
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ Deployment successful for $APP_TO_BUILD application"
+          else
+            echo "❌ Deployment failed for $APP_TO_BUILD application"
+          fi
