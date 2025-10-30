@@ -1,0 +1,100 @@
+name: Deploy Storybook
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ui/**'
+      - '.storybook/**'
+      - 'storybook-**'
+  workflow_dispatch:
+    inputs:
+      deploy_target:
+        description: 'Deployment target'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  S3_BUCKET_NAME: "ethos-build"
+  BUILD_ENV: ${{ github.event.inputs.deploy_target || 'production' }}
+  AWS_REGION: us-east-1
+
+jobs:
+  build-storybook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+          
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+            
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          
+      - name: Get NX Cloud token
+        run: |
+          NX_TOKEN=$(aws ssm get-parameter --name "NX_CLOUD_ACCESS_TOKEN" --query "Parameter.Value" --output text)
+          echo "NX_CLOUD_ACCESS_TOKEN=$NX_TOKEN" >> $GITHUB_ENV
+          echo "NX_CLOUD_ACCESS_TOKEN=$NX_TOKEN" > .env
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Build Storybook
+        run: |
+          echo "Building Storybook for UI components..."
+          pnpm run build:storybook --configuration=$BUILD_ENV
+          
+      - name: Upload to S3
+        run: |
+          echo "Uploading Storybook to S3..."
+          aws s3 sync dist/lib s3://$S3_BUCKET_NAME/prod/dist/lib --sse aws:kms --delete
+          
+      - name: Deploy to CloudFront (if configured)
+        run: |
+          # Optional: Invalidate CloudFront distribution if you have one
+          # DISTRIBUTION_ID=$(aws ssm get-parameter --name "STORYBOOK_CF_DISTRIBUTION_ID" --query "Parameter.Value" --output text 2>/dev/null || true)
+          # if [ -n "$DISTRIBUTION_ID" ]; then
+          #   aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
+          # fi
+          echo "Storybook deployment completed successfully!"
+          
+      - name: Generate deployment summary
+        run: |
+          echo "## 📚 Storybook Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment:** $BUILD_ENV" >> $GITHUB_STEP_SUMMARY
+          echo "- **S3 Bucket:** s3://$S3_BUCKET_NAME/prod/dist/lib" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp:** $(date -u)" >> $GITHUB_STEP_SUMMARY
