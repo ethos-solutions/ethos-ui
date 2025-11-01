@@ -31,7 +31,6 @@ env:
   AWS_REGION: us-east-1
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
-# Prevent concurrent deployments of the same app
 concurrency:
   group: deploy-${{ github.ref }}-${{ github.event.inputs.app_to_build || 'customer' }}
   cancel-in-progress: false
@@ -52,10 +51,10 @@ jobs:
         with:
           node-version: '22'
           
-      - name: Setup pnpm
+      - name: Setup pnpm (use version from package.json)
         uses: pnpm/action-setup@v4
         with:
-          version: latest
+          run_install: false
 
       - name: Cache pnpm store
         uses: actions/cache@v4
@@ -123,19 +122,15 @@ jobs:
           echo "Building $APP_TO_BUILD application with Nx..."
           case "$APP_TO_BUILD" in
             "fe")
-              echo "Building organisation app with Nx..."
               pnpm exec nx build organisation --configuration=$BUILD_ENV
               ;;
             "ui")
-              echo "Building UI Storybook with Nx..."
               pnpm exec nx build-storybook ui --configuration=$BUILD_ENV
               ;;
             "admin")
-              echo "Building admin app with Nx..."
               pnpm exec nx build admin --configuration=$BUILD_ENV
               ;;
             "customer")
-              echo "Building customer app with Nx..."
               pnpm exec nx build customer --configuration=$BUILD_ENV
               
               if [ ! -d dist/apps/customer ]; then
@@ -180,48 +175,38 @@ jobs:
           case "$APP_TO_BUILD" in
             "ui")
               aws s3 sync dist/lib s3://$S3_BUCKET_NAME/prod/dist/lib --sse aws:kms
-              echo "✅ UI artifacts uploaded"
               ;;
             "fe")
               aws s3 sync dist/apps/organisation/ s3://$S3_BUCKET_NAME/prod/dist/apps/organisation/ --sse aws:kms --exact-timestamps --exclude "node_modules/*"
-              echo "✅ FE artifacts uploaded"
               ;;
             "customer")
               if [ -f customer-runtime.tgz ]; then
-                echo "Uploading customer-runtime.tgz to S3..."
                 aws s3 cp customer-runtime.tgz s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz --sse aws:kms
                 rm -f customer-runtime.tgz
-                echo "✅ Customer runtime uploaded"
               else
-                echo "❌ WARNING: customer-runtime.tgz missing; fallback to sync"
                 aws s3 sync dist/apps/customer/ s3://$S3_BUCKET_NAME/prod/dist/apps/customer/ --sse aws:kms --exact-timestamps --exclude "node_modules/*" --exclude "pnpm-lock.yaml" --exclude "package-lock.json"
               fi
               ;;
             "admin")
               aws s3 sync dist/apps/admin/ s3://$S3_BUCKET_NAME/prod/dist/apps/admin/ --sse aws:kms --exact-timestamps --exclude "node_modules/*" --exclude "pnpm-lock.yaml" --exclude "package-lock.json"
-              echo "✅ Admin artifacts uploaded"
               ;;
           esac
           
       - name: Deploy to EC2 (Customer App)
         if: env.APP_TO_BUILD == 'customer'
         run: |
-          echo "Deploying customer app to EC2..."
           echo "Retrieving PEM key from SSM..."
           aws ssm get-parameter --name "ethos-fe" --query "Parameter.Value" --output text > /tmp/private_key.pem
           chmod 400 /tmp/private_key.pem
           
-          echo "Executing deployment on EC2..."
+          echo "Deploying to EC2..."
           ssh -i /tmp/private_key.pem -p 7172 -o StrictHostKeyChecking=no ubuntu@3.210.120.239 "
             set -euo pipefail
-            echo 'Cleaning old dist on EC2...'
             sudo rm -rf /var/www/html/ethos-multi/dist/apps/customer/* || true
             sudo mkdir -p /var/www/html/ethos-multi/dist/apps/customer || true
             
             if aws s3 ls s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz >/dev/null 2>&1; then
-              echo 'Downloading runtime tarball from S3...'
               aws s3 cp s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz /tmp/customer-runtime.tgz --sse aws:kms
-              echo 'Extracting runtime tarball to target directory...'
               sudo tar -xzf /tmp/customer-runtime.tgz -C /var/www/html/ethos-multi/dist/apps/customer
               rm -f /tmp/customer-runtime.tgz || true
             else
@@ -229,23 +214,16 @@ jobs:
               exit 1
             fi
             
-            echo 'Fixing ownership on deployed files'
             sudo chown -R www-data:www-data /var/www/html/ethos-multi/dist/apps/customer || true
-            
-            echo 'Recording version from package.json'
             node -e \"console.log(require('/var/www/html/ethos-multi/dist/apps/customer/package.json').version || 'unknown')\" > /tmp/CUSTOMER_VERSION || true
             sudo mv /tmp/CUSTOMER_VERSION /var/www/html/ethos-multi/dist/apps/customer/VERSION || true
             sudo chown www-data:www-data /var/www/html/ethos-multi/dist/apps/customer/VERSION || true
             
-            echo 'Starting the customer app with pm2'
             cd /var/www/html/ethos-multi || true
             sudo pm2 delete customer || true
             sudo pm2 start npx --name customer --interpreter node -- next start /var/www/html/ethos-multi/dist/apps/customer -p 4200
             sudo pm2 save || true
-            
-            echo '✅ Deploy finished on EC2.'
           "
-          echo "✅ Customer app deployment completed"
           
       - name: Upload deployment artifacts on failure
         if: failure()
