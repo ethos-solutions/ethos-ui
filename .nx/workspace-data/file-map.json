@@ -47,16 +47,68 @@
         "hash": "8618838976421826986"
       },
       {
-        "file": ".eslintrc.json",
-        "hash": "8438299478381614931"
-      },
-      {
         "file": "CHANGELOG.md",
         "hash": "16184507339836904816"
       },
       {
+        "file": "jest.config.ts",
+        "hash": "12333515226966617182"
+      },
+      {
+        "file": ".github/README.md",
+        "hash": "11293720638132773849"
+      },
+      {
+        "file": ".eslintrc.json",
+        "hash": "8438299478381614931"
+      },
+      {
         "file": ".eslintignore",
         "hash": "7663861978715868291"
+      },
+      {
+        "file": "package.json",
+        "hash": "11410801087596628394"
+      },
+      {
+        "file": "jest.preset.js",
+        "hash": "15554043170078602512"
+      },
+      {
+        "file": ".prettierignore",
+        "hash": "14688272390704683536"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "16267754514737964994"
+      },
+      {
+        "file": ".vscode/mcp.json",
+        "hash": "16669523274055152517"
+      },
+      {
+        "file": ".github/workflows/ci.yml",
+        "hash": "15626853202655932618"
+      },
+      {
+        "file": "storybook-migration-summary.md",
+        "hash": "4565494848689173010"
+      },
+      {
+        "file": "tax.html",
+        "hash": "3998199932679906846"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "10066300031063478629"
+      },
+      {
+        "file": "README.md",
+        "hash": "3529177930900412919"
+      },
+      {
+        "file": "nx.json",
+        "hash": "1710823921016680181"
       },
       {
         "file": ".github/workflows/storybook.yml",
@@ -71,60 +123,8 @@
         "hash": "6166160105318820923"
       },
       {
-        "file": "nx.json",
-        "hash": "1710823921016680181"
-      },
-      {
-        "file": ".vscode/extensions.json",
-        "hash": "10066300031063478629"
-      },
-      {
-        "file": "README.md",
-        "hash": "3529177930900412919"
-      },
-      {
         "file": "tsconfig.base.json",
         "hash": "924875193486690378"
-      },
-      {
-        "file": "package.json",
-        "hash": "11410801087596628394"
-      },
-      {
-        "file": ".github/workflows/ci.yml",
-        "hash": "15626853202655932618"
-      },
-      {
-        "file": ".prettierrc",
-        "hash": "16267754514737964994"
-      },
-      {
-        "file": "jest.config.ts",
-        "hash": "12333515226966617182"
-      },
-      {
-        "file": "tax.html",
-        "hash": "3998199932679906846"
-      },
-      {
-        "file": ".vscode/mcp.json",
-        "hash": "16669523274055152517"
-      },
-      {
-        "file": ".prettierignore",
-        "hash": "14688272390704683536"
-      },
-      {
-        "file": "jest.preset.js",
-        "hash": "15554043170078602512"
-      },
-      {
-        "file": "storybook-migration-summary.md",
-        "hash": "4565494848689173010"
-      },
-      {
-        "file": ".github/README.md",
-        "hash": "11293720638132773849"
       }
     ],
     "projectFileMap": {
@@ -371,6 +371,15 @@
           ]
         },
         {
+          "file": "apps/admin/src/Pages/Login/login.tsx",
+          "hash": "17799936102518920414",
+          "deps": [
+            "ui",
+            "npm:react-router-dom",
+            "npm:react-i18next"
+          ]
+        },
+        {
           "file": "apps/admin/src/Pages/Organisation/Details.tsx",
           "hash": "16573854199997809955",
           "deps": [
@@ -383,6 +392,31 @@
         },
         {
           "file": "apps/admin/src/Pages/Organisation/List.tsx",
+          "hash": "17950413573754840832",
+          "deps": [
+            "npm:react",
+            "npm:react-router-dom",
+            "ui",
+            "npm:@mui/x-data-grid-premium",
+            "npm:@mui/material",
+            "npm:react-toastify",
+            "npm:@mui/icons-material",
+            "npm:react-i18next"
+          ]
+        },
+        {
+          "file": "apps/admin/src/Pages/Organisation/details.tsx",
+          "hash": "16573854199997809955",
+          "deps": [
+            "npm:@mui/material",
+            "npm:dayjs",
+            "npm:react-router-dom",
+            "ui",
+            "npm:@mui/icons-material"
+          ]
+        },
+        {
+          "file": "apps/admin/src/Pages/Organisation/list.tsx",
           "hash": "17950413573754840832",
           "deps": [
             "npm:react",
