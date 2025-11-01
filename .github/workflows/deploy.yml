@@ -29,6 +29,12 @@ env:
   BUILD_ENV: ${{ github.event.inputs.build_env || 'production' }}
   APP_TO_BUILD: ${{ github.event.inputs.app_to_build || 'customer' }}
   AWS_REGION: us-east-1
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+
+# Prevent concurrent deployments of the same app
+concurrency:
+  group: deploy-${{ github.ref }}-${{ github.event.inputs.app_to_build || 'customer' }}
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
@@ -38,6 +44,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
         
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
@@ -46,7 +54,25 @@ jobs:
           
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
         
+      - name: Verify AWS credentials are set
+        run: |
+          if [ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ] || [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY }}" ]; then
+            echo "❌ AWS credentials not found in secrets"
+            exit 1
+          fi
+          echo "✅ AWS credentials verified"
+          
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -59,26 +85,17 @@ jobs:
           NX_TOKEN=$(aws ssm get-parameter --name "NX_CLOUD_ACCESS_TOKEN" --query "Parameter.Value" --output text)
           echo "NX_CLOUD_ACCESS_TOKEN=$NX_TOKEN" >> $GITHUB_ENV
           echo "NX_CLOUD_ACCESS_TOKEN=$NX_TOKEN" > .env
-          
-      - name: Restore pnpm cache
-        run: |
-          if aws s3 ls s3://$S3_BUCKET_NAME/cache/pnpm-store-cache.tgz >/dev/null 2>&1; then
-            echo "Found pnpm cache tarball; downloading..."
-            aws s3 cp s3://$S3_BUCKET_NAME/cache/pnpm-store-cache.tgz /tmp/pnpm-store-cache.tgz
-            mkdir -p ~/.local/share/pnpm/store
-            tar -xzf /tmp/pnpm-store-cache.tgz -C ~/.local/share/pnpm/store
-            rm -f /tmp/pnpm-store-cache.tgz
-          else
-            echo "No pnpm cache tarball found"
-          fi
+          echo "✅ Nx Cloud token configured"
           
       - name: Install dependencies
         run: |
-          echo "Running pnpm install for workspace"
+          echo "Installing workspace dependencies..."
           pnpm install --frozen-lockfile || pnpm install
+          echo "✅ Dependencies installed"
           
       - name: Set environment variables
         run: |
+          echo "Setting environment variables for $APP_TO_BUILD..."
           case "$APP_TO_BUILD" in
             "fe")
               echo "VITE_APP_API_URL=$(aws ssm get-parameter --name 'VITE_APP_API_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
@@ -99,28 +116,30 @@ jobs:
               echo "NEXT_PUBLIC_MP_PUBLIC_KEY=$(aws ssm get-parameter --name 'NEXT_PUBLIC_MP_PUBLIC_KEY' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
               ;;
           esac
+          echo "✅ Environment variables configured for $APP_TO_BUILD"
           
-      - name: Build application
+      - name: Build application with Nx
         run: |
+          echo "Building $APP_TO_BUILD application with Nx..."
           case "$APP_TO_BUILD" in
             "fe")
-              echo "Building FE (organisation)..."
-              pnpm run build:org --configuration=$BUILD_ENV
+              echo "Building organisation app with Nx..."
+              pnpm exec nx build organisation --configuration=$BUILD_ENV
               ;;
             "ui")
-              echo "Building UI (storybook)..."
-              pnpm run build:storybook --configuration=$BUILD_ENV
+              echo "Building UI Storybook with Nx..."
+              pnpm exec nx build-storybook ui --configuration=$BUILD_ENV
               ;;
             "admin")
-              echo "Building Admin..."
-              pnpm run build:admin --configuration=$BUILD_ENV
+              echo "Building admin app with Nx..."
+              pnpm exec nx build admin --configuration=$BUILD_ENV
               ;;
             "customer")
-              echo "Building Customer..."
-              pnpm run build:customer --configuration=$BUILD_ENV
+              echo "Building customer app with Nx..."
+              pnpm exec nx build customer --configuration=$BUILD_ENV
               
               if [ ! -d dist/apps/customer ]; then
-                echo "ERROR: dist/apps/customer not found after build"
+                echo "❌ ERROR: dist/apps/customer not found after build"
                 exit 1
               fi
               
@@ -149,43 +168,50 @@ jobs:
               tar -tf customer-runtime.tgz | grep -i nx-helpers || echo "WARNING: no nx-helpers in tarball"
               ;;
             *)
-              echo "Invalid APP_TO_BUILD: $APP_TO_BUILD"
+              echo "❌ Invalid APP_TO_BUILD: $APP_TO_BUILD"
               exit 1
               ;;
           esac
+          echo "✅ Build completed for $APP_TO_BUILD"
           
       - name: Upload to S3
         run: |
+          echo "Uploading $APP_TO_BUILD artifacts to S3..."
           case "$APP_TO_BUILD" in
             "ui")
               aws s3 sync dist/lib s3://$S3_BUCKET_NAME/prod/dist/lib --sse aws:kms
+              echo "✅ UI artifacts uploaded"
               ;;
             "fe")
               aws s3 sync dist/apps/organisation/ s3://$S3_BUCKET_NAME/prod/dist/apps/organisation/ --sse aws:kms --exact-timestamps --exclude "node_modules/*"
+              echo "✅ FE artifacts uploaded"
               ;;
             "customer")
               if [ -f customer-runtime.tgz ]; then
                 echo "Uploading customer-runtime.tgz to S3..."
                 aws s3 cp customer-runtime.tgz s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz --sse aws:kms
                 rm -f customer-runtime.tgz
+                echo "✅ Customer runtime uploaded"
               else
-                echo "WARNING: customer-runtime.tgz missing; fallback to sync"
+                echo "❌ WARNING: customer-runtime.tgz missing; fallback to sync"
                 aws s3 sync dist/apps/customer/ s3://$S3_BUCKET_NAME/prod/dist/apps/customer/ --sse aws:kms --exact-timestamps --exclude "node_modules/*" --exclude "pnpm-lock.yaml" --exclude "package-lock.json"
               fi
               ;;
             "admin")
               aws s3 sync dist/apps/admin/ s3://$S3_BUCKET_NAME/prod/dist/apps/admin/ --sse aws:kms --exact-timestamps --exclude "node_modules/*" --exclude "pnpm-lock.yaml" --exclude "package-lock.json"
+              echo "✅ Admin artifacts uploaded"
               ;;
           esac
           
       - name: Deploy to EC2 (Customer App)
         if: env.APP_TO_BUILD == 'customer'
         run: |
+          echo "Deploying customer app to EC2..."
           echo "Retrieving PEM key from SSM..."
           aws ssm get-parameter --name "ethos-fe" --query "Parameter.Value" --output text > /tmp/private_key.pem
           chmod 400 /tmp/private_key.pem
           
-          echo "Deploying to EC2..."
+          echo "Executing deployment on EC2..."
           ssh -i /tmp/private_key.pem -p 7172 -o StrictHostKeyChecking=no ubuntu@3.210.120.239 "
             set -euo pipefail
             echo 'Cleaning old dist on EC2...'
@@ -217,23 +243,31 @@ jobs:
             sudo pm2 start npx --name customer --interpreter node -- next start /var/www/html/ethos-multi/dist/apps/customer -p 4200
             sudo pm2 save || true
             
-            echo 'Deploy finished on EC2.'
+            echo '✅ Deploy finished on EC2.'
           "
+          echo "✅ Customer app deployment completed"
           
-      - name: Cache pnpm store
-        run: |
-          echo "Creating pnpm cache tarball..."
-          if [ -d ~/.local/share/pnpm/store ]; then
-            tar -czf pnpm-store-cache.tgz -C ~/.local/share/pnpm/store .
-            aws s3 cp pnpm-store-cache.tgz s3://$S3_BUCKET_NAME/cache/pnpm-store-cache.tgz --sse aws:kms || true
-            rm -f pnpm-store-cache.tgz || true
-          fi
+      - name: Upload deployment artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-logs-${{ env.APP_TO_BUILD }}-${{ github.run_id }}
+          path: |
+            dist/
+            *.log
+            *.tgz
+          retention-days: 7
           
-      - name: Notify deployment status
+      - name: Deployment summary
         if: always()
         run: |
-          if [ "${{ job.status }}" == "success" ]; then
-            echo "✅ Deployment successful for $APP_TO_BUILD application"
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ Deployment successful for $APP_TO_BUILD application ($BUILD_ENV)"
+            echo "📦 Artifacts uploaded to S3: s3://$S3_BUCKET_NAME/prod/"
+            if [ "$APP_TO_BUILD" = "customer" ]; then
+              echo "🚀 Customer app deployed to EC2 and running on pm2"
+            fi
           else
             echo "❌ Deployment failed for $APP_TO_BUILD application"
+            echo "📋 Check the logs above and uploaded artifacts for debugging"
           fi
