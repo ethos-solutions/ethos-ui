@@ -22809,37 +22809,7 @@
       },
       {
         "source": "admin",
-        "target": "npm:react",
-        "type": "static"
-      },
-      {
-        "source": "admin",
         "target": "ui",
-        "type": "static"
-      },
-      {
-        "source": "admin",
-        "target": "npm:react-hook-form",
-        "type": "static"
-      },
-      {
-        "source": "admin",
-        "target": "npm:@hookform/resolvers",
-        "type": "static"
-      },
-      {
-        "source": "admin",
-        "target": "npm:yup",
-        "type": "static"
-      },
-      {
-        "source": "admin",
-        "target": "npm:@mui/material",
-        "type": "static"
-      },
-      {
-        "source": "admin",
-        "target": "npm:@mui/icons-material",
         "type": "static"
       },
       {
@@ -22854,7 +22824,22 @@
       },
       {
         "source": "admin",
+        "target": "npm:@mui/material",
+        "type": "static"
+      },
+      {
+        "source": "admin",
         "target": "npm:dayjs",
+        "type": "static"
+      },
+      {
+        "source": "admin",
+        "target": "npm:@mui/icons-material",
+        "type": "static"
+      },
+      {
+        "source": "admin",
+        "target": "npm:react",
         "type": "static"
       },
       {
@@ -22870,6 +22855,21 @@
       {
         "source": "admin",
         "target": "npm:@tanstack/react-query",
+        "type": "static"
+      },
+      {
+        "source": "admin",
+        "target": "npm:react-hook-form",
+        "type": "static"
+      },
+      {
+        "source": "admin",
+        "target": "npm:@hookform/resolvers",
+        "type": "static"
+      },
+      {
+        "source": "admin",
+        "target": "npm:yup",
         "type": "static"
       },
       {
@@ -53961,5 +53961,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1762004323676
+  "computedAt": 1762006950653
 }
