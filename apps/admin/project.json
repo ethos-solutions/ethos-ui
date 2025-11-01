@@ -5,6 +5,12 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "type-check": {
+      "executor": "@nrwl/workspace:run-commands", 
+      "options": {
+        "command": "tsc -p apps/admin/tsconfig.app.json --noEmit"
+      }
+    },
     "build": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
