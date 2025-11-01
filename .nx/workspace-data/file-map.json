@@ -43,88 +43,88 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "nx.json",
-        "hash": "1710823921016680181"
-      },
-      {
-        "file": ".eslintrc.json",
-        "hash": "8438299478381614931"
-      },
-      {
-        "file": ".vscode/extensions.json",
-        "hash": "10066300031063478629"
-      },
-      {
-        "file": ".vscode/mcp.json",
-        "hash": "16669523274055152517"
-      },
-      {
-        "file": ".github/workflows/deploy.yml",
-        "hash": "6166160105318820923"
-      },
-      {
-        "file": "jest.config.ts",
-        "hash": "12333515226966617182"
-      },
-      {
-        "file": "tax.html",
-        "hash": "3998199932679906846"
-      },
-      {
-        "file": ".prettierrc",
-        "hash": "16267754514737964994"
-      },
-      {
         "file": "tsconfig.base.json",
         "hash": "924875193486690378"
-      },
-      {
-        "file": "pnpm-lock.yaml",
-        "hash": "9805211760720280268"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "8618838976421826986"
-      },
-      {
-        "file": "README.md",
-        "hash": "3529177930900412919"
-      },
-      {
-        "file": "CHANGELOG.md",
-        "hash": "16184507339836904816"
-      },
-      {
-        "file": ".github/README.md",
-        "hash": "11293720638132773849"
-      },
-      {
-        "file": ".eslintignore",
-        "hash": "7663861978715868291"
-      },
-      {
-        "file": "jest.preset.js",
-        "hash": "15554043170078602512"
-      },
-      {
-        "file": "package.json",
-        "hash": "11410801087596628394"
       },
       {
         "file": "storybook-migration-summary.md",
         "hash": "4565494848689173010"
       },
       {
-        "file": ".prettierignore",
-        "hash": "14688272390704683536"
+        "file": ".prettierrc",
+        "hash": "16267754514737964994"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "hash": "9805211760720280268"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "10066300031063478629"
+      },
+      {
+        "file": "jest.config.ts",
+        "hash": "12333515226966617182"
+      },
+      {
+        "file": "README.md",
+        "hash": "3529177930900412919"
+      },
+      {
+        "file": ".eslintrc.json",
+        "hash": "8438299478381614931"
+      },
+      {
+        "file": "nx.json",
+        "hash": "1710823921016680181"
+      },
+      {
+        "file": ".github/README.md",
+        "hash": "11293720638132773849"
+      },
+      {
+        "file": ".github/workflows/deploy.yml",
+        "hash": "6166160105318820923"
+      },
+      {
+        "file": "tax.html",
+        "hash": "3998199932679906846"
+      },
+      {
+        "file": "CHANGELOG.md",
+        "hash": "16184507339836904816"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "8618838976421826986"
+      },
+      {
+        "file": ".eslintignore",
+        "hash": "7663861978715868291"
       },
       {
         "file": ".github/workflows/ci.yml",
         "hash": "15626853202655932618"
       },
       {
+        "file": ".prettierignore",
+        "hash": "14688272390704683536"
+      },
+      {
+        "file": "jest.preset.js",
+        "hash": "15554043170078602512"
+      },
+      {
         "file": ".github/workflows/storybook.yml",
         "hash": "18334824462403200868"
+      },
+      {
+        "file": ".vscode/mcp.json",
+        "hash": "16669523274055152517"
+      },
+      {
+        "file": "package.json",
+        "hash": "11410801087596628394"
       }
     ],
     "projectFileMap": {
