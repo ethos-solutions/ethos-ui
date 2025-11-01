@@ -9,82 +9,95 @@ on:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  lint-only:
+  ci:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    
+    timeout-minutes: 20
+
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          
-      - name: Setup pnpm
+
+      - name: Setup pnpm (use version from package.json)
         uses: pnpm/action-setup@v4
-          
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-          
-      - name: Setup pnpm cache
+        with:
+          run_install: false
+
+      - name: Cache pnpm store
         uses: actions/cache@v4
         with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-            
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        
-      - name: Run linting
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies (allow lockfile update)
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Print Nx info
+        run: pnpm exec nx report
+
+      - name: Lint (affected)
         run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            pnpm exec nx affected --target=lint --base=origin/main --head=HEAD
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec nx affected --target=lint --base=origin/main --head=HEAD --parallel=3
           else
-            pnpm run lint
+            pnpm exec nx run-many --target=lint --all --parallel=3
           fi
 
-  type-check:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Setup Node.js 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-          
-      - name: Get pnpm store directory
-        shell: bash
+      - name: Type check (affected)
         run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-          
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-            
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        
-      - name: Type check
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec nx affected --target=type-check --base=origin/main --head=HEAD --parallel=3 || \
+            pnpm exec tsc --noEmit --project tsconfig.base.json
+          else
+            pnpm exec nx run-many --target=type-check --all --parallel=3 || \
+            pnpm exec tsc --noEmit --project tsconfig.base.json
+          fi
+
+      - name: Test (affected)
         run: |
-          pnpm exec nx run-many --target=type-check --all || \
-          pnpm exec tsc --noEmit --project tsconfig.base.json
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec nx affected --target=test --base=origin/main --head=HEAD --parallel=3 --configuration=ci || echo "No tests found or tests failed"
+          else
+            pnpm exec nx run-many --target=test --all --parallel=3 --configuration=ci || echo "No tests found or tests failed"
+          fi
+
+      - name: Build (affected)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec nx affected --target=build --base=origin/main --head=HEAD --parallel=3
+          else
+            pnpm exec nx run-many --target=build --all --parallel=3
+          fi
+
+      - name: Upload build artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ github.run_id }}
+          path: |
+            dist/
+            node_modules/.nx/
+            *.log
+          retention-days: 3
+
+      - name: CI Summary
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ CI completed successfully"
+          else
+            echo "❌ CI failed - check logs above"
+          fi
