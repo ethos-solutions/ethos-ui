@@ -16,7 +16,7 @@ concurrency:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -42,8 +42,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
-      - name: Install dependencies (allow lockfile update)
-        run: pnpm install --no-frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile || pnpm install
 
       - name: Print Nx info
         run: pnpm exec nx report
@@ -74,21 +74,12 @@ jobs:
             pnpm exec nx run-many --target=test --all --parallel=3 --configuration=ci || echo "No tests found or tests failed"
           fi
 
-      - name: Build (affected)
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pnpm exec nx affected --target=build --base=origin/main --head=HEAD --parallel=3
-          else
-            pnpm exec nx run-many --target=build --all --parallel=3
-          fi
-
-      - name: Upload build artifacts on failure
+      - name: Upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: build-logs-${{ github.run_id }}
+          name: ci-logs-${{ github.run_id }}
           path: |
-            dist/
             node_modules/.nx/
             *.log
           retention-days: 3
@@ -97,7 +88,7 @@ jobs:
         if: always()
         run: |
           if [ "${{ job.status }}" = "success" ]; then
-            echo "✅ CI completed successfully"
+            echo "✅ CI validation completed successfully (lint + type-check + test)"
           else
-            echo "❌ CI failed - check logs above"
+            echo "❌ CI validation failed - check logs above"
           fi
