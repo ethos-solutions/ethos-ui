@@ -8,7 +8,7 @@
     "type-check": {
       "executor": "@nrwl/workspace:run-commands", 
       "options": {
-        "command": "tsc -p apps/organisation/tsconfig.app.json --noEmit"
+        "command": "tsc -p apps/customer/tsconfig.app.json --noEmit"
       }
     },
     "build": {
