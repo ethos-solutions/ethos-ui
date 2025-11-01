@@ -1,8 +1,6 @@
 name: Deploy Ethos Applications
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
     inputs:
       app_to_build:
