@@ -1,65 +1,32 @@
 {
   "run": {
-    "command": "nx run-many --target=lint --all",
-    "startTime": "2025-11-01T12:48:46.241Z",
-    "endTime": "2025-11-01T12:48:46.306Z",
+    "command": "nx run admin:build:production",
+    "startTime": "2025-11-01T13:26:39.208Z",
+    "endTime": "2025-11-01T13:27:29.302Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "ui:lint",
-      "target": "lint",
+      "taskId": "ui:build:production",
+      "target": "build",
       "projectName": "ui",
-      "hash": "1753886222442910074",
-      "startTime": "2025-11-01T12:48:46.265Z",
-      "endTime": "2025-11-01T12:48:46.267Z",
+      "hash": "12405207106253931981",
+      "startTime": "2025-11-01T13:26:39.232Z",
+      "endTime": "2025-11-01T13:27:22.516Z",
       "params": "",
-      "cacheStatus": "local-cache-hit",
+      "cacheStatus": "cache-miss",
       "status": 0
     },
     {
-      "taskId": "customer:lint",
-      "target": "lint",
-      "projectName": "customer",
-      "hash": "10115609243495267181",
-      "startTime": "2025-11-01T12:48:46.273Z",
-      "endTime": "2025-11-01T12:48:46.274Z",
-      "params": "",
-      "cacheStatus": "local-cache-hit",
-      "status": 0
-    },
-    {
-      "taskId": "organisation:lint",
-      "target": "lint",
-      "projectName": "organisation",
-      "hash": "12549769568875064946",
-      "startTime": "2025-11-01T12:48:46.283Z",
-      "endTime": "2025-11-01T12:48:46.283Z",
-      "params": "",
-      "cacheStatus": "local-cache-hit",
-      "status": 0
-    },
-    {
-      "taskId": "co-screen:lint",
-      "target": "lint",
-      "projectName": "co-screen",
-      "hash": "17112909777370484952",
-      "startTime": "2025-11-01T12:48:46.304Z",
-      "endTime": "2025-11-01T12:48:46.305Z",
-      "params": "",
-      "cacheStatus": "local-cache-hit",
-      "status": 0
-    },
-    {
-      "taskId": "admin:lint",
-      "target": "lint",
+      "taskId": "admin:build:production",
+      "target": "build",
       "projectName": "admin",
-      "hash": "11387575507876088458",
-      "startTime": "2025-11-01T12:48:46.305Z",
-      "endTime": "2025-11-01T12:48:46.306Z",
+      "hash": "145279653689539016",
+      "startTime": "2025-11-01T13:27:22.602Z",
+      "endTime": "2025-11-01T13:27:29.300Z",
       "params": "",
-      "cacheStatus": "local-cache-hit",
-      "status": 0
+      "cacheStatus": "cache-miss",
+      "status": 1
     }
   ]
 }

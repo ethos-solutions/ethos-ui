@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { pageRoutes } from './routes';
 import { routeTypes } from '../types';
 import Layout from '../layout/Layout';
-import Loading from '../components/Loading';
+import Loading from '../Components_old/Loading';
 import { withConditionalRoute } from '@ethos-frontend/hoc';
 import { ROUTES } from '../helpers/constants';
 
