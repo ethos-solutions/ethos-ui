@@ -48,13 +48,12 @@ jobs:
       - name: Print Nx info
         run: pnpm exec nx report
 
-      - name: Lint (affected) - non-blocking for now
+      - name: Lint (affected)
         run: |
-          echo "🔍 Running lint checks (non-blocking during CI optimization phase)"
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pnpm exec nx affected --target=lint --base=origin/main --head=HEAD --parallel=3 || echo "⚠️ Lint issues found - will be addressed in follow-up commit"
+            pnpm exec nx affected --target=lint --base=origin/main --head=HEAD --parallel=3
           else
-            pnpm exec nx run-many --target=lint --all --parallel=3 || echo "⚠️ Lint issues found - will be addressed in follow-up commit"
+            pnpm exec nx run-many --target=lint --all --parallel=3
           fi
 
       - name: Type check (affected)
@@ -99,7 +98,6 @@ jobs:
         run: |
           if [ "${{ job.status }}" = "success" ]; then
             echo "✅ CI completed successfully"
-            echo "📝 Note: Lint issues are temporarily non-blocking during CI optimization phase"
           else
             echo "❌ CI failed - check logs above"
           fi
