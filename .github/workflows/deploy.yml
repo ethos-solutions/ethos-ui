@@ -147,30 +147,45 @@ jobs:
           echo "📦 Building version: $VERSION_SHA"
           echo "📁 Artifact path: s3://$S3_BUCKET_NAME/$ARTIFACT_PATH"
 
-      - name: Set environment variables from Parameter Store
+      - name: Set environment variables from Parameter Store (production/staging)
         run: |
           echo "Setting environment variables for $APP_TO_BUILD from SSM..."
           if [ "$APP_TO_BUILD" = "fe" ]; then
-            echo "VITE_APP_API_URL=$(aws ssm get-parameter --name 'VITE_APP_API_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
-            echo "VITE_APP_API_GRAPH_URL=$(aws ssm get-parameter --name 'VITE_APP_API_GRAPH_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
-            echo "VITE_APP_SOCKET_URL=$(aws ssm get-parameter --name 'VITE_APP_SOCKET_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            if [ "$BUILD_ENV" = "staging" ] || [ "$BUILD_ENV" = "stage" ]; then
+              echo "VITE_APP_API_URL=$(aws ssm get-parameter --name 'VITE_APP_API_URL_STAGE' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "VITE_APP_API_GRAPH_URL=$(aws ssm get-parameter --name 'VITE_APP_API_GRAPH_URL_STAGE' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            else
+              echo "VITE_APP_API_URL=$(aws ssm get-parameter --name 'VITE_APP_API_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "VITE_APP_API_GRAPH_URL=$(aws ssm get-parameter --name 'VITE_APP_API_GRAPH_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            fi
             echo "VITE_APP_S3_BUCKET_NAME=$(aws ssm get-parameter --name 'VITE_APP_S3_BUCKET_NAME' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
             echo "VITE_APP_IDENTITY_POOL_ID=$(aws ssm get-parameter --name 'VITE_APP_IDENTITY_POOL_ID' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
             echo "VITE_APP_PLACES_API=$(aws ssm get-parameter --name 'VITE_APP_PLACES_API' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
           fi
 
           if [ "$APP_TO_BUILD" = "customer" ]; then
-            echo "NEXT_PUBLIC_API_URL=$(aws ssm get-parameter --name 'NEXT_PUBLIC_API_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
-            echo "NEXT_PUBLIC_API_GRAPH_URL=$(aws ssm get-parameter --name 'NEXT_PUBLIC_API_GRAPH_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            if [ "$BUILD_ENV" = "staging" ] || [ "$BUILD_ENV" = "stage" ]; then
+              echo "NEXT_PUBLIC_API_URL=$(aws ssm get-parameter --name 'NEXT_PUBLIC_API_URL_STAGE' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "NEXT_PUBLIC_API_GRAPH_URL=$(aws ssm get-parameter --name 'NEXT_PUBLIC_API_GRAPH_URL_STAGE' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            else
+              echo "NEXT_PUBLIC_API_URL=$(aws ssm get-parameter --name 'NEXT_PUBLIC_API_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+              echo "NEXT_PUBLIC_API_GRAPH_URL=$(aws ssm get-parameter --name 'NEXT_PUBLIC_API_GRAPH_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            fi
             echo "NEXT_PUBLIC_STRIPE_KEY=$(aws ssm get-parameter --name 'NEXT_PUBLIC_STRIPE_KEY' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
             echo "NEXT_PUBLIC_FIREBASE_VAPID_TOKEN=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_VAPID_TOKEN' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
-            echo "NEXT_PUBLIC_MP_PUBLIC_KEY=$(aws ssm get-parameter --name 'NEXT_PUBLIC_MP_PUBLIC_KEY' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_FIREBASE_APP_API_KEY=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_APP_API_KEY' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_PROJECT_ID' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_FIREBASE_APP_ID=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_APP_ID' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
           fi
-          echo "✅ Environment variables configured for $APP_TO_BUILD"
+          echo "✅ Environment variables configured for $APP_TO_BUILD ($BUILD_ENV)"
 
       - name: Build application with Nx
         run: |
-          echo "Building $APP_TO_BUILD application with Nx..."
+          echo "Building $APP_TO_BUILD application with Nx ($BUILD_ENV)..."
           case "$APP_TO_BUILD" in
             "fe") pnpm exec nx build organisation --configuration=$BUILD_ENV ;;
             "ui") pnpm exec nx build-storybook ui --configuration=$BUILD_ENV ;;
@@ -232,187 +247,102 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Create timestamped backup of current production (rollback protection)
+      - name: Create timestamped backup of current environment (rollback protection)
         if: env.APP_TO_BUILD == 'customer'
         run: |
+          TARGET_PREFIX=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "stage" || echo "prod")
           BACKUP_TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
-          BACKUP_PATH="backups/customer/$BACKUP_TIMESTAMP"
-          echo "🛡️ Creating production backup: s3://$S3_BUCKET_NAME/$BACKUP_PATH"
-          
-          if aws s3 ls s3://$S3_BUCKET_NAME/prod/dist/apps/customer/ >/dev/null 2>&1; then
-            aws s3 sync s3://$S3_BUCKET_NAME/prod/dist/apps/customer/ s3://$S3_BUCKET_NAME/$BACKUP_PATH/ --sse aws:kms
-            echo "✅ Backup created: s3://$S3_BUCKET_NAME/$BACKUP_PATH"
+          BACKUP_PATH="backups/customer/$TARGET_PREFIX/$BACKUP_TIMESTAMP"
+          echo "🛡️ Creating backup: s3://$S3_BUCKET_NAME/$BACKUP_PATH"
+          if aws s3 ls s3://$S3_BUCKET_NAME/$TARGET_PREFIX/dist/apps/customer/ >/dev/null 2>&1; then
+            aws s3 sync s3://$S3_BUCKET_NAME/$TARGET_PREFIX/dist/apps/customer/ s3://$S3_BUCKET_NAME/$BACKUP_PATH/ --sse aws:kms
             echo "BACKUP_PATH=$BACKUP_PATH" >> $GITHUB_ENV
           else
-            echo "ℹ️ No existing production deployment found to backup"
+            echo "No existing deployment to backup"
             echo "BACKUP_PATH=" >> $GITHUB_ENV
           fi
 
-      - name: Deploy versioned artifacts to production
+      - name: Deploy versioned artifacts to target prefix
         run: |
-          echo "🚀 Deploying $APP_TO_BUILD version ${{ needs.build.outputs.version_sha }}..."
+          TARGET_PREFIX=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "stage" || echo "prod")
+          echo "🚀 Deploying $APP_TO_BUILD ($BUILD_ENV) to s3://$S3_BUCKET_NAME/$TARGET_PREFIX/..."
           case "$APP_TO_BUILD" in
             "ui")
-              aws s3 sync s3://$S3_BUCKET_NAME/${{ needs.build.outputs.artifact_path }}/lib/ s3://$S3_BUCKET_NAME/prod/dist/lib/ --sse aws:kms --delete
-              ;;
+              aws s3 sync s3://$S3_BUCKET_NAME/${{ needs.build.outputs.artifact_path }}/lib/ s3://$S3_BUCKET_NAME/$TARGET_PREFIX/dist/lib/ --sse aws:kms --delete ;;
             "fe")
-              aws s3 sync s3://$S3_BUCKET_NAME/${{ needs.build.outputs.artifact_path }}/organisation/ s3://$S3_BUCKET_NAME/prod/dist/apps/organisation/ --sse aws:kms --delete
-              ;;
+              aws s3 sync s3://$S3_BUCKET_NAME/${{ needs.build.outputs.artifact_path }}/organisation/ s3://$S3_BUCKET_NAME/$TARGET_PREFIX/dist/apps/organisation/ --sse aws:kms --delete ;;
             "customer")
-              aws s3 cp s3://$S3_BUCKET_NAME/${{ needs.build.outputs.artifact_path }}/customer-runtime.tgz s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz --sse aws:kms
-              ;;
+              aws s3 cp s3://$S3_BUCKET_NAME/${{ needs.build.outputs.artifact_path }}/customer-runtime.tgz s3://$S3_BUCKET_NAME/$TARGET_PREFIX/dist/apps/customer/customer-runtime.tgz --sse aws:kms ;;
             "admin")
-              aws s3 sync s3://$S3_BUCKET_NAME/${{ needs.build.outputs.artifact_path }}/admin/ s3://$S3_BUCKET_NAME/prod/dist/apps/admin/ --sse aws:kms --delete
-              ;;
+              aws s3 sync s3://$S3_BUCKET_NAME/${{ needs.build.outputs.artifact_path }}/admin/ s3://$S3_BUCKET_NAME/$TARGET_PREFIX/dist/apps/admin/ --sse aws:kms --delete ;;
           esac
-          echo "✅ Artifacts deployed to production S3"
+          echo "✅ Artifacts deployed to s3://$S3_BUCKET_NAME/$TARGET_PREFIX/"
 
       - name: Deploy to EC2 (Customer App)
         if: env.APP_TO_BUILD == 'customer'
         run: |
-          echo "🖥️ Deploying to EC2 server..."
+          TARGET_HOST=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "35.175.98.240" || echo "3.210.120.239")
+          TARGET_PREFIX=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "stage" || echo "prod")
+
+          echo "🖥️ Deploying to EC2 $TARGET_HOST ($BUILD_ENV)..."
           aws ssm get-parameter --name "ethos-fe" --query "Parameter.Value" --output text > /tmp/private_key.pem
           chmod 400 /tmp/private_key.pem
 
-          ssh -i /tmp/private_key.pem -p 7172 -o StrictHostKeyChecking=no ubuntu@3.210.120.239 "
+          ssh -i /tmp/private_key.pem -p 7172 -o StrictHostKeyChecking=no ubuntu@$TARGET_HOST "
             set -euo pipefail
-            echo '🗂️ Cleaning old deployment directory...'
-            sudo rm -rf /var/www/html/ethos-multi/dist/apps/customer/* || true
-            sudo mkdir -p /var/www/html/ethos-multi/dist/apps/customer || true
+            sudo rm -rf /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/* || true
+            sudo mkdir -p /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer || true
 
-            echo '📦 Downloading runtime artifact from S3...'
-            if aws s3 ls s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz >/dev/null 2>&1; then
-              aws s3 cp s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz /tmp/customer-runtime.tgz --sse aws:kms
-              echo '📂 Extracting runtime to deployment directory...'
-              sudo tar -xzf /tmp/customer-runtime.tgz -C /var/www/html/ethos-multi/dist/apps/customer
+            if aws s3 ls s3://$S3_BUCKET_NAME/$TARGET_PREFIX/dist/apps/customer/customer-runtime.tgz >/dev/null 2>&1; then
+              aws s3 cp s3://$S3_BUCKET_NAME/$TARGET_PREFIX/dist/apps/customer/customer-runtime.tgz /tmp/customer-runtime.tgz --sse aws:kms
+              sudo tar -xzf /tmp/customer-runtime.tgz -C /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer
               rm -f /tmp/customer-runtime.tgz || true
             else
-              echo '❌ Runtime artifact not found in S3'
-              exit 1
+              echo 'Runtime artifact not found in S3'; exit 1
             fi
 
-            echo '👤 Setting file ownership...'
-            sudo chown -R www-data:www-data /var/www/html/ethos-multi/dist/apps/customer || true
-            
-            echo '📋 Recording deployment version...'
-            echo '${{ needs.build.outputs.version_sha }}' | sudo tee /var/www/html/ethos-multi/dist/apps/customer/VERSION
-            sudo chown www-data:www-data /var/www/html/ethos-multi/dist/apps/customer/VERSION || true
+            sudo chown -R www-data:www-data /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer || true
+            echo '${{ needs.build.outputs.version_sha }}' | sudo tee /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/VERSION
+            sudo chown www-data:www-data /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/VERSION || true
 
-            echo '🔄 Restarting application with pm2...'
-            cd /var/www/html/ethos-multi || true
+            cd /var/www/html/ethos-$TARGET_PREFIX
             sudo pm2 delete customer || true
-            sudo pm2 start npx --name customer --interpreter node -- next start /var/www/html/ethos-multi/dist/apps/customer -p 4200
+            sudo pm2 start npx --name customer --interpreter node -- next start /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer -p 4200
             sudo pm2 save || true
-            echo '✅ EC2 deployment completed'
           "
 
       - name: Enhanced health check with retry logic
         if: env.APP_TO_BUILD == 'customer'
         run: |
-          echo "🏥 Running enhanced health checks..."
-          SUCCESS=false
-          
+          TARGET_HOST=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "35.175.98.240" || echo "3.210.120.239")
+          echo "🏥 Running health checks on $TARGET_HOST..."
           for i in {1..15}; do
-            echo "Health check attempt $i/15..."
-            
-            # Basic connectivity
-            if ! curl -s --max-time 10 http://3.210.120.239:4200/ >/dev/null; then
-              echo "❌ Basic connectivity failed"
-              sleep 10
-              continue
-            fi
-            
-            # Health endpoint (if exists)
-            HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 http://3.210.120.239:4200/health || echo "000")
-            if [ "$HEALTH_STATUS" = "200" ]; then
-              echo "✅ Health endpoint responded successfully"
-              SUCCESS=true
-              break
-            elif [ "$HEALTH_STATUS" = "404" ]; then
-              # Health endpoint might not exist, check main page
-              MAIN_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 http://3.210.120.239:4200/ || echo "000")
-              if [ "$MAIN_STATUS" = "200" ]; then
-                echo "✅ Main page responded successfully (health endpoint not found)"
-                SUCCESS=true
-                break
-              fi
-            fi
-            
-            echo "⏳ Health not ready (health: $HEALTH_STATUS). Retrying in 10s..."
-            sleep 10
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 http://$TARGET_HOST:4200/health || echo "000")
+            if [ "$STATUS" = "200" ]; then echo "✅ Health passed"; exit 0; fi
+            echo "⏳ Not ready (status=$STATUS). Retry..."; sleep 10
           done
-          
-          if [ "$SUCCESS" = "true" ]; then
-            echo "🎉 Health checks passed - deployment successful!"
-          else
-            echo "💥 Health checks failed after 15 attempts - triggering rollback"
-            exit 1
-          fi
+          echo "💥 Health checks failed"; exit 1
 
       - name: Emergency rollback on any failure
         if: failure() && env.APP_TO_BUILD == 'customer' && env.BACKUP_PATH != ''
         run: |
-          echo "🚨 DEPLOYMENT FAILED - Starting emergency rollback..."
-          echo "📼 Restoring from backup: s3://$S3_BUCKET_NAME/$BACKUP_PATH"
-          
-          # Restore S3 artifacts
-          aws s3 sync s3://$S3_BUCKET_NAME/$BACKUP_PATH/ s3://$S3_BUCKET_NAME/prod/dist/apps/customer/ --sse aws:kms --delete
-          echo "✅ S3 artifacts restored from backup"
-          
-          # Restore EC2 deployment
-          ssh -i /tmp/private_key.pem -p 7172 -o StrictHostKeyChecking=no ubuntu@3.210.120.239 "
+          TARGET_PREFIX=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "stage" || echo "prod")
+          echo "🚨 Rolling back using backup at s3://$S3_BUCKET_NAME/$BACKUP_PATH"
+          aws s3 sync s3://$S3_BUCKET_NAME/$BACKUP_PATH/ s3://$S3_BUCKET_NAME/$TARGET_PREFIX/dist/apps/customer/ --sse aws:kms --delete
+          TARGET_HOST=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "35.175.98.240" || echo "3.210.120.239")
+          ssh -i /tmp/private_key.pem -p 7172 -o StrictHostKeyChecking=no ubuntu@$TARGET_HOST "
             set -euo pipefail
-            echo '🔄 Redeploying backup version to EC2...'
-            sudo rm -rf /var/www/html/ethos-multi/dist/apps/customer/* || true
-            
-            if aws s3 ls s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz >/dev/null 2>&1; then
-              aws s3 cp s3://$S3_BUCKET_NAME/prod/dist/apps/customer/customer-runtime.tgz /tmp/customer-runtime-rollback.tgz --sse aws:kms
-              sudo tar -xzf /tmp/customer-runtime-rollback.tgz -C /var/www/html/ethos-multi/dist/apps/customer
-              rm -f /tmp/customer-runtime-rollback.tgz || true
-              sudo chown -R www-data:www-data /var/www/html/ethos-multi/dist/apps/customer || true
-              
-              echo '🔄 Restarting with previous version...'
-              cd /var/www/html/ethos-multi
-              sudo pm2 delete customer || true
-              sudo pm2 start npx --name customer --interpreter node -- next start /var/www/html/ethos-multi/dist/apps/customer -p 4200
-              sudo pm2 save || true
-              echo '✅ Emergency rollback completed - previous version restored'
-            else
-              echo '❌ Could not restore - manual intervention required'
-            fi
+            cd /var/www/html/ethos-$TARGET_PREFIX
+            sudo pm2 delete customer || true
+            sudo pm2 start npx --name customer --interpreter node -- next start /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer -p 4200
+            sudo pm2 save || true
           "
-          
-          echo "🛡️ ROLLBACK COMPLETED - Production should be serving previous version"
-
-      - name: Upload deployment logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: deploy-failure-logs-${{ env.APP_TO_BUILD }}-${{ github.run_id }}
-          path: |
-            *.log
-          retention-days: 14
+          echo "🛡️ Rollback completed"
 
       - name: Deployment summary
         if: always()
         run: |
-          if [ "${{ job.status }}" = "success" ]; then
-            echo "🎉 DEPLOYMENT SUCCESSFUL"
-            echo "📱 App: $APP_TO_BUILD"
-            echo "🏷️ Version: ${{ needs.build.outputs.version_sha }}"
-            echo "🌍 Environment: $BUILD_ENV"
-            echo "📦 Artifacts: s3://$S3_BUCKET_NAME/${{ needs.build.outputs.artifact_path }}"
-            if [ "$APP_TO_BUILD" = "customer" ]; then
-              echo "🔗 Service: http://3.210.120.239:4200/"
-            fi
-          else
-            echo "💥 DEPLOYMENT FAILED"
-            echo "📱 App: $APP_TO_BUILD"
-            echo "🏷️ Attempted Version: ${{ needs.build.outputs.version_sha }}"
-            if [ -n "${BACKUP_PATH:-}" ]; then
-              echo "🛡️ Rollback: Previous version restored from s3://$S3_BUCKET_NAME/$BACKUP_PATH"
-              echo "✅ Production should be stable and serving previous version"
-            else
-              echo "⚠️ No backup available - check production status manually"
-            fi
-          fi
+          echo "📱 App: $APP_TO_BUILD"
+          echo "🌍 Env: $BUILD_ENV"
+          echo "🏷️ Version: ${{ needs.build.outputs.version_sha }}"
+          echo "📦 S3: s3://$S3_BUCKET_NAME/${{ needs.build.outputs.artifact_path }}"
