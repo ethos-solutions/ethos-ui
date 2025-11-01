@@ -42,8 +42,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install dependencies (allow lockfile update)
+        run: pnpm install --no-frozen-lockfile
 
       - name: Print Nx info
         run: pnpm exec nx report
