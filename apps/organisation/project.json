@@ -41,7 +41,10 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "maxWarnings": -1
+      }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",

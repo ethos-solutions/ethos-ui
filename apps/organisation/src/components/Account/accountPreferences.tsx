@@ -254,8 +254,7 @@ const AccountPreferences = () => {
     setLoading(true);
 
     try {
-      // @ts-ignore
-      const linkResponse: { data?: { data?: { url?: string } } } =
+      const linkResponse =
         connected?.stripeConnectStatus === STRIPE_CONNECT_STATUS.NOT_CONNECTED
           ? await fetchLinkStripeConnect()
           : await regenerateLink();
@@ -274,8 +273,7 @@ const AccountPreferences = () => {
     setMpLoading(true);
 
     try {
-      // @ts-ignore
-      const linkResponse: { data?: { data?: { url?: string } } } = await fetchMpOAuthLink();
+      const linkResponse = await fetchMpOAuthLink();
 
       if (linkResponse?.data?.data?.url) {
         // Redirect to Mercado Pago OAuth (full page redirect)
@@ -289,8 +287,7 @@ const AccountPreferences = () => {
 
   const handleOpenMpDashboard = async () => {
     try {
-      // @ts-ignore
-      const response: { data?: { data?: { url?: string } } } = await fetchMpDashboardLink();
+      const response = await fetchMpDashboardLink();
 
       if (response?.data?.data?.url) {
         window.open(response.data.data.url, '_blank');

@@ -1,7 +1,7 @@
 import { ReactNode, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Header from "../components/Header";
-import SideNavigation from "../components/SideNavigation";
+import Header from "../Components_old/Header";
+import SideNavigation from "../Components_old/SideNavigation";
 import { Iconbutton } from "@ethos-frontend/ui";
 import {
   ArrowBackIosNewOutlined,

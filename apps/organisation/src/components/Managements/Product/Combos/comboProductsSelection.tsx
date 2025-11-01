@@ -27,8 +27,7 @@ export const ComboProductSelection = ({
   return (
     <Card title={t('product.chooseProducts')} className='mt-4'>
       <div className="flex flex-col gap-4">
-        <>
-          {watchCombos?.map((comboField, comboIndex) => {
+        {watchCombos?.map((comboField, comboIndex) => {
             return (
               <div key={comboField.id}>
                 <div>
@@ -98,7 +97,6 @@ export const ComboProductSelection = ({
               </div>
             );
           })}
-        </>
         <PrimaryButton
           onClick={() => append({ type: 'Single' })}
           variant="outlined"

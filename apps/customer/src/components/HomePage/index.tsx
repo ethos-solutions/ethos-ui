@@ -99,7 +99,7 @@ export const HomePage = () => {
 
         setStorage('restaurantData', JSON.stringify(login));
         setStorage('accessToken', login?.accessToken);
-      } catch (error) {
+      } catch (_error) {
         toast.error('Login failed');
       } finally {
         setIsLoading(false);

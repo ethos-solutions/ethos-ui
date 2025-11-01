@@ -62,7 +62,7 @@ const StyledChip = styled(Chip)(({ theme }) => ({
   },
 }));
 
-const StyledMenuItem = styled(MenuItem)(({}) => ({
+const StyledMenuItem = styled(MenuItem)(() => ({
   '&.MuiMenuItem-root': {
     fontSize: 14,
   },

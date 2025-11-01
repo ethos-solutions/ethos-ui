@@ -171,12 +171,18 @@ const AutoComplete: React.FC<IBaseSelect> = ({
     const syntheticEvent = {
       target: { value: newValues },
       currentTarget: { value: newValues },
-      preventDefault: () => {},
-      stopPropagation: () => {},
+      preventDefault: () => {
+        // Synthetic event method
+      },
+      stopPropagation: () => {
+        // Synthetic event method
+      },
       nativeEvent: {} as Event,
       isDefaultPrevented: () => false,
       isPropagationStopped: () => false,
-      persist: () => {},
+      persist: () => {
+        // Synthetic event method
+      },
     } as unknown as SyntheticEvent<Element, Event>;
 
     onChange(syntheticEvent, newValues);

@@ -360,7 +360,9 @@ export const Payment = () => {
       {/* Mercado Pago Payment Bricks Modal */}
       <Modal 
         open={showPaymentBricks} 
-        onClose={() => {}} 
+        onClose={() => {
+          // Disable closing via backdrop to prevent interrupting payment
+        }} 
         size='md'
         showCloseButton={false}
         disableEscapeKeyDown

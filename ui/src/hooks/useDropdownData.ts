@@ -15,15 +15,15 @@ interface DropdownData {
   refetch: () => void;
 }
 
-interface UseDropdownOptions
-  extends Omit<
-    UseQueryOptions<AxiosResponse, AxiosError, AxiosResponse>,
-    'queryKey' | 'queryFn'
-  > {}
+type UseDropdownOptions = Omit<
+  UseQueryOptions<AxiosResponse, AxiosError, AxiosResponse>,
+  'queryKey' | 'queryFn'
+>;
 
 export const useDropdownData = (
   key: QueryKey | string,
   url: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterFn: (data: any) => OptionsProps[],
   options?: UseDropdownOptions,
 ): DropdownData => {
