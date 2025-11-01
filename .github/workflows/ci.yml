@@ -9,7 +9,6 @@ on:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
-# Prevent concurrent CI runs on the same branch
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -30,10 +29,10 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Setup pnpm
+      - name: Setup pnpm (use version from package.json)
         uses: pnpm/action-setup@v4
         with:
-          version: latest
+          run_install: false
 
       - name: Cache pnpm store
         uses: actions/cache@v4
@@ -52,21 +51,17 @@ jobs:
       - name: Lint (affected)
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "Running lint on affected projects (PR)"
             pnpm exec nx affected --target=lint --base=origin/main --head=HEAD --parallel=3
           else
-            echo "Running lint on all projects (push)"
             pnpm exec nx run-many --target=lint --all --parallel=3
           fi
 
       - name: Type check (affected)
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "Running type-check on affected projects (PR)"
             pnpm exec nx affected --target=type-check --base=origin/main --head=HEAD --parallel=3 || \
             pnpm exec tsc --noEmit --project tsconfig.base.json
           else
-            echo "Running type-check on all projects (push)"
             pnpm exec nx run-many --target=type-check --all --parallel=3 || \
             pnpm exec tsc --noEmit --project tsconfig.base.json
           fi
@@ -74,20 +69,16 @@ jobs:
       - name: Test (affected)
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "Running tests on affected projects (PR)"
             pnpm exec nx affected --target=test --base=origin/main --head=HEAD --parallel=3 --configuration=ci || echo "No tests found or tests failed"
           else
-            echo "Running tests on all projects (push)"
             pnpm exec nx run-many --target=test --all --parallel=3 --configuration=ci || echo "No tests found or tests failed"
           fi
 
       - name: Build (affected)
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "Building affected projects (PR)"
             pnpm exec nx affected --target=build --base=origin/main --head=HEAD --parallel=3
           else
-            echo "Building all projects (push)"
             pnpm exec nx run-many --target=build --all --parallel=3
           fi
 
