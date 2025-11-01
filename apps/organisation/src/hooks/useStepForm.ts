@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useStepForm = (initialStep: string = '1') => {
+export const useStepForm = (initialStep = '1') => {
   const [step, setStep] = useState(initialStep);
 
   const goToStep = (newStep: string) => setStep(newStep);

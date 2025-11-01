@@ -109,7 +109,7 @@ export const PaymentBricks: React.FC<PaymentBricksProps> = ({
           mp = new window.MercadoPago(publicKey, {
             locale: 'es-CO',
           });
-        } catch (error) {
+        } catch (_error) {
           // Try alternative initialization methods
         }
       }
@@ -157,7 +157,7 @@ export const PaymentBricks: React.FC<PaymentBricksProps> = ({
         if (email) {
           userEmail = email || ''
         }
-      } catch (error) {
+      } catch (_error) {
         // Could not retrieve email
       }
 

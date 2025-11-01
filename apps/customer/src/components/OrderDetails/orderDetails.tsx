@@ -28,7 +28,7 @@ export const OrderDetails = () => {
   }>();
   const [tips, setTips] = useState([]);
   const [selectedTip, setSelectedTip] = useState('');
-  const [selectedTipValue, setSelectedTipValue] = useState('');
+  const [_selectedTipValue, setSelectedTipValue] = useState('');
   const [customTip, setCustomTip] = useState<string>('');
   const [isAddTipDisabled, setIsAddTipDisabled] = useState(true);
   const [addTipAmount, setAddTipAmount] = useState(0);

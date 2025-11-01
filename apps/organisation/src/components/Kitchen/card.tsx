@@ -132,7 +132,7 @@ export const KitchenCard: React.FC<IKitchenCard> = ({ orderList, status, handleU
               <Chip
                 size="small"
                 color={status?.orderStatus === ORDER_STATUS.PROGRESS ? 'success' : 'warning'}
-                label={status?.buttonText!}
+                label={status?.buttonText || ''}
                 sx={{
                   background: status?.orderStatus === ORDER_STATUS.PROGRESS
                     ? 'rgba(21, 153, 86, .15)'

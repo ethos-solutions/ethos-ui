@@ -1220,6 +1220,14 @@
       "apps/organisation/project.json",
       "nx/core/project-json"
     ],
+    "targets.lint.options": [
+      "apps/organisation/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint.options.maxWarnings": [
+      "apps/organisation/project.json",
+      "nx/core/project-json"
+    ],
     "targets.serve-static": [
       "apps/organisation/project.json",
       "nx/core/project-json"

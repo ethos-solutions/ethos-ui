@@ -34,7 +34,7 @@ export const LanguageDropdown = () => {
       options={languageOptions}
       label={t('selectLanguage')}
       value={valueOption}
-      onChange={() => {}}
+      onChange={handleChange}
     />
   );
 };

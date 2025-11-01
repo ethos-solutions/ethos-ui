@@ -1,64 +1,64 @@
 {
   "run": {
-    "command": "nx run-many -t build --produ",
-    "startTime": "2025-08-24T19:51:01.551Z",
-    "endTime": "2025-08-24T19:53:44.870Z",
+    "command": "nx run-many --target=lint --all",
+    "startTime": "2025-11-01T12:48:46.241Z",
+    "endTime": "2025-11-01T12:48:46.306Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "ui:build:production",
-      "target": "build",
+      "taskId": "ui:lint",
+      "target": "lint",
       "projectName": "ui",
-      "hash": "18004685912361497294",
-      "startTime": "2025-08-24T19:51:01.561Z",
-      "endTime": "2025-08-24T19:51:43.685Z",
+      "hash": "1753886222442910074",
+      "startTime": "2025-11-01T12:48:46.265Z",
+      "endTime": "2025-11-01T12:48:46.267Z",
       "params": "",
-      "cacheStatus": "cache-miss",
+      "cacheStatus": "local-cache-hit",
       "status": 0
     },
     {
-      "taskId": "co-screen:build:production",
-      "target": "build",
-      "projectName": "co-screen",
-      "hash": "3245897680441099621",
-      "startTime": "2025-08-24T19:51:43.764Z",
-      "endTime": "2025-08-24T19:52:41.792Z",
-      "params": "",
-      "cacheStatus": "cache-miss",
-      "status": 0
-    },
-    {
-      "taskId": "admin:build:production",
-      "target": "build",
-      "projectName": "admin",
-      "hash": "4887370374742623616",
-      "startTime": "2025-08-24T19:51:43.764Z",
-      "endTime": "2025-08-24T19:52:46.150Z",
-      "params": "",
-      "cacheStatus": "cache-miss",
-      "status": 0
-    },
-    {
-      "taskId": "organisation:build",
-      "target": "build",
-      "projectName": "organisation",
-      "hash": "2677868425269623255",
-      "startTime": "2025-08-24T19:51:43.764Z",
-      "endTime": "2025-08-24T19:53:09.660Z",
-      "params": "",
-      "cacheStatus": "cache-miss",
-      "status": 0
-    },
-    {
-      "taskId": "customer:build:production",
-      "target": "build",
+      "taskId": "customer:lint",
+      "target": "lint",
       "projectName": "customer",
-      "hash": "11083254293838402087",
-      "startTime": "2025-08-24T19:52:41.894Z",
-      "endTime": "2025-08-24T19:53:44.829Z",
+      "hash": "10115609243495267181",
+      "startTime": "2025-11-01T12:48:46.273Z",
+      "endTime": "2025-11-01T12:48:46.274Z",
       "params": "",
-      "cacheStatus": "cache-miss",
+      "cacheStatus": "local-cache-hit",
+      "status": 0
+    },
+    {
+      "taskId": "organisation:lint",
+      "target": "lint",
+      "projectName": "organisation",
+      "hash": "12549769568875064946",
+      "startTime": "2025-11-01T12:48:46.283Z",
+      "endTime": "2025-11-01T12:48:46.283Z",
+      "params": "",
+      "cacheStatus": "local-cache-hit",
+      "status": 0
+    },
+    {
+      "taskId": "co-screen:lint",
+      "target": "lint",
+      "projectName": "co-screen",
+      "hash": "17112909777370484952",
+      "startTime": "2025-11-01T12:48:46.304Z",
+      "endTime": "2025-11-01T12:48:46.305Z",
+      "params": "",
+      "cacheStatus": "local-cache-hit",
+      "status": 0
+    },
+    {
+      "taskId": "admin:lint",
+      "target": "lint",
+      "projectName": "admin",
+      "hash": "11387575507876088458",
+      "startTime": "2025-11-01T12:48:46.305Z",
+      "endTime": "2025-11-01T12:48:46.306Z",
+      "params": "",
+      "cacheStatus": "local-cache-hit",
       "status": 0
     }
   ]

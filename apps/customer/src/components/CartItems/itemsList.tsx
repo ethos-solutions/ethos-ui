@@ -49,14 +49,14 @@ export const ItemsList = ({
       .join(' | ');
 
   return productList?.map((product, i) => (
-    <div className="flex items-start py-5 gap-4">
+    <div key={product._id + i + 1} className="flex items-start py-5 gap-4">
       <Image
         src={product.imgUrl[0]}
         width={80}
         height={80}
         alt="Product Image"
       />
-      <div className={styles.orderItemHolder} key={product._id + i + 1}>
+      <div className={styles.orderItemHolder}>
         <div className={styles.orderItemName}>
           <div className="flex items-center gap-2">
             <Label variant="subtitle2" weight="semibold">
@@ -120,7 +120,9 @@ export const ItemsList = ({
           </Label>
           <Counter
             count={product.quantity || 0}
-            setCount={() => {}}
+            setCount={(_count: number | ((prevValue: number) => number)) => {
+              // Counter state is managed via onIncrement/onDecrement
+            }}
             onIncrement={() => onIncrement(product)}
             onDecrement={() => onDecrement(product)}
           />
