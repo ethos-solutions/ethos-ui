@@ -43,20 +43,12 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "nx.json",
-        "hash": "1710823921016680181"
+        "file": "CHANGELOG.md",
+        "hash": "16184507339836904816"
       },
       {
-        "file": "pnpm-lock.yaml",
-        "hash": "9805211760720280268"
-      },
-      {
-        "file": "package.json",
-        "hash": "9027269013731779078"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "924875193486690378"
+        "file": "tax.html",
+        "hash": "3998199932679906846"
       },
       {
         "file": "README.md",
@@ -67,48 +59,36 @@
         "hash": "12333515226966617182"
       },
       {
-        "file": "storybook-migration-summary.md",
-        "hash": "4565494848689173010"
+        "file": ".gitignore",
+        "hash": "8618838976421826986"
+      },
+      {
+        "file": "package.json",
+        "hash": "9027269013731779078"
+      },
+      {
+        "file": "nx.json",
+        "hash": "1710823921016680181"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "hash": "9805211760720280268"
       },
       {
         "file": ".github/README.md",
         "hash": "11293720638132773849"
       },
       {
-        "file": "CHANGELOG.md",
-        "hash": "16184507339836904816"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "8618838976421826986"
-      },
-      {
         "file": ".prettierignore",
         "hash": "14688272390704683536"
-      },
-      {
-        "file": "jest.preset.js",
-        "hash": "15554043170078602512"
-      },
-      {
-        "file": ".prettierrc",
-        "hash": "16267754514737964994"
-      },
-      {
-        "file": ".github/workflows/ci.yml",
-        "hash": "1093459995290087371"
       },
       {
         "file": ".eslintignore",
         "hash": "7663861978715868291"
       },
       {
-        "file": "tax.html",
-        "hash": "3998199932679906846"
-      },
-      {
-        "file": ".eslintrc.json",
-        "hash": "17311743928954180249"
+        "file": "tsconfig.base.json",
+        "hash": "924875193486690378"
       },
       {
         "file": ".vscode/extensions.json",
@@ -119,12 +99,32 @@
         "hash": "18334824462403200868"
       },
       {
+        "file": "jest.preset.js",
+        "hash": "15554043170078602512"
+      },
+      {
         "file": ".vscode/mcp.json",
         "hash": "16669523274055152517"
       },
       {
+        "file": ".prettierrc",
+        "hash": "16267754514737964994"
+      },
+      {
         "file": ".github/workflows/deploy.yml",
         "hash": "1749507813861652600"
+      },
+      {
+        "file": "storybook-migration-summary.md",
+        "hash": "4565494848689173010"
+      },
+      {
+        "file": ".eslintrc.json",
+        "hash": "17311743928954180249"
+      },
+      {
+        "file": ".github/workflows/ci.yml",
+        "hash": "1093459995290087371"
       }
     ],
     "projectFileMap": {
@@ -659,7 +659,7 @@
         },
         {
           "file": "ui/src/components/LanguageDropdown/languageDropdown.tsx",
-          "hash": "1260459878456051883",
+          "hash": "14346823432673168891",
           "deps": [
             "npm:react",
             "npm:react-i18next"

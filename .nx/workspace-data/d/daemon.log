@@ -8441,3 +8441,14 @@ Error: write EPIPE
 [NX Daemon Server] - 2025-11-01T12:49:42.691Z - [SYNC]: project graph hash is the same, not collecting task sync generators
 [NX Daemon Server] - 2025-11-01T12:49:42.691Z - [SYNC]: nx.json hash is the same, not collecting global sync generators
 [NX Daemon Server] - 2025-11-01T12:49:42.691Z - Time taken for 'total execution time for createProjectGraph()' 27.930249999975786ms
+[NX Daemon Server] - 2025-11-01T13:21:13.148Z - [WATCHER]: ui/src/components/LanguageDropdown/languageDropdown.tsx was modified
+[NX Daemon Server] - 2025-11-01T13:21:13.153Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2025-11-01T13:21:19.559Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX Daemon Server] - 2025-11-01T13:21:19.560Z - [REQUEST]: ui/src/components/LanguageDropdown/languageDropdown.tsx
+[NX Daemon Server] - 2025-11-01T13:21:19.560Z - [REQUEST]: 
+[NX Daemon Server] - 2025-11-01T13:21:19.582Z - Time taken for 'hash changed files from watcher' 3.700750000309199ms
+[NX Daemon Server] - 2025-11-01T13:21:19.677Z - Time taken for 'build-project-configs' 98.74520799983293ms
+[NX Daemon Server] - 2025-11-01T13:21:20.000Z - [SYNC]: collect registered sync generators
+[NX Daemon Server] - 2025-11-01T13:21:20.000Z - [SYNC]: project graph hash is the same, not collecting task sync generators
+[NX Daemon Server] - 2025-11-01T13:21:20.000Z - [SYNC]: nx.json hash is the same, not collecting global sync generators
+[NX Daemon Server] - 2025-11-01T13:21:20.000Z - Time taken for 'total execution time for createProjectGraph()' 319.5515829999931ms
