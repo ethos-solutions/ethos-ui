@@ -39,7 +39,7 @@ export const ControlledInput = <T extends FieldValues>({
   fullWidth,
   multiline,
   rows,
-  helperText,
+  helperText: _helperText,
   errors,
   disabled = false,
   readOnly,

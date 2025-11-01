@@ -31,7 +31,7 @@ export const ReceiveConfirmation = () => {
   const [email, setEmail] = useState('');
   const [sms, setSms] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
-  const [restaurantType, setRestaurantType] = useState('');
+  const [_restaurantType, setRestaurantType] = useState('');
   const [isSmsValid, setIsSmsValid] = useState(false);
   const [isWhatsappValid, setIsWhatsappValid] = useState(false);
 

@@ -3,6 +3,7 @@ import { getLanguageOptions } from '@ethos-frontend/constants';
 import i18n from '@ethos-frontend/i18n';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ItemProps } from '../../lib/autocomplete/AutoComplete';
 
 export const LanguageDropdown = () => {
   const { t } = useTranslation();
@@ -17,8 +18,9 @@ export const LanguageDropdown = () => {
 
   const handleChange = (
     _: unknown,
-    option: { value: string } | null,
+    option: ItemProps | ItemProps[] | null,
   ) => {
+    if (Array.isArray(option)) return;
     const value = option?.value || '';
     setSelectedLang(value);
     localStorage.setItem('i18nextLng', value);
@@ -34,7 +36,7 @@ export const LanguageDropdown = () => {
       options={languageOptions}
       label={t('selectLanguage')}
       value={valueOption}
-      onChange={() => {}}
+      onChange={handleChange}
     />
   );
 };

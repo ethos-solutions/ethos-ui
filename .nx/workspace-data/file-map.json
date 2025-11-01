@@ -43,8 +43,56 @@
   "fileMap": {
     "nonProjectFiles": [
       {
+        "file": ".github/workflows/deploy.yml",
+        "hash": "6166160105318820923"
+      },
+      {
+        "file": ".prettierignore",
+        "hash": "14688272390704683536"
+      },
+      {
+        "file": ".github/workflows/storybook.yml",
+        "hash": "18334824462403200868"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "924875193486690378"
+      },
+      {
+        "file": "storybook-migration-summary.md",
+        "hash": "4565494848689173010"
+      },
+      {
+        "file": ".github/README.md",
+        "hash": "11293720638132773849"
+      },
+      {
+        "file": "README.md",
+        "hash": "3529177930900412919"
+      },
+      {
+        "file": ".eslintrc.json",
+        "hash": "8438299478381614931"
+      },
+      {
+        "file": "package.json",
+        "hash": "11410801087596628394"
+      },
+      {
         "file": ".vscode/extensions.json",
         "hash": "10066300031063478629"
+      },
+      {
+        "file": "nx.json",
+        "hash": "1710823921016680181"
+      },
+      {
+        "file": "CHANGELOG.md",
+        "hash": "16184507339836904816"
+      },
+      {
+        "file": "tax.html",
+        "hash": "3998199932679906846"
       },
       {
         "file": ".gitignore",
@@ -55,67 +103,182 @@
         "hash": "15554043170078602512"
       },
       {
-        "file": "jest.config.ts",
-        "hash": "12333515226966617182"
-      },
-      {
-        "file": "tax.html",
-        "hash": "3998199932679906846"
-      },
-      {
-        "file": "storybook-migration-summary.md",
-        "hash": "4565494848689173010"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "924875193486690378"
-      },
-      {
-        "file": ".eslintrc.json",
-        "hash": "13447780663185909745"
-      },
-      {
         "file": ".vscode/mcp.json",
         "hash": "16669523274055152517"
       },
       {
-        "file": "package.json",
-        "hash": "2823075340304183719"
+        "file": "jest.config.ts",
+        "hash": "12333515226966617182"
       },
       {
-        "file": "CHANGELOG.md",
-        "hash": "16184507339836904816"
-      },
-      {
-        "file": "README.md",
-        "hash": "3529177930900412919"
-      },
-      {
-        "file": "nx.json",
-        "hash": "1710823921016680181"
-      },
-      {
-        "file": "pnpm-lock.yaml",
-        "hash": "18056836014932079878"
+        "file": ".github/workflows/ci.yml",
+        "hash": "15626853202655932618"
       },
       {
         "file": ".prettierrc",
         "hash": "16267754514737964994"
       },
       {
-        "file": ".prettierignore",
-        "hash": "14688272390704683536"
-      },
-      {
         "file": ".eslintignore",
         "hash": "7663861978715868291"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "hash": "9805211760720280268"
       }
     ],
     "projectFileMap": {
+      "co-screen": [
+        {
+          "file": "apps/co-screen/.env.example",
+          "hash": "1629375566748642154"
+        },
+        {
+          "file": "apps/co-screen/.eslintrc.json",
+          "hash": "11012487992710232822"
+        },
+        {
+          "file": "apps/co-screen/index.html",
+          "hash": "17195752053801648739"
+        },
+        {
+          "file": "apps/co-screen/jest.config.ts",
+          "hash": "13573378800732097977"
+        },
+        {
+          "file": "apps/co-screen/postcss.config.js",
+          "hash": "13598591179375906364"
+        },
+        {
+          "file": "apps/co-screen/project.json",
+          "hash": "7738431956459585992"
+        },
+        {
+          "file": "apps/co-screen/public/favicon.ico",
+          "hash": "9303420814833116677"
+        },
+        {
+          "file": "apps/co-screen/src/app/app.module.scss",
+          "hash": "8887387885984320532"
+        },
+        {
+          "file": "apps/co-screen/src/app/app.spec.tsx",
+          "hash": "11453869490004956352",
+          "deps": [
+            "npm:@testing-library/react",
+            "npm:react-router-dom"
+          ]
+        },
+        {
+          "file": "apps/co-screen/src/app/app.tsx",
+          "hash": "12249789390943445042",
+          "deps": [
+            "ui",
+            "npm:react-toastify",
+            "npm:react",
+            "npm:@tanstack/react-query"
+          ]
+        },
+        {
+          "file": "apps/co-screen/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/co-screen/src/components/forgetPasswordModal.tsx",
+          "hash": "17140477209008098846",
+          "deps": [
+            "ui",
+            "npm:i18next",
+            "npm:react-toastify"
+          ]
+        },
+        {
+          "file": "apps/co-screen/src/components/login.module.scss",
+          "hash": "11418399029589831016"
+        },
+        {
+          "file": "apps/co-screen/src/components/login.tsx",
+          "hash": "2981103284482643111",
+          "deps": [
+            "ui",
+            "npm:react-router-dom",
+            "npm:react-i18next",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/co-screen/src/components/routes.tsx",
+          "hash": "17592712419662302251",
+          "deps": [
+            "npm:react-router-dom",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/co-screen/src/components/socket.tsx",
+          "hash": "10298422232549115300",
+          "deps": [
+            "npm:react",
+            "npm:socket.io-client"
+          ]
+        },
+        {
+          "file": "apps/co-screen/src/components/status.tsx",
+          "hash": "3577941260065535055",
+          "deps": [
+            "ui",
+            "npm:@mui/icons-material",
+            "npm:react",
+            "npm:react-router-dom",
+            "npm:@mui/x-data-grid-premium"
+          ]
+        },
+        {
+          "file": "apps/co-screen/src/main.tsx",
+          "hash": "3751753673953770956",
+          "deps": [
+            "npm:react",
+            "npm:react-dom",
+            "npm:react-router-dom"
+          ]
+        },
+        {
+          "file": "apps/co-screen/src/styles.scss",
+          "hash": "2866083945719690482"
+        },
+        {
+          "file": "apps/co-screen/tailwind.config.js",
+          "hash": "14242995927995164225",
+          "deps": [
+            "npm:tailwindcss"
+          ]
+        },
+        {
+          "file": "apps/co-screen/tsconfig.app.json",
+          "hash": "7232119452847825095"
+        },
+        {
+          "file": "apps/co-screen/tsconfig.json",
+          "hash": "824604371006306276"
+        },
+        {
+          "file": "apps/co-screen/tsconfig.spec.json",
+          "hash": "11378287594513225419"
+        },
+        {
+          "file": "apps/co-screen/vite.config.ts",
+          "hash": "3389250265267376684",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-react",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
       "customer": [
         {
           "file": "apps/customer/.env.example",
-          "hash": "14531445945950726122"
+          "hash": "3358482316871091906"
         },
         {
           "file": "apps/customer/.eslintrc.json",
@@ -123,7 +286,7 @@
         },
         {
           "file": "apps/customer/env.example",
-          "hash": "2078637887604526165"
+          "hash": "1267117900441313269"
         },
         {
           "file": "apps/customer/index.d.ts",
@@ -135,7 +298,7 @@
         },
         {
           "file": "apps/customer/next-env.d.ts",
-          "hash": "9827906575449055322"
+          "hash": "8839483950812115187"
         },
         {
           "file": "apps/customer/next.config.js",
@@ -206,7 +369,7 @@
         },
         {
           "file": "apps/customer/src/api/interceptor.ts",
-          "hash": "16950031197992718875",
+          "hash": "17514740874303605940",
           "deps": [
             "npm:axios",
             "ui"
@@ -277,7 +440,7 @@
         },
         {
           "file": "apps/customer/src/components/CartItems/itemsList.tsx",
-          "hash": "631917086427079351",
+          "hash": "12080341168483695142",
           "deps": [
             "npm:react",
             "ui",
@@ -378,7 +541,7 @@
         },
         {
           "file": "apps/customer/src/components/HomePage/index.tsx",
-          "hash": "5744105690554518653",
+          "hash": "14255028834804546521",
           "deps": [
             "npm:react",
             "npm:next",
@@ -412,7 +575,7 @@
         },
         {
           "file": "apps/customer/src/components/OrderDetails/orderDetails.tsx",
-          "hash": "7633805405228193106",
+          "hash": "16699644989924120154",
           "deps": [
             "npm:react",
             "ui",
@@ -438,7 +601,7 @@
         },
         {
           "file": "apps/customer/src/components/PageHead/index.tsx",
-          "hash": "9707023496323619432",
+          "hash": "3613206648771788018",
           "deps": [
             "npm:next",
             "npm:react",
@@ -453,12 +616,23 @@
           ]
         },
         {
+          "file": "apps/customer/src/components/Payment/PaymentBricks.tsx",
+          "hash": "11297641521808847299",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material",
+            "npm:react-toastify",
+            "ui",
+            "npm:react-i18next"
+          ]
+        },
+        {
           "file": "apps/customer/src/components/Payment/index.tsx",
           "hash": "7883972374524256861"
         },
         {
           "file": "apps/customer/src/components/Payment/payment.tsx",
-          "hash": "10438069308422474295",
+          "hash": "6607992483780443040",
           "deps": [
             "npm:next",
             "npm:react",
@@ -475,7 +649,7 @@
         },
         {
           "file": "apps/customer/src/components/PaymentConfirmation/paymentConfirmation.tsx",
-          "hash": "9343949168245090487",
+          "hash": "13487054378393829757",
           "deps": [
             "npm:react",
             "npm:next",
@@ -677,7 +851,7 @@
         },
         {
           "file": "apps/customer/src/components/ReceiveConfirmation/receiveConfirmation.tsx",
-          "hash": "16258583245992108366",
+          "hash": "364448820026491169",
           "deps": [
             "npm:react",
             "ui",
@@ -751,7 +925,7 @@
         },
         {
           "file": "apps/customer/src/pages/api/login.ts",
-          "hash": "3225086640437532107",
+          "hash": "11563185435353294766",
           "deps": [
             "npm:node-fetch"
           ]
@@ -873,1143 +1047,10 @@
           "hash": "13998840040434192437"
         }
       ],
-      "ui": [
-        {
-          "file": "ui/.eslintrc.json",
-          "hash": "7388911630545237055"
-        },
-        {
-          "file": "ui/.storybook/main.ts",
-          "hash": "10974445222942348091",
-          "deps": [
-            "npm:@storybook/react-vite"
-          ]
-        },
-        {
-          "file": "ui/.storybook/preview-head.html",
-          "hash": "3442485693015235803"
-        },
-        {
-          "file": "ui/.storybook/preview.tsx",
-          "hash": "14259854285920208373",
-          "deps": [
-            "npm:@storybook/react",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/README.md",
-          "hash": "2776327953747952561"
-        },
-        {
-          "file": "ui/jest.config.ts",
-          "hash": "1567495430191593384"
-        },
-        {
-          "file": "ui/package.json",
-          "hash": "179508816908391147"
-        },
-        {
-          "file": "ui/project.json",
-          "hash": "5629585574542866370"
-        },
-        {
-          "file": "ui/src/apolloWrapper/index.tsx",
-          "hash": "15612551347075046596",
-          "deps": [
-            "npm:@apollo/client",
-            "npm:react",
-            "npm:react-toastify",
-            "npm:i18next"
-          ]
-        },
-        {
-          "file": "ui/src/assets/index.tsx",
-          "hash": "17362989708386187654",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/assets/logo.svg",
-          "hash": "4115867920610272835"
-        },
-        {
-          "file": "ui/src/assets/smallLogo.svg",
-          "hash": "12344569172406716174"
-        },
-        {
-          "file": "ui/src/components/Card/card.tsx",
-          "hash": "14455004450623499056",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/components/Card/index.ts",
-          "hash": "15070519349704388910"
-        },
-        {
-          "file": "ui/src/components/ControlledCheckbox/controlledCheckbox.tsx",
-          "hash": "14085994804330795519",
-          "deps": [
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "ui/src/components/ControlledCheckbox/index.ts",
-          "hash": "10808636692667012526"
-        },
-        {
-          "file": "ui/src/components/ControlledDropdown/controlledDropdown.tsx",
-          "hash": "2693449200365711758",
-          "deps": [
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "ui/src/components/ControlledDropdown/index.ts",
-          "hash": "361705227658019169"
-        },
-        {
-          "file": "ui/src/components/ControlledInput/controlledInput.tsx",
-          "hash": "11818642753229505995",
-          "deps": [
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "ui/src/components/ControlledInput/index.ts",
-          "hash": "1303394200872788152"
-        },
-        {
-          "file": "ui/src/components/ControlledRadio/controlledRadio.tsx",
-          "hash": "12114945730065703561",
-          "deps": [
-            "npm:react",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "ui/src/components/ControlledRadio/index.ts",
-          "hash": "1343905811524786308"
-        },
-        {
-          "file": "ui/src/components/ForgotPasswordForm/forgotPasswordForm.tsx",
-          "hash": "14761924905716028882",
-          "deps": [
-            "npm:react-hook-form",
-            "npm:yup",
-            "npm:@hookform/resolvers",
-            "npm:i18next"
-          ]
-        },
-        {
-          "file": "ui/src/components/ForgotPasswordForm/index.ts",
-          "hash": "17240979147876187180"
-        },
-        {
-          "file": "ui/src/components/FormFields/formFields.tsx",
-          "hash": "8485061439756806880",
-          "deps": [
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "ui/src/components/FormFields/index.ts",
-          "hash": "12738797869967583175"
-        },
-        {
-          "file": "ui/src/components/Grid/grid.tsx",
-          "hash": "16700512478844590176",
-          "deps": [
-            "npm:@mui/material",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/components/Grid/index.ts",
-          "hash": "14479136909788795662"
-        },
-        {
-          "file": "ui/src/components/LanguageDropdown/index.ts",
-          "hash": "3926092223889077545"
-        },
-        {
-          "file": "ui/src/components/LanguageDropdown/languageDropdown.tsx",
-          "hash": "17648477900049342014",
-          "deps": [
-            "npm:react",
-            "npm:react-i18next"
-          ]
-        },
-        {
-          "file": "ui/src/components/LoginForm/index.ts",
-          "hash": "11045404284400741079"
-        },
-        {
-          "file": "ui/src/components/LoginForm/loginForm.tsx",
-          "hash": "14675131570550926539",
-          "deps": [
-            "npm:react-hook-form",
-            "npm:yup",
-            "npm:@hookform/resolvers",
-            "npm:i18next"
-          ]
-        },
-        {
-          "file": "ui/src/components/PhoneInputWithCountry/index.ts",
-          "hash": "2905417731446269293"
-        },
-        {
-          "file": "ui/src/components/PhoneInputWithCountry/phoneInputWithCountry.module.scss",
-          "hash": "7229406208721837748"
-        },
-        {
-          "file": "ui/src/components/PhoneInputWithCountry/phoneInputWithCountry.tsx",
-          "hash": "9067002938412061002",
-          "deps": [
-            "npm:react",
-            "npm:react-phone-input-2",
-            "npm:libphonenumber-js",
-            "npm:react-hook-form"
-          ]
-        },
-        {
-          "file": "ui/src/components/RegisterForm/index.ts",
-          "hash": "13666930554159294696"
-        },
-        {
-          "file": "ui/src/components/RegisterForm/registerForm.tsx",
-          "hash": "16324476769695932021",
-          "deps": [
-            "npm:react-hook-form",
-            "npm:yup",
-            "npm:@hookform/resolvers",
-            "npm:i18next"
-          ]
-        },
-        {
-          "file": "ui/src/components/ResetPasswordForm/index.ts",
-          "hash": "11696725322257878898"
-        },
-        {
-          "file": "ui/src/components/ResetPasswordForm/resetPasswordForm.tsx",
-          "hash": "5076609303260824139",
-          "deps": [
-            "npm:react-hook-form",
-            "npm:yup",
-            "npm:@hookform/resolvers",
-            "npm:i18next"
-          ]
-        },
-        {
-          "file": "ui/src/components/index.ts",
-          "hash": "8793460227841968644",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/constants/apiMethods.ts",
-          "hash": "15271375228208994101"
-        },
-        {
-          "file": "ui/src/constants/apiUrl.ts",
-          "hash": "17773746180393915296"
-        },
-        {
-          "file": "ui/src/constants/common.ts",
-          "hash": "17198684360143145489",
-          "deps": [
-            "npm:i18next"
-          ]
-        },
-        {
-          "file": "ui/src/constants/countryLists.ts",
-          "hash": "4240707140480284796"
-        },
-        {
-          "file": "ui/src/constants/index.ts",
-          "hash": "18002282442024344645"
-        },
-        {
-          "file": "ui/src/constants/messages.ts",
-          "hash": "16656070161101667007",
-          "deps": [
-            "npm:i18next"
-          ]
-        },
-        {
-          "file": "ui/src/constants/orderStatus.ts",
-          "hash": "11516793022755255669"
-        },
-        {
-          "file": "ui/src/constants/themeColours.ts",
-          "hash": "14070532993222619584",
-          "deps": [
-            "npm:i18next"
-          ]
-        },
-        {
-          "file": "ui/src/context/index.ts",
-          "hash": "17763314740106715566"
-        },
-        {
-          "file": "ui/src/context/language.tsx",
-          "hash": "4797655220419910626",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/fonts/assets/icomoon.eot",
-          "hash": "3721213137930980534"
-        },
-        {
-          "file": "ui/src/fonts/assets/icomoon.svg",
-          "hash": "16712182160090216977"
-        },
-        {
-          "file": "ui/src/fonts/assets/icomoon.ttf",
-          "hash": "15815996966089764246"
-        },
-        {
-          "file": "ui/src/fonts/assets/icomoon.woff",
-          "hash": "332814687279774687"
-        },
-        {
-          "file": "ui/src/fonts/font.css",
-          "hash": "13395294583296972490"
-        },
-        {
-          "file": "ui/src/hoc/index.ts",
-          "hash": "11267973342237930515"
-        },
-        {
-          "file": "ui/src/hoc/withConditionalRoute.tsx",
-          "hash": "2706556222367291451",
-          "deps": [
-            "npm:react",
-            "npm:react-router-dom"
-          ]
-        },
-        {
-          "file": "ui/src/hooks/index.ts",
-          "hash": "3180800170908201957"
-        },
-        {
-          "file": "ui/src/hooks/useDropdownData.ts",
-          "hash": "1010610873036568776",
-          "deps": [
-            "npm:react",
-            "npm:@tanstack/react-query",
-            "npm:axios"
-          ]
-        },
-        {
-          "file": "ui/src/hooks/useGeoLocation.ts",
-          "hash": "3891630229370078428",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/hooks/useRestHooks.ts",
-          "hash": "12066208953651747171",
-          "deps": [
-            "npm:@tanstack/react-query",
-            "npm:axios",
-            "npm:react-toastify",
-            "npm:i18next"
-          ]
-        },
-        {
-          "file": "ui/src/i18n.ts",
-          "hash": "10779167104436347175",
-          "deps": [
-            "npm:i18next",
-            "npm:react-i18next",
-            "npm:i18next-http-backend",
-            "npm:i18next-browser-languagedetector"
-          ]
-        },
-        {
-          "file": "ui/src/index.ts",
-          "hash": "7958568875001682254",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/autocomplete/AutoComplete.stories.tsx",
-          "hash": "6365694321803830059",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/autocomplete/AutoComplete.tsx",
-          "hash": "8651729694507246275",
-          "deps": [
-            "npm:@mui/material",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/autocomplete/index.tsx",
-          "hash": "5854640351285940199"
-        },
-        {
-          "file": "ui/src/lib/checkbox/Checkbox.stories.tsx",
-          "hash": "15044863563150302880",
-          "deps": [
-            "npm:react",
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/checkbox/Checkbox.tsx",
-          "hash": "15423245582481767368",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material",
-            "npm:@mui/system"
-          ]
-        },
-        {
-          "file": "ui/src/lib/checkbox/index.ts",
-          "hash": "12403527245079433921"
-        },
-        {
-          "file": "ui/src/lib/chip/Chip.stories.tsx",
-          "hash": "3000163367672786400",
-          "deps": [
-            "npm:react",
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/chip/Chip.tsx",
-          "hash": "4437069376015022607",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/chip/index.ts",
-          "hash": "4794218682314131289"
-        },
-        {
-          "file": "ui/src/lib/counter/Counter.stories.tsx",
-          "hash": "7134250493100999226",
-          "deps": [
-            "npm:@storybook/react",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/counter/Counter.tsx",
-          "hash": "2052252650329368871",
-          "deps": [
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/counter/index.ts",
-          "hash": "7617163419614622310"
-        },
-        {
-          "file": "ui/src/lib/dateRangePicker/DateRangePicker.stories.tsx",
-          "hash": "15908054620973849928",
-          "deps": [
-            "npm:react",
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/dateRangePicker/DateRangePicker.tsx",
-          "hash": "16737222717603814714",
-          "deps": [
-            "npm:react",
-            "npm:@mui/x-date-pickers-pro",
-            "npm:@mui/x-date-pickers",
-            "npm:react-i18next"
-          ]
-        },
-        {
-          "file": "ui/src/lib/dateRangePicker/index.ts",
-          "hash": "6023309407721665511"
-        },
-        {
-          "file": "ui/src/lib/dateTimeRangePicker/DateTimeRangePicker.stories.tsx",
-          "hash": "2729496463920983981",
-          "deps": [
-            "npm:react",
-            "npm:@storybook/react",
-            "npm:dayjs",
-            "npm:@mui/x-date-pickers-pro"
-          ]
-        },
-        {
-          "file": "ui/src/lib/dateTimeRangePicker/DateTimeRangePicker.tsx",
-          "hash": "5818929068311635710",
-          "deps": [
-            "npm:react",
-            "npm:@mui/x-date-pickers-pro",
-            "npm:dayjs",
-            "npm:@mui/material",
-            "npm:@mui/x-date-pickers"
-          ]
-        },
-        {
-          "file": "ui/src/lib/dateTimeRangePicker/index.ts",
-          "hash": "7623752593140236666"
-        },
-        {
-          "file": "ui/src/lib/dialog/Dialog.stories.tsx",
-          "hash": "2879047675422818861",
-          "deps": [
-            "npm:react",
-            "npm:@storybook/react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/dialog/Dialog.tsx",
-          "hash": "16133328581352805909",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/dialog/index.ts",
-          "hash": "7681462274783279441"
-        },
-        {
-          "file": "ui/src/lib/drawer/Drawer.stories.tsx",
-          "hash": "18308776120208121509",
-          "deps": [
-            "npm:react",
-            "npm:@storybook/react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/drawer/Drawer.tsx",
-          "hash": "10766308749229173512",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material",
-            "npm:@emotion/styled"
-          ]
-        },
-        {
-          "file": "ui/src/lib/drawer/index.ts",
-          "hash": "8046062801589881301"
-        },
-        {
-          "file": "ui/src/lib/iconButton/IconButton.spec.tsx",
-          "hash": "410464578801757191",
-          "deps": [
-            "npm:@testing-library/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/iconButton/IconButton.stories.tsx",
-          "hash": "14830706193416279706",
-          "deps": [
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/iconButton/IconButton.tsx",
-          "hash": "2007322513158178974",
-          "deps": [
-            "npm:@mui/material",
-            "npm:react",
-            "npm:@mui/icons-material",
-            "npm:react-icons"
-          ]
-        },
-        {
-          "file": "ui/src/lib/iconButton/index.ts",
-          "hash": "15425438677553034387"
-        },
-        {
-          "file": "ui/src/lib/link/index.ts",
-          "hash": "14235532886772533161"
-        },
-        {
-          "file": "ui/src/lib/link/link.spec.tsx",
-          "hash": "9654996257519306624",
-          "deps": [
-            "npm:@testing-library/react",
-            "npm:react-router-dom"
-          ]
-        },
-        {
-          "file": "ui/src/lib/link/link.stories.tsx",
-          "hash": "604491257437452999",
-          "deps": [
-            "npm:react-router-dom",
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/link/link.tsx",
-          "hash": "14270769824056339294",
-          "deps": [
-            "npm:react-router-dom",
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/modal/Modal.stories.tsx",
-          "hash": "9494413846779216377",
-          "deps": [
-            "npm:react",
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/modal/Modal.tsx",
-          "hash": "5383720830961668926",
-          "deps": [
-            "npm:@mui/material",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/modal/index.ts",
-          "hash": "2095426545778276623"
-        },
-        {
-          "file": "ui/src/lib/primaryButton/PrimaryButton.spec.tsx",
-          "hash": "6068368570366741035",
-          "deps": [
-            "npm:@testing-library/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/primaryButton/PrimaryButton.stories.tsx",
-          "hash": "14591257391410537768",
-          "deps": [
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/primaryButton/PrimaryButton.tsx",
-          "hash": "1230772577762223819",
-          "deps": [
-            "npm:@mui/material",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/primaryButton/index.ts",
-          "hash": "2477384396160643708"
-        },
-        {
-          "file": "ui/src/lib/radio/Radio.stories.tsx",
-          "hash": "2004331211712196831",
-          "deps": [
-            "npm:react",
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/radio/Radio.tsx",
-          "hash": "2810146749759506560",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/radio/index.ts",
-          "hash": "4711265427018180784"
-        },
-        {
-          "file": "ui/src/lib/select/index.tsx",
-          "hash": "10174683663984868278"
-        },
-        {
-          "file": "ui/src/lib/select/select.stories.tsx",
-          "hash": "16933913477277634701",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/select/select.tsx",
-          "hash": "7464136571152309801",
-          "deps": [
-            "npm:@mui/material",
-            "npm:react",
-            "npm:@mui/icons-material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/snackbar/Snackbar.stories.tsx",
-          "hash": "18063837511925153894",
-          "deps": [
-            "npm:@storybook/react",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/snackbar/Snackbar.tsx",
-          "hash": "13082240461802869962",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/snackbar/index.ts",
-          "hash": "7327617168541713670"
-        },
-        {
-          "file": "ui/src/lib/stepper/Stepper.stories.tsx",
-          "hash": "11901493541109000965",
-          "deps": [
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/stepper/Stepper.tsx",
-          "hash": "9897072757603608811",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/stepper/index.ts",
-          "hash": "9780729133916833333"
-        },
-        {
-          "file": "ui/src/lib/switch/Switch.stories.tsx",
-          "hash": "16644975734003968603",
-          "deps": [
-            "npm:react",
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/switch/Switch.tsx",
-          "hash": "976974188616882596",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/switch/index.ts",
-          "hash": "16515839268279821631"
-        },
-        {
-          "file": "ui/src/lib/tab/Tab.stories.tsx",
-          "hash": "7594986061503228829",
-          "deps": [
-            "npm:react",
-            "npm:@storybook/react",
-            "npm:@mui/icons-material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/tab/Tab.tsx",
-          "hash": "2066460979673126300",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material",
-            "npm:@mui/lab"
-          ]
-        },
-        {
-          "file": "ui/src/lib/tab/index.ts",
-          "hash": "9576807898515049196"
-        },
-        {
-          "file": "ui/src/lib/table/Table.stories.tsx",
-          "hash": "8829589388716804073",
-          "deps": [
-            "npm:@storybook/react",
-            "npm:@mui/x-data-grid-premium",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/table/Table.tsx",
-          "hash": "50940443641482208",
-          "deps": [
-            "npm:react",
-            "npm:@mui/x-data-grid-premium",
-            "npm:@mui/material",
-            "npm:@mui/icons-material",
-            "npm:@mui/system"
-          ]
-        },
-        {
-          "file": "ui/src/lib/table/index.ts",
-          "hash": "16982334163247498605"
-        },
-        {
-          "file": "ui/src/lib/textarea/Textarea.tsx",
-          "hash": "12810101972211781128",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/textarea/index.ts",
-          "hash": "16562990876911909576"
-        },
-        {
-          "file": "ui/src/lib/textarea/textarea.stories.tsx",
-          "hash": "9770499955595623126",
-          "deps": [
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/textfield/index.ts",
-          "hash": "2535152958406442652"
-        },
-        {
-          "file": "ui/src/lib/textfield/textfield.spec.tsx",
-          "hash": "1861324144580406484",
-          "deps": [
-            "npm:@testing-library/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/textfield/textfield.stories.tsx",
-          "hash": "16106832711815822002",
-          "deps": [
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/textfield/textfield.tsx",
-          "hash": "12274826324841656381",
-          "deps": [
-            "npm:@mui/material",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/theme/index.tsx",
-          "hash": "159403319209928917",
-          "deps": [
-            "npm:@mui/material",
-            "npm:react",
-            "npm:@mui/x-license",
-            "npm:react-i18next"
-          ]
-        },
-        {
-          "file": "ui/src/lib/theme/theme/index.tsx",
-          "hash": "5340973678560731501",
-          "deps": [
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/theme/theme/palette.ts",
-          "hash": "12522423079206594185"
-        },
-        {
-          "file": "ui/src/lib/theme/theme/typography.ts",
-          "hash": "4677685229844637894"
-        },
-        {
-          "file": "ui/src/lib/tooltip/Tooltip.stories.tsx",
-          "hash": "17106380648035376256",
-          "deps": [
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/tooltip/Tooltip.tsx",
-          "hash": "10836787242085343621",
-          "deps": [
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/tooltip/index.ts",
-          "hash": "11774991681613164738"
-        },
-        {
-          "file": "ui/src/lib/typography/Typography.stories.tsx",
-          "hash": "6615696761135534478",
-          "deps": [
-            "npm:@storybook/react"
-          ]
-        },
-        {
-          "file": "ui/src/lib/typography/Typography.tsx",
-          "hash": "11149793757292118916",
-          "deps": [
-            "npm:react",
-            "npm:@mui/material"
-          ]
-        },
-        {
-          "file": "ui/src/lib/typography/index.ts",
-          "hash": "1378169322418160128"
-        },
-        {
-          "file": "ui/src/locale/en/translations.json",
-          "hash": "17513682011749283153"
-        },
-        {
-          "file": "ui/src/locale/es/translations.json",
-          "hash": "8784521605795168503"
-        },
-        {
-          "file": "ui/src/locale/fr/translations.json",
-          "hash": "1931680434713966064"
-        },
-        {
-          "file": "ui/src/locale/index.ts",
-          "hash": "16611299757108200855"
-        },
-        {
-          "file": "ui/src/locale/sv/translations.json",
-          "hash": "17542832372416844223"
-        },
-        {
-          "file": "ui/src/utils/api.ts",
-          "hash": "17106065718359745799",
-          "deps": [
-            "npm:axios"
-          ]
-        },
-        {
-          "file": "ui/src/utils/common.ts",
-          "hash": "9484605622057399008",
-          "deps": [
-            "npm:@mui/material",
-            "npm:@mui/system",
-            "npm:axios",
-            "npm:dayjs",
-            "npm:react-router-dom",
-            "npm:react-toastify",
-            "npm:crypto-js",
-            "npm:js-cookie",
-            "npm:jwt-decode",
-            "npm:date-fns"
-          ]
-        },
-        {
-          "file": "ui/src/utils/index.ts",
-          "hash": "16594202499584107477"
-        },
-        {
-          "file": "ui/src/utils/jwtExpire.ts",
-          "hash": "14207942181351420562",
-          "deps": [
-            "npm:jwt-decode",
-            "npm:react-toastify"
-          ]
-        },
-        {
-          "file": "ui/src/vite-env.d.ts",
-          "hash": "4346551397233632145"
-        },
-        {
-          "file": "ui/tsconfig.json",
-          "hash": "16697216427249282302"
-        },
-        {
-          "file": "ui/tsconfig.lib.json",
-          "hash": "10990120218789605224"
-        },
-        {
-          "file": "ui/tsconfig.spec.json",
-          "hash": "13369031804221838106"
-        },
-        {
-          "file": "ui/tsconfig.storybook.json",
-          "hash": "6982859882495716044"
-        },
-        {
-          "file": "ui/vite.config.ts",
-          "hash": "11069079386581398141",
-          "deps": [
-            "npm:vite",
-            "npm:vite-plugin-dts",
-            "npm:@nx/vite",
-            "npm:@vitejs/plugin-react"
-          ]
-        }
-      ],
-      "co-screen": [
-        {
-          "file": "apps/co-screen/.env.example",
-          "hash": "1629375566748642154"
-        },
-        {
-          "file": "apps/co-screen/.eslintrc.json",
-          "hash": "11012487992710232822"
-        },
-        {
-          "file": "apps/co-screen/index.html",
-          "hash": "17195752053801648739"
-        },
-        {
-          "file": "apps/co-screen/jest.config.ts",
-          "hash": "13573378800732097977"
-        },
-        {
-          "file": "apps/co-screen/postcss.config.js",
-          "hash": "13598591179375906364"
-        },
-        {
-          "file": "apps/co-screen/project.json",
-          "hash": "7738431956459585992"
-        },
-        {
-          "file": "apps/co-screen/public/favicon.ico",
-          "hash": "9303420814833116677"
-        },
-        {
-          "file": "apps/co-screen/src/app/app.module.scss",
-          "hash": "8887387885984320532"
-        },
-        {
-          "file": "apps/co-screen/src/app/app.spec.tsx",
-          "hash": "11453869490004956352",
-          "deps": [
-            "npm:@testing-library/react",
-            "npm:react-router-dom"
-          ]
-        },
-        {
-          "file": "apps/co-screen/src/app/app.tsx",
-          "hash": "12249789390943445042",
-          "deps": [
-            "ui",
-            "npm:react-toastify",
-            "npm:react",
-            "npm:@tanstack/react-query"
-          ]
-        },
-        {
-          "file": "apps/co-screen/src/assets/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/co-screen/src/components/forgetPasswordModal.tsx",
-          "hash": "17140477209008098846",
-          "deps": [
-            "ui",
-            "npm:i18next",
-            "npm:react-toastify"
-          ]
-        },
-        {
-          "file": "apps/co-screen/src/components/login.module.scss",
-          "hash": "11418399029589831016"
-        },
-        {
-          "file": "apps/co-screen/src/components/login.tsx",
-          "hash": "727277144043884504",
-          "deps": [
-            "ui",
-            "npm:react-router-dom",
-            "npm:react-i18next",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/co-screen/src/components/routes.tsx",
-          "hash": "17592712419662302251",
-          "deps": [
-            "npm:react-router-dom",
-            "ui"
-          ]
-        },
-        {
-          "file": "apps/co-screen/src/components/socket.tsx",
-          "hash": "10298422232549115300",
-          "deps": [
-            "npm:react",
-            "npm:socket.io-client"
-          ]
-        },
-        {
-          "file": "apps/co-screen/src/components/status.tsx",
-          "hash": "3577941260065535055",
-          "deps": [
-            "ui",
-            "npm:@mui/icons-material",
-            "npm:react",
-            "npm:react-router-dom",
-            "npm:@mui/x-data-grid-premium"
-          ]
-        },
-        {
-          "file": "apps/co-screen/src/main.tsx",
-          "hash": "3751753673953770956",
-          "deps": [
-            "npm:react",
-            "npm:react-dom",
-            "npm:react-router-dom"
-          ]
-        },
-        {
-          "file": "apps/co-screen/src/styles.scss",
-          "hash": "2866083945719690482"
-        },
-        {
-          "file": "apps/co-screen/tailwind.config.js",
-          "hash": "14242995927995164225",
-          "deps": [
-            "npm:tailwindcss"
-          ]
-        },
-        {
-          "file": "apps/co-screen/tsconfig.app.json",
-          "hash": "7232119452847825095"
-        },
-        {
-          "file": "apps/co-screen/tsconfig.json",
-          "hash": "824604371006306276"
-        },
-        {
-          "file": "apps/co-screen/tsconfig.spec.json",
-          "hash": "11378287594513225419"
-        },
-        {
-          "file": "apps/co-screen/vite.config.ts",
-          "hash": "3389250265267376684",
-          "deps": [
-            "npm:vite",
-            "npm:@vitejs/plugin-react",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
       "organisation": [
         {
-          "file": "apps/organisation/.env-example",
-          "hash": "7839000509089865638"
-        },
-        {
           "file": "apps/organisation/.env.example",
-          "hash": "17002092421539052989"
+          "hash": "7839000509089865638"
         },
         {
           "file": "apps/organisation/.eslintrc.json",
@@ -2034,7 +1075,7 @@
         },
         {
           "file": "apps/organisation/project.json",
-          "hash": "12039479299852331495"
+          "hash": "2619869723602304036"
         },
         {
           "file": "apps/organisation/src/api/client/Interceptor.ts",
@@ -2049,7 +1090,7 @@
         },
         {
           "file": "apps/organisation/src/api/fragments/order.ts",
-          "hash": "12743498482608718283",
+          "hash": "2915134993892955207",
           "deps": [
             "npm:@apollo/client"
           ]
@@ -2208,7 +1249,7 @@
         },
         {
           "file": "apps/organisation/src/components/Account/accountPreferences.tsx",
-          "hash": "97683888386475501",
+          "hash": "9334624029712328386",
           "deps": [
             "npm:@mui/material",
             "npm:react",
@@ -2534,7 +1575,7 @@
         },
         {
           "file": "apps/organisation/src/components/Dashboard/dashboard.tsx",
-          "hash": "16403010094992351976",
+          "hash": "8713357518723954106",
           "deps": [
             "ui",
             "npm:react-icons",
@@ -2608,7 +1649,7 @@
         },
         {
           "file": "apps/organisation/src/components/Kitchen/card.tsx",
-          "hash": "12402495272770601684",
+          "hash": "2320854290976125464",
           "deps": [
             "npm:react",
             "ui",
@@ -2651,7 +1692,7 @@
         },
         {
           "file": "apps/organisation/src/components/Managements/Cashier/cashierReport.tsx",
-          "hash": "7453232544379211377",
+          "hash": "5652363955345276018",
           "deps": [
             "npm:react",
             "ui",
@@ -2669,7 +1710,7 @@
         },
         {
           "file": "apps/organisation/src/components/Managements/Cashier/userCashierDetail.tsx",
-          "hash": "11889200446077961558",
+          "hash": "18032832318337933672",
           "deps": [
             "ui",
             "npm:@mui/x-data-grid-premium",
@@ -2796,7 +1837,7 @@
         },
         {
           "file": "apps/organisation/src/components/Managements/Order/OrderList/orderList.tsx",
-          "hash": "17880095840980055336",
+          "hash": "4945837320472960649",
           "deps": [
             "npm:@apollo/client",
             "npm:react",
@@ -2810,7 +1851,7 @@
         },
         {
           "file": "apps/organisation/src/components/Managements/Order/OrderList/orderTable.tsx",
-          "hash": "9167369964750168794",
+          "hash": "5935219694938694434",
           "deps": [
             "ui",
             "npm:@mui/icons-material",
@@ -2843,7 +1884,7 @@
         },
         {
           "file": "apps/organisation/src/components/Managements/Order/orderHistory.tsx",
-          "hash": "15802790927283124663",
+          "hash": "4035549208571143111",
           "deps": [
             "ui",
             "npm:@mui/material",
@@ -2932,7 +1973,7 @@
         },
         {
           "file": "apps/organisation/src/components/Managements/Product/Combos/comboProductsSelection.tsx",
-          "hash": "11892462272416486424",
+          "hash": "322101797070188273",
           "deps": [
             "ui",
             "npm:@mui/icons-material",
@@ -3311,7 +2352,7 @@
         },
         {
           "file": "apps/organisation/src/hooks/useStepForm.ts",
-          "hash": "12898557491584299318",
+          "hash": "17905345620125355367",
           "deps": [
             "npm:react"
           ]
@@ -3530,17 +2571,7 @@
           "hash": "6498540061907161913"
         },
         {
-          "file": "apps/admin/src/app.tsx",
-          "hash": "12663703417999724397",
-          "deps": [
-            "npm:react-toastify",
-            "npm:react-router-dom",
-            "npm:@tanstack/react-query",
-            "ui"
-          ]
-        },
-        {
-          "file": "apps/admin/src/components/CommissionDialog.tsx",
+          "file": "apps/admin/src/Components_old/CommissionDialog.tsx",
           "hash": "5709601343102966137",
           "deps": [
             "npm:react",
@@ -3551,7 +2582,7 @@
           ]
         },
         {
-          "file": "apps/admin/src/components/Header.tsx",
+          "file": "apps/admin/src/Components_old/Header.tsx",
           "hash": "11014339561858703273",
           "deps": [
             "npm:@mui/material",
@@ -3562,14 +2593,14 @@
           ]
         },
         {
-          "file": "apps/admin/src/components/Loading.tsx",
+          "file": "apps/admin/src/Components_old/Loading.tsx",
           "hash": "9974621302379065563",
           "deps": [
             "npm:@mui/material"
           ]
         },
         {
-          "file": "apps/admin/src/components/RejectDialog.tsx",
+          "file": "apps/admin/src/Components_old/RejectDialog.tsx",
           "hash": "11865013342089658655",
           "deps": [
             "npm:react",
@@ -3577,7 +2608,7 @@
           ]
         },
         {
-          "file": "apps/admin/src/components/SideNavigation.tsx",
+          "file": "apps/admin/src/Components_old/SideNavigation.tsx",
           "hash": "16896173069681526714",
           "deps": [
             "npm:react-router-dom",
@@ -3585,9 +2616,107 @@
           ]
         },
         {
-          "file": "apps/admin/src/components/WarningDialog.tsx",
+          "file": "apps/admin/src/Components_old/WarningDialog.tsx",
           "hash": "7165928299328810020",
           "deps": [
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/admin/src/Pages/Login/Login.tsx",
+          "hash": "17799936102518920414",
+          "deps": [
+            "ui",
+            "npm:react-router-dom",
+            "npm:react-i18next"
+          ]
+        },
+        {
+          "file": "apps/admin/src/Pages/Login/login.tsx",
+          "hash": "17799936102518920414",
+          "deps": [
+            "ui",
+            "npm:react-router-dom",
+            "npm:react-i18next"
+          ]
+        },
+        {
+          "file": "apps/admin/src/Pages/Organisation/Details.tsx",
+          "hash": "9732204166750715441",
+          "deps": [
+            "npm:@mui/material",
+            "npm:dayjs",
+            "npm:react-router-dom",
+            "ui",
+            "npm:@mui/icons-material"
+          ]
+        },
+        {
+          "file": "apps/admin/src/Pages/Organisation/List.tsx",
+          "hash": "8312022327714970765",
+          "deps": [
+            "npm:react",
+            "npm:react-router-dom",
+            "ui",
+            "npm:@mui/x-data-grid-premium",
+            "npm:@mui/material",
+            "npm:react-toastify",
+            "npm:@mui/icons-material",
+            "npm:react-i18next"
+          ]
+        },
+        {
+          "file": "apps/admin/src/Pages/Organisation/details.tsx",
+          "hash": "16573854199997809955",
+          "deps": [
+            "npm:@mui/material",
+            "npm:dayjs",
+            "npm:react-router-dom",
+            "ui",
+            "npm:@mui/icons-material"
+          ]
+        },
+        {
+          "file": "apps/admin/src/Pages/Organisation/list.tsx",
+          "hash": "17950413573754840832",
+          "deps": [
+            "npm:react",
+            "npm:react-router-dom",
+            "ui",
+            "npm:@mui/x-data-grid-premium",
+            "npm:@mui/material",
+            "npm:react-toastify",
+            "npm:@mui/icons-material",
+            "npm:react-i18next"
+          ]
+        },
+        {
+          "file": "apps/admin/src/Pages/Organisation/styles.module.scss",
+          "hash": "12113843891927069710"
+        },
+        {
+          "file": "apps/admin/src/Router_old/index.tsx",
+          "hash": "16593908912347439789",
+          "deps": [
+            "npm:react",
+            "npm:react-router-dom",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/admin/src/Router_old/routes.ts",
+          "hash": "15858455441722922547",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/admin/src/app.tsx",
+          "hash": "12663703417999724397",
+          "deps": [
+            "npm:react-toastify",
+            "npm:react-router-dom",
+            "npm:@tanstack/react-query",
             "ui"
           ]
         },
@@ -3618,15 +2747,6 @@
           ]
         },
         {
-          "file": "apps/admin/src/pages/Login/login.tsx",
-          "hash": "17799936102518920414",
-          "deps": [
-            "ui",
-            "npm:react-router-dom",
-            "npm:react-i18next"
-          ]
-        },
-        {
           "file": "apps/admin/src/pages/Organisation/Details.tsx",
           "hash": "5165364709907505126",
           "deps": [
@@ -3652,48 +2772,12 @@
           ]
         },
         {
-          "file": "apps/admin/src/pages/Organisation/details.tsx",
-          "hash": "5165364709907505126",
-          "deps": [
-            "npm:@mui/material",
-            "npm:dayjs",
-            "npm:react-router-dom",
-            "ui",
-            "npm:@mui/icons-material"
-          ]
-        },
-        {
-          "file": "apps/admin/src/pages/Organisation/list.tsx",
-          "hash": "12118085701806226325",
-          "deps": [
-            "npm:react",
-            "npm:react-router-dom",
-            "ui",
-            "npm:@mui/x-data-grid-premium",
-            "npm:@mui/material",
-            "npm:react-toastify",
-            "npm:@mui/icons-material",
-            "npm:react-i18next"
-          ]
-        },
-        {
-          "file": "apps/admin/src/pages/Organisation/styles.module.scss",
-          "hash": "12113843891927069710"
-        },
-        {
           "file": "apps/admin/src/router/index.tsx",
           "hash": "9370071075130699182",
           "deps": [
             "npm:react",
             "npm:react-router-dom",
             "ui"
-          ]
-        },
-        {
-          "file": "apps/admin/src/router/routes.ts",
-          "hash": "15858455441722922547",
-          "deps": [
-            "npm:react"
           ]
         },
         {
@@ -3734,6 +2818,988 @@
             "npm:vite",
             "npm:@vitejs/plugin-react",
             "npm:@nx/vite"
+          ]
+        }
+      ],
+      "ui": [
+        {
+          "file": "ui/.eslintrc.json",
+          "hash": "7388911630545237055"
+        },
+        {
+          "file": "ui/.storybook/main.ts",
+          "hash": "10974445222942348091",
+          "deps": [
+            "npm:@storybook/react-vite"
+          ]
+        },
+        {
+          "file": "ui/.storybook/preview-head.html",
+          "hash": "3442485693015235803"
+        },
+        {
+          "file": "ui/.storybook/preview.tsx",
+          "hash": "14259854285920208373",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/README.md",
+          "hash": "2776327953747952561"
+        },
+        {
+          "file": "ui/jest.config.ts",
+          "hash": "1567495430191593384"
+        },
+        {
+          "file": "ui/package.json",
+          "hash": "179508816908391147"
+        },
+        {
+          "file": "ui/project.json",
+          "hash": "5629585574542866370"
+        },
+        {
+          "file": "ui/src/apolloWrapper/index.tsx",
+          "hash": "15612551347075046596",
+          "deps": [
+            "npm:@apollo/client",
+            "npm:react",
+            "npm:react-toastify",
+            "npm:i18next"
+          ]
+        },
+        {
+          "file": "ui/src/assets/index.tsx",
+          "hash": "17362989708386187654",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/assets/logo.svg",
+          "hash": "4115867920610272835"
+        },
+        {
+          "file": "ui/src/assets/smallLogo.svg",
+          "hash": "12344569172406716174"
+        },
+        {
+          "file": "ui/src/components/Card/card.tsx",
+          "hash": "14455004450623499056",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/components/Card/index.ts",
+          "hash": "15070519349704388910"
+        },
+        {
+          "file": "ui/src/components/ControlledCheckbox/controlledCheckbox.tsx",
+          "hash": "14085994804330795519",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "ui/src/components/ControlledCheckbox/index.ts",
+          "hash": "10808636692667012526"
+        },
+        {
+          "file": "ui/src/components/ControlledDropdown/controlledDropdown.tsx",
+          "hash": "2693449200365711758",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "ui/src/components/ControlledDropdown/index.ts",
+          "hash": "361705227658019169"
+        },
+        {
+          "file": "ui/src/components/ControlledInput/controlledInput.tsx",
+          "hash": "161015675702471483",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "ui/src/components/ControlledInput/index.ts",
+          "hash": "1303394200872788152"
+        },
+        {
+          "file": "ui/src/components/ControlledRadio/controlledRadio.tsx",
+          "hash": "12114945730065703561",
+          "deps": [
+            "npm:react",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "ui/src/components/ControlledRadio/index.ts",
+          "hash": "1343905811524786308"
+        },
+        {
+          "file": "ui/src/components/ForgotPasswordForm/forgotPasswordForm.tsx",
+          "hash": "14761924905716028882",
+          "deps": [
+            "npm:react-hook-form",
+            "npm:yup",
+            "npm:@hookform/resolvers",
+            "npm:i18next"
+          ]
+        },
+        {
+          "file": "ui/src/components/ForgotPasswordForm/index.ts",
+          "hash": "17240979147876187180"
+        },
+        {
+          "file": "ui/src/components/FormFields/formFields.tsx",
+          "hash": "8485061439756806880",
+          "deps": [
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "ui/src/components/FormFields/index.ts",
+          "hash": "12738797869967583175"
+        },
+        {
+          "file": "ui/src/components/Grid/grid.tsx",
+          "hash": "16700512478844590176",
+          "deps": [
+            "npm:@mui/material",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/components/Grid/index.ts",
+          "hash": "14479136909788795662"
+        },
+        {
+          "file": "ui/src/components/LanguageDropdown/index.ts",
+          "hash": "3926092223889077545"
+        },
+        {
+          "file": "ui/src/components/LanguageDropdown/languageDropdown.tsx",
+          "hash": "14346823432673168891",
+          "deps": [
+            "npm:react",
+            "npm:react-i18next"
+          ]
+        },
+        {
+          "file": "ui/src/components/LoginForm/index.ts",
+          "hash": "11045404284400741079"
+        },
+        {
+          "file": "ui/src/components/LoginForm/loginForm.tsx",
+          "hash": "14675131570550926539",
+          "deps": [
+            "npm:react-hook-form",
+            "npm:yup",
+            "npm:@hookform/resolvers",
+            "npm:i18next"
+          ]
+        },
+        {
+          "file": "ui/src/components/PhoneInputWithCountry/index.ts",
+          "hash": "2905417731446269293"
+        },
+        {
+          "file": "ui/src/components/PhoneInputWithCountry/phoneInputWithCountry.module.scss",
+          "hash": "7229406208721837748"
+        },
+        {
+          "file": "ui/src/components/PhoneInputWithCountry/phoneInputWithCountry.tsx",
+          "hash": "9067002938412061002",
+          "deps": [
+            "npm:react",
+            "npm:react-phone-input-2",
+            "npm:libphonenumber-js",
+            "npm:react-hook-form"
+          ]
+        },
+        {
+          "file": "ui/src/components/RegisterForm/index.ts",
+          "hash": "13666930554159294696"
+        },
+        {
+          "file": "ui/src/components/RegisterForm/registerForm.tsx",
+          "hash": "16324476769695932021",
+          "deps": [
+            "npm:react-hook-form",
+            "npm:yup",
+            "npm:@hookform/resolvers",
+            "npm:i18next"
+          ]
+        },
+        {
+          "file": "ui/src/components/ResetPasswordForm/index.ts",
+          "hash": "11696725322257878898"
+        },
+        {
+          "file": "ui/src/components/ResetPasswordForm/resetPasswordForm.tsx",
+          "hash": "5076609303260824139",
+          "deps": [
+            "npm:react-hook-form",
+            "npm:yup",
+            "npm:@hookform/resolvers",
+            "npm:i18next"
+          ]
+        },
+        {
+          "file": "ui/src/components/index.ts",
+          "hash": "8793460227841968644",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/constants/apiMethods.ts",
+          "hash": "15271375228208994101"
+        },
+        {
+          "file": "ui/src/constants/apiUrl.ts",
+          "hash": "17773746180393915296"
+        },
+        {
+          "file": "ui/src/constants/common.ts",
+          "hash": "17198684360143145489",
+          "deps": [
+            "npm:i18next"
+          ]
+        },
+        {
+          "file": "ui/src/constants/countryLists.ts",
+          "hash": "4240707140480284796"
+        },
+        {
+          "file": "ui/src/constants/index.ts",
+          "hash": "18002282442024344645"
+        },
+        {
+          "file": "ui/src/constants/messages.ts",
+          "hash": "16656070161101667007",
+          "deps": [
+            "npm:i18next"
+          ]
+        },
+        {
+          "file": "ui/src/constants/orderStatus.ts",
+          "hash": "1753232504179983705"
+        },
+        {
+          "file": "ui/src/constants/themeColours.ts",
+          "hash": "14070532993222619584",
+          "deps": [
+            "npm:i18next"
+          ]
+        },
+        {
+          "file": "ui/src/context/index.ts",
+          "hash": "17763314740106715566"
+        },
+        {
+          "file": "ui/src/context/language.tsx",
+          "hash": "4797655220419910626",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/fonts/assets/icomoon.eot",
+          "hash": "3721213137930980534"
+        },
+        {
+          "file": "ui/src/fonts/assets/icomoon.svg",
+          "hash": "16712182160090216977"
+        },
+        {
+          "file": "ui/src/fonts/assets/icomoon.ttf",
+          "hash": "15815996966089764246"
+        },
+        {
+          "file": "ui/src/fonts/assets/icomoon.woff",
+          "hash": "332814687279774687"
+        },
+        {
+          "file": "ui/src/fonts/font.css",
+          "hash": "13395294583296972490"
+        },
+        {
+          "file": "ui/src/hoc/index.ts",
+          "hash": "11267973342237930515"
+        },
+        {
+          "file": "ui/src/hoc/withConditionalRoute.tsx",
+          "hash": "2706556222367291451",
+          "deps": [
+            "npm:react",
+            "npm:react-router-dom"
+          ]
+        },
+        {
+          "file": "ui/src/hooks/index.ts",
+          "hash": "3180800170908201957"
+        },
+        {
+          "file": "ui/src/hooks/useDropdownData.ts",
+          "hash": "7622652558507086579",
+          "deps": [
+            "npm:react",
+            "npm:@tanstack/react-query",
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "ui/src/hooks/useGeoLocation.ts",
+          "hash": "3891630229370078428",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/hooks/useRestHooks.ts",
+          "hash": "12066208953651747171",
+          "deps": [
+            "npm:@tanstack/react-query",
+            "npm:axios",
+            "npm:react-toastify",
+            "npm:i18next"
+          ]
+        },
+        {
+          "file": "ui/src/i18n.ts",
+          "hash": "10779167104436347175",
+          "deps": [
+            "npm:i18next",
+            "npm:react-i18next",
+            "npm:i18next-http-backend",
+            "npm:i18next-browser-languagedetector"
+          ]
+        },
+        {
+          "file": "ui/src/index.ts",
+          "hash": "7958568875001682254",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/autocomplete/AutoComplete.stories.tsx",
+          "hash": "6365694321803830059",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/autocomplete/AutoComplete.tsx",
+          "hash": "15738219240555718386",
+          "deps": [
+            "npm:@mui/material",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/autocomplete/index.tsx",
+          "hash": "5854640351285940199"
+        },
+        {
+          "file": "ui/src/lib/checkbox/Checkbox.stories.tsx",
+          "hash": "15044863563150302880",
+          "deps": [
+            "npm:react",
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/checkbox/Checkbox.tsx",
+          "hash": "15423245582481767368",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material",
+            "npm:@mui/system"
+          ]
+        },
+        {
+          "file": "ui/src/lib/checkbox/index.ts",
+          "hash": "12403527245079433921"
+        },
+        {
+          "file": "ui/src/lib/chip/Chip.stories.tsx",
+          "hash": "3000163367672786400",
+          "deps": [
+            "npm:react",
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/chip/Chip.tsx",
+          "hash": "4437069376015022607",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/chip/index.ts",
+          "hash": "4794218682314131289"
+        },
+        {
+          "file": "ui/src/lib/counter/Counter.stories.tsx",
+          "hash": "7134250493100999226",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/counter/Counter.tsx",
+          "hash": "2052252650329368871",
+          "deps": [
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/counter/index.ts",
+          "hash": "7617163419614622310"
+        },
+        {
+          "file": "ui/src/lib/dateRangePicker/DateRangePicker.stories.tsx",
+          "hash": "15908054620973849928",
+          "deps": [
+            "npm:react",
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/dateRangePicker/DateRangePicker.tsx",
+          "hash": "16737222717603814714",
+          "deps": [
+            "npm:react",
+            "npm:@mui/x-date-pickers-pro",
+            "npm:@mui/x-date-pickers",
+            "npm:react-i18next"
+          ]
+        },
+        {
+          "file": "ui/src/lib/dateRangePicker/index.ts",
+          "hash": "6023309407721665511"
+        },
+        {
+          "file": "ui/src/lib/dateTimeRangePicker/DateTimeRangePicker.stories.tsx",
+          "hash": "2729496463920983981",
+          "deps": [
+            "npm:react",
+            "npm:@storybook/react",
+            "npm:dayjs",
+            "npm:@mui/x-date-pickers-pro"
+          ]
+        },
+        {
+          "file": "ui/src/lib/dateTimeRangePicker/DateTimeRangePicker.tsx",
+          "hash": "5818929068311635710",
+          "deps": [
+            "npm:react",
+            "npm:@mui/x-date-pickers-pro",
+            "npm:dayjs",
+            "npm:@mui/material",
+            "npm:@mui/x-date-pickers"
+          ]
+        },
+        {
+          "file": "ui/src/lib/dateTimeRangePicker/index.ts",
+          "hash": "7623752593140236666"
+        },
+        {
+          "file": "ui/src/lib/dialog/Dialog.stories.tsx",
+          "hash": "2879047675422818861",
+          "deps": [
+            "npm:react",
+            "npm:@storybook/react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/dialog/Dialog.tsx",
+          "hash": "16133328581352805909",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/dialog/index.ts",
+          "hash": "7681462274783279441"
+        },
+        {
+          "file": "ui/src/lib/drawer/Drawer.stories.tsx",
+          "hash": "18308776120208121509",
+          "deps": [
+            "npm:react",
+            "npm:@storybook/react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/drawer/Drawer.tsx",
+          "hash": "10766308749229173512",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material",
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "ui/src/lib/drawer/index.ts",
+          "hash": "8046062801589881301"
+        },
+        {
+          "file": "ui/src/lib/iconButton/IconButton.spec.tsx",
+          "hash": "410464578801757191",
+          "deps": [
+            "npm:@testing-library/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/iconButton/IconButton.stories.tsx",
+          "hash": "14830706193416279706",
+          "deps": [
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/iconButton/IconButton.tsx",
+          "hash": "2007322513158178974",
+          "deps": [
+            "npm:@mui/material",
+            "npm:react",
+            "npm:@mui/icons-material",
+            "npm:react-icons"
+          ]
+        },
+        {
+          "file": "ui/src/lib/iconButton/index.ts",
+          "hash": "15425438677553034387"
+        },
+        {
+          "file": "ui/src/lib/link/index.ts",
+          "hash": "14235532886772533161"
+        },
+        {
+          "file": "ui/src/lib/link/link.spec.tsx",
+          "hash": "9654996257519306624",
+          "deps": [
+            "npm:@testing-library/react",
+            "npm:react-router-dom"
+          ]
+        },
+        {
+          "file": "ui/src/lib/link/link.stories.tsx",
+          "hash": "604491257437452999",
+          "deps": [
+            "npm:react-router-dom",
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/link/link.tsx",
+          "hash": "14270769824056339294",
+          "deps": [
+            "npm:react-router-dom",
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/modal/Modal.stories.tsx",
+          "hash": "9494413846779216377",
+          "deps": [
+            "npm:react",
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/modal/Modal.tsx",
+          "hash": "12923137701964960333",
+          "deps": [
+            "npm:@mui/material",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/modal/index.ts",
+          "hash": "2095426545778276623"
+        },
+        {
+          "file": "ui/src/lib/primaryButton/PrimaryButton.spec.tsx",
+          "hash": "6068368570366741035",
+          "deps": [
+            "npm:@testing-library/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/primaryButton/PrimaryButton.stories.tsx",
+          "hash": "14591257391410537768",
+          "deps": [
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/primaryButton/PrimaryButton.tsx",
+          "hash": "1230772577762223819",
+          "deps": [
+            "npm:@mui/material",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/primaryButton/index.ts",
+          "hash": "2477384396160643708"
+        },
+        {
+          "file": "ui/src/lib/radio/Radio.stories.tsx",
+          "hash": "2004331211712196831",
+          "deps": [
+            "npm:react",
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/radio/Radio.tsx",
+          "hash": "2810146749759506560",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/radio/index.ts",
+          "hash": "4711265427018180784"
+        },
+        {
+          "file": "ui/src/lib/select/index.tsx",
+          "hash": "10174683663984868278"
+        },
+        {
+          "file": "ui/src/lib/select/select.stories.tsx",
+          "hash": "16933913477277634701",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/select/select.tsx",
+          "hash": "122391230756582777",
+          "deps": [
+            "npm:@mui/material",
+            "npm:react",
+            "npm:@mui/icons-material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/snackbar/Snackbar.stories.tsx",
+          "hash": "18063837511925153894",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/snackbar/Snackbar.tsx",
+          "hash": "13082240461802869962",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/snackbar/index.ts",
+          "hash": "7327617168541713670"
+        },
+        {
+          "file": "ui/src/lib/stepper/Stepper.stories.tsx",
+          "hash": "11901493541109000965",
+          "deps": [
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/stepper/Stepper.tsx",
+          "hash": "9897072757603608811",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/stepper/index.ts",
+          "hash": "9780729133916833333"
+        },
+        {
+          "file": "ui/src/lib/switch/Switch.stories.tsx",
+          "hash": "16644975734003968603",
+          "deps": [
+            "npm:react",
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/switch/Switch.tsx",
+          "hash": "976974188616882596",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/switch/index.ts",
+          "hash": "16515839268279821631"
+        },
+        {
+          "file": "ui/src/lib/tab/Tab.stories.tsx",
+          "hash": "7594986061503228829",
+          "deps": [
+            "npm:react",
+            "npm:@storybook/react",
+            "npm:@mui/icons-material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/tab/Tab.tsx",
+          "hash": "2066460979673126300",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material",
+            "npm:@mui/lab"
+          ]
+        },
+        {
+          "file": "ui/src/lib/tab/index.ts",
+          "hash": "9576807898515049196"
+        },
+        {
+          "file": "ui/src/lib/table/Table.stories.tsx",
+          "hash": "8829589388716804073",
+          "deps": [
+            "npm:@storybook/react",
+            "npm:@mui/x-data-grid-premium",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/table/Table.tsx",
+          "hash": "50940443641482208",
+          "deps": [
+            "npm:react",
+            "npm:@mui/x-data-grid-premium",
+            "npm:@mui/material",
+            "npm:@mui/icons-material",
+            "npm:@mui/system"
+          ]
+        },
+        {
+          "file": "ui/src/lib/table/index.ts",
+          "hash": "16982334163247498605"
+        },
+        {
+          "file": "ui/src/lib/textarea/Textarea.tsx",
+          "hash": "12810101972211781128",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/textarea/index.ts",
+          "hash": "16562990876911909576"
+        },
+        {
+          "file": "ui/src/lib/textarea/textarea.stories.tsx",
+          "hash": "9770499955595623126",
+          "deps": [
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/textfield/index.ts",
+          "hash": "2535152958406442652"
+        },
+        {
+          "file": "ui/src/lib/textfield/textfield.spec.tsx",
+          "hash": "1861324144580406484",
+          "deps": [
+            "npm:@testing-library/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/textfield/textfield.stories.tsx",
+          "hash": "16106832711815822002",
+          "deps": [
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/textfield/textfield.tsx",
+          "hash": "12274826324841656381",
+          "deps": [
+            "npm:@mui/material",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/theme/index.tsx",
+          "hash": "159403319209928917",
+          "deps": [
+            "npm:@mui/material",
+            "npm:react",
+            "npm:@mui/x-license",
+            "npm:react-i18next"
+          ]
+        },
+        {
+          "file": "ui/src/lib/theme/theme/index.tsx",
+          "hash": "5340973678560731501",
+          "deps": [
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/theme/theme/palette.ts",
+          "hash": "12522423079206594185"
+        },
+        {
+          "file": "ui/src/lib/theme/theme/typography.ts",
+          "hash": "4677685229844637894"
+        },
+        {
+          "file": "ui/src/lib/tooltip/Tooltip.stories.tsx",
+          "hash": "17106380648035376256",
+          "deps": [
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/tooltip/Tooltip.tsx",
+          "hash": "10836787242085343621",
+          "deps": [
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/tooltip/index.ts",
+          "hash": "11774991681613164738"
+        },
+        {
+          "file": "ui/src/lib/typography/Typography.stories.tsx",
+          "hash": "6615696761135534478",
+          "deps": [
+            "npm:@storybook/react"
+          ]
+        },
+        {
+          "file": "ui/src/lib/typography/Typography.tsx",
+          "hash": "11149793757292118916",
+          "deps": [
+            "npm:react",
+            "npm:@mui/material"
+          ]
+        },
+        {
+          "file": "ui/src/lib/typography/index.ts",
+          "hash": "1378169322418160128"
+        },
+        {
+          "file": "ui/src/locale/en/translations.json",
+          "hash": "14251004562442123675"
+        },
+        {
+          "file": "ui/src/locale/es/translations.json",
+          "hash": "11162332838469989855"
+        },
+        {
+          "file": "ui/src/locale/fr/translations.json",
+          "hash": "11969984570782371280"
+        },
+        {
+          "file": "ui/src/locale/index.ts",
+          "hash": "16611299757108200855"
+        },
+        {
+          "file": "ui/src/locale/sv/translations.json",
+          "hash": "7306653221228804402"
+        },
+        {
+          "file": "ui/src/utils/api.ts",
+          "hash": "17106065718359745799",
+          "deps": [
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "ui/src/utils/common.ts",
+          "hash": "9484605622057399008",
+          "deps": [
+            "npm:@mui/material",
+            "npm:@mui/system",
+            "npm:axios",
+            "npm:dayjs",
+            "npm:react-router-dom",
+            "npm:react-toastify",
+            "npm:crypto-js",
+            "npm:js-cookie",
+            "npm:jwt-decode",
+            "npm:date-fns"
+          ]
+        },
+        {
+          "file": "ui/src/utils/index.ts",
+          "hash": "16594202499584107477"
+        },
+        {
+          "file": "ui/src/utils/jwtExpire.ts",
+          "hash": "14207942181351420562",
+          "deps": [
+            "npm:jwt-decode",
+            "npm:react-toastify"
+          ]
+        },
+        {
+          "file": "ui/src/vite-env.d.ts",
+          "hash": "4346551397233632145"
+        },
+        {
+          "file": "ui/tsconfig.json",
+          "hash": "16697216427249282302"
+        },
+        {
+          "file": "ui/tsconfig.lib.json",
+          "hash": "10990120218789605224"
+        },
+        {
+          "file": "ui/tsconfig.spec.json",
+          "hash": "13369031804221838106"
+        },
+        {
+          "file": "ui/tsconfig.storybook.json",
+          "hash": "6982859882495716044"
+        },
+        {
+          "file": "ui/vite.config.ts",
+          "hash": "11069079386581398141",
+          "deps": [
+            "npm:vite",
+            "npm:vite-plugin-dts",
+            "npm:@nx/vite",
+            "npm:@vitejs/plugin-react"
           ]
         }
       ]

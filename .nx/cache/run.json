@@ -1,8 +1,8 @@
 {
   "run": {
-    "command": "nx run-many -t build --produ",
-    "startTime": "2025-08-24T19:51:01.551Z",
-    "endTime": "2025-08-24T19:53:44.870Z",
+    "command": "nx run admin:build:production",
+    "startTime": "2025-11-01T13:26:39.208Z",
+    "endTime": "2025-11-01T13:27:29.302Z",
     "inner": false
   },
   "tasks": [
@@ -10,20 +10,9 @@
       "taskId": "ui:build:production",
       "target": "build",
       "projectName": "ui",
-      "hash": "18004685912361497294",
-      "startTime": "2025-08-24T19:51:01.561Z",
-      "endTime": "2025-08-24T19:51:43.685Z",
-      "params": "",
-      "cacheStatus": "cache-miss",
-      "status": 0
-    },
-    {
-      "taskId": "co-screen:build:production",
-      "target": "build",
-      "projectName": "co-screen",
-      "hash": "3245897680441099621",
-      "startTime": "2025-08-24T19:51:43.764Z",
-      "endTime": "2025-08-24T19:52:41.792Z",
+      "hash": "12405207106253931981",
+      "startTime": "2025-11-01T13:26:39.232Z",
+      "endTime": "2025-11-01T13:27:22.516Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0
@@ -32,34 +21,12 @@
       "taskId": "admin:build:production",
       "target": "build",
       "projectName": "admin",
-      "hash": "4887370374742623616",
-      "startTime": "2025-08-24T19:51:43.764Z",
-      "endTime": "2025-08-24T19:52:46.150Z",
+      "hash": "145279653689539016",
+      "startTime": "2025-11-01T13:27:22.602Z",
+      "endTime": "2025-11-01T13:27:29.300Z",
       "params": "",
       "cacheStatus": "cache-miss",
-      "status": 0
-    },
-    {
-      "taskId": "organisation:build",
-      "target": "build",
-      "projectName": "organisation",
-      "hash": "2677868425269623255",
-      "startTime": "2025-08-24T19:51:43.764Z",
-      "endTime": "2025-08-24T19:53:09.660Z",
-      "params": "",
-      "cacheStatus": "cache-miss",
-      "status": 0
-    },
-    {
-      "taskId": "customer:build:production",
-      "target": "build",
-      "projectName": "customer",
-      "hash": "11083254293838402087",
-      "startTime": "2025-08-24T19:52:41.894Z",
-      "endTime": "2025-08-24T19:53:44.829Z",
-      "params": "",
-      "cacheStatus": "cache-miss",
-      "status": 0
+      "status": 1
     }
   ]
 }

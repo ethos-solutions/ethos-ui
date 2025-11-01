@@ -52,14 +52,6 @@ export const Dashboard = () => {
     return dash?.pages.includes('list') ?? false;
   }, [userData]);
 
-  if (userData && !hasDashboardList) {
-    return (
-      <div>
-        <Heading variant="h2">Welcome to {userData.restaurantName}!</Heading>
-      </div>
-    );
-  }
-
   const [start, end] = dateRange;
 
   let startTs;
@@ -106,7 +98,7 @@ export const Dashboard = () => {
     ['get_reports', startTs, endTs],
     reportsUrl,
     {
-      enabled: !!userData,
+      enabled: !!userData && hasDashboardList,
       onError: (err) => {
         if (err.message.includes('Cannot read properties')) {
           toast.error(t(ERROR_MESSAGES.GENERAL));
@@ -117,14 +109,14 @@ export const Dashboard = () => {
   const { data: mostSellingItems, isLoading: isSellingLoading } = useRestQuery(
     ['get_mostSellingItems', startTs, endTs],
     mostSellingUrl,
-    { enabled: !!userData },
+    { enabled: !!userData && hasDashboardList },
   );
 
   const { isLoading: isOrderCountLoading } = useRestQuery(
     ['order_count', startTs, endTs],
     countUrl,
     {
-      enabled: !!userData,
+      enabled: !!userData && hasDashboardList,
       onSuccess: (res) => {
         setOrderCount({ online: res.data?.online, ofline: res.data?.offline });
       },
@@ -205,6 +197,14 @@ export const Dashboard = () => {
       },
       onError: () => toast.error(t(ERROR_MESSAGES.GENERAL)),
     });
+
+  if (userData && !hasDashboardList) {
+    return (
+      <div>
+        <Heading variant="h2">Welcome to {userData.restaurantName}!</Heading>
+      </div>
+    );
+  }
 
   return (
     <>
