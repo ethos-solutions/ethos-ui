@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Heading, Iconbutton, Paragraph } from '@ethos-frontend/ui';
 import { useRestQuery } from '@ethos-frontend/hook';
 import { API_URL } from '@ethos-frontend/constants';
-import Loading from '../../Components_old/Loading';
+import Loading from '../../components/Loading';
 import { GridContainer } from '@ethos-frontend/components';
 import { getNumberOfCols, useResponsive } from '@ethos-frontend/utils';
 import { ArrowBack } from '@mui/icons-material';
