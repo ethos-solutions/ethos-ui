@@ -13,9 +13,9 @@ import {
   GridSortModel,
 } from "@mui/x-data-grid-premium";
 import { Menu, MenuItem } from "@mui/material";
-import WarningDialog from "../../Components_old/WarningDialog";
-import RejectDialog from "../../Components_old/RejectDialog";
-import CommissionDialog from "../../Components_old/CommissionDialog";
+import WarningDialog from "../../components/WarningDialog";
+import RejectDialog from "../../components/RejectDialog";
+import CommissionDialog from "../../components/CommissionDialog";
 import { toast } from "react-toastify";
 import { Search, MoreVert } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
