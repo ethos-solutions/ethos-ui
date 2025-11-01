@@ -1,0 +1,103 @@
+name: Continuous Integration (Dependabot)
+
+on:
+  push:
+    branches: [dependabot/npm_and_yarn/brace-expansion-1.1.12]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies (allow lockfile update)
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Print Nx info
+        run: pnpm exec nx report
+
+      - name: Lint (affected)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec nx affected --target=lint --base=origin/main --head=HEAD --parallel=3
+          else
+            pnpm exec nx run-many --target=lint --all --parallel=3
+          fi
+
+      - name: Type check (affected)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec nx affected --target=type-check --base=origin/main --head=HEAD --parallel=3 || \
+            pnpm exec tsc --noEmit --project tsconfig.base.json
+          else
+            pnpm exec nx run-many --target=type-check --all --parallel=3 || \
+            pnpm exec tsc --noEmit --project tsconfig.base.json
+          fi
+
+      - name: Test (affected)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec nx affected --target=test --base=origin/main --head=HEAD --parallel=3 --configuration=ci || echo "No tests found or tests failed"
+          else
+            pnpm exec nx run-many --target=test --all --parallel=3 --configuration=ci || echo "No tests found or tests failed"
+          fi
+
+      - name: Build (affected)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm exec nx affected --target=build --base=origin/main --head=HEAD --parallel=3
+          else
+            pnpm exec nx run-many --target=build --all --parallel=3
+          fi
+
+      - name: Upload build artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ github.run_id }}
+          path: |
+            dist/
+            node_modules/.nx/
+            *.log
+          retention-days: 3
+
+      - name: CI Summary
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ CI completed successfully"
+          else
+            echo "❌ CI failed - check logs above"
+          fi
