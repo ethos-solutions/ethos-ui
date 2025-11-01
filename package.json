@@ -19,9 +19,9 @@
   },
   "private": true,
   "engines": {
-    "pnpm": ">=8.0.0"
+    "pnpm": ">=8.15.0"
   },
-  "packageManager": "pnpm@8.0.0",
+  "packageManager": "pnpm@8.15.0",
   "dependencies": {
     "@apollo/client": "^3.13.1",
     "@base2/pretty-print-object": "1.0.2",
@@ -159,7 +159,6 @@
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react": "7.37.4",
     "eslint-plugin-react-hooks": "5.2.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^9.1.7",
     "i18next-parser": "^9.3.0",
     "jest": "29.7.0",
