@@ -207,7 +207,7 @@ jobs:
             set -euo pipefail
             sudo rm -rf /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/* || true
             sudo mkdir -p /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer || true
-            aws s3 cp s3://$S3_BUCKET_NAME/$TARGET_PREFIX/dist/apps/customer/customer-runtime.tgz /tmp/customer-runtime.tgz --sse aws:kms
+            aws s3 cp s3://$S3_BUCKET_NAME/artifacts/customer/latest/customer-runtime.tgz /tmp/customer-runtime.tgz --sse aws:kms
             sudo tar -xzf /tmp/customer-runtime.tgz -C /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer
             sudo chown -R www-data:www-data /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer || true
             echo '${{ needs.build.outputs.version_sha }}' | sudo tee /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/VERSION
