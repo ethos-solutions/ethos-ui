@@ -92,3 +92,7 @@ jobs:
           else
             echo "❌ CI validation failed - check logs above"
           fi
+
+                - name: Fix CI
+        if: always()
+        run: npx nx fix-ci
