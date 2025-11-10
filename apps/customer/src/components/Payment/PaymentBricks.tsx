@@ -43,40 +43,62 @@ export const PaymentBricks: React.FC<PaymentBricksProps> = ({
     }
     
     const loadMercadoPagoSDK = () => {
+      // Check if MercadoPago is already loaded
       if (window.MercadoPago) {
         setMpLoaded(true);
         return;
       }
 
+      // Check if script is already in the DOM (from _document.tsx in standalone builds)
       const existingScript = document.querySelector(
         'script[src="https://sdk.mercadopago.com/js/v2"]',
       );
+      
       if (existingScript) {
-        existingScript.addEventListener('load', () => {
-          setTimeout(() => {
-            if (window.MercadoPago) {
-              setMpLoaded(true);
-            } else {
-              onError(new Error('MercadoPago SDK loaded but not accessible'));
-            }
-          }, 500);
-        });
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://sdk.mercadopago.com/js/v2';
-      script.async = false;
-      script.defer = false;
-      script.onload = () => {
-        setTimeout(() => {
+        // Script exists but SDK might not be ready yet
+        const checkSDKReady = () => {
           if (window.MercadoPago) {
             setMpLoaded(true);
           } else {
-            onError(new Error('MercadoPago SDK loaded but not accessible'));
+            // Retry checking for SDK availability
+            setTimeout(checkSDKReady, 100);
           }
-        }, 500);
+        };
+        
+        if (existingScript.hasAttribute('data-loaded')) {
+          // Script already loaded
+          checkSDKReady();
+        } else {
+          // Wait for script to load
+          existingScript.addEventListener('load', () => {
+            existingScript.setAttribute('data-loaded', 'true');
+            checkSDKReady();
+          });
+          existingScript.addEventListener('error', () => {
+            onError(new Error('Failed to load payment system'));
+          });
+        }
+        return;
+      }
+
+      // Fallback: Create script if not found (for dev mode)
+      const script = document.createElement('script');
+      script.src = 'https://sdk.mercadopago.com/js/v2';
+      script.async = true;
+      script.defer = true;
+      
+      script.onload = () => {
+        script.setAttribute('data-loaded', 'true');
+        const checkSDKReady = () => {
+          if (window.MercadoPago) {
+            setMpLoaded(true);
+          } else {
+            setTimeout(checkSDKReady, 100);
+          }
+        };
+        checkSDKReady();
       };
+      
       script.onerror = () => {
         onError(new Error('Failed to load payment system'));
       };
@@ -100,7 +122,8 @@ export const PaymentBricks: React.FC<PaymentBricksProps> = ({
         return;
       }
       
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Wait a bit to ensure SDK is fully initialized
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       if (!window.MercadoPago) {
         throw new Error('MercadoPago SDK not loaded');
@@ -117,7 +140,8 @@ export const PaymentBricks: React.FC<PaymentBricksProps> = ({
           mp = new window.MercadoPago(publicKey, {
             locale: 'es-CO',
           });
-        } catch (_error) {
+        } catch (constructorError) {
+          console.warn('Constructor initialization failed, trying alternatives:', constructorError);
           // Try alternative initialization methods
         }
       }
@@ -142,14 +166,24 @@ export const PaymentBricks: React.FC<PaymentBricksProps> = ({
         throw new Error('Failed to initialize MercadoPago SDK');
       }
 
-      // Get bricks builder
+      // Get bricks builder with improved error handling
       let bricksBuilder;
       if (typeof mp.bricks === 'function') {
         bricksBuilder = mp.bricks();
       } else if (mp.bricks && typeof mp.bricks === 'object') {
         bricksBuilder = mp.bricks;
       } else {
-        throw new Error('Cannot access MercadoPago bricks');
+        // Last resort: wait and retry once
+        console.warn('Bricks not immediately available, retrying...');
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        
+        if (typeof mp.bricks === 'function') {
+          bricksBuilder = mp.bricks();
+        } else if (mp.bricks && typeof mp.bricks === 'object') {
+          bricksBuilder = mp.bricks;
+        } else {
+          throw new Error('Cannot access MercadoPago bricks');
+        }
       }
 
       // Clear existing brick
