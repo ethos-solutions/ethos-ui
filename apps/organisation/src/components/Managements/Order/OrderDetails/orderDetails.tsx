@@ -14,6 +14,8 @@ import { ERROR_MESSAGES, ORDER_STATUS } from '@ethos-frontend/constants';
 import { UPDATE_ORDER } from '@organisation/api/mutations/Order';
 import { toast } from 'react-toastify';
 import { PrimaryButton } from '@ethos-frontend/ui';
+import { Alert, Chip } from '@mui/material';
+import { Error, HourglassEmpty } from '@mui/icons-material';
 
 export const DefaultOrderDetailsValues = {
   orderNo: '',
@@ -37,6 +39,8 @@ export const DefaultOrderDetailsValues = {
     status: '',
   },
   status: '',
+  edocStatus: undefined,
+  edocErrorMessage: undefined,
 };
 export const OrderDetails = () => {
   const { t } = useTranslation();
@@ -167,9 +171,35 @@ export const OrderDetails = () => {
 
     default:
   }
+
+  const isEstado15 = orderDetailsData.edocStatus === '15';
+  const isEstado20 = orderDetailsData.edocStatus === '20';
+
   return (
     <>
       <Header title={t('orderDetails')} />
+      {(isEstado15 || isEstado20) && (
+        <div className="mb-4">
+          {isEstado15 && (
+            <Alert severity="error" icon={<Error />}>
+              <div className="font-semibold">{t('invoiceError')}</div>
+              {orderDetailsData.edocErrorMessage && (
+                <div className="text-sm mt-1">
+                  {orderDetailsData.edocErrorMessage}
+                </div>
+              )}
+            </Alert>
+          )}
+          {isEstado20 && (
+            <Alert severity="warning" icon={<HourglassEmpty />}>
+              <div className="font-semibold">{t('invoiceVerificationPending')}</div>
+              <div className="text-sm mt-1">
+                {t('verifying')}
+              </div>
+            </Alert>
+          )}
+        </div>
+      )}
       {nextStatus && (
         <div className="mb-4">
           <PrimaryButton

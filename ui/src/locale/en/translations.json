@@ -91,6 +91,15 @@
   "restaurantType":{
     "pickUp":"Pick up at counter"
   },
+  "documentTypes": {
+    "cedulaCiudadania": "Cédula de Ciudadanía",
+    "tarjetaExtranjeria": "Tarjeta de Extranjería",
+    "cedulaExtranjeria": "Cédula de Extranjería",
+    "pasaporte": "Pasaporte",
+    "documentoExtranjero": "Documento Extranjero",
+    "pep": "PEP (Permiso Especial)",
+    "ppt": "PPT (Permiso Protección Temporal)"
+  },
   "errors": {
     "invalidEmail": "Email is invalid",
     "requiredField": "This is a required field.",
@@ -523,7 +532,9 @@
     "exportOrders": "Export Orders",
     "exportOrdersReports": "Export Orders Report",
     "verifying": "Verifying",
-    "invoiceVerificationPending": "Electronic invoice verification pending"
+    "invoiceVerificationPending": "Electronic invoice verification pending",
+    "invoiceError": "Invoice Error",
+    "invoiceErrorTooltip": "Electronic invoice authorization failed. Will be retried automatically."
   },
   "kitchen": {
     "combo": "Combo Products",
@@ -604,8 +615,26 @@
     "enterName": "Enter your Name",
     "fiscalId": "Person ID / Tax ID",
     "enterFiscalId": "Enter your Person ID / Tax ID",
-    "fiscalAddress": "Address",
-    "enterFiscalAddress": "Enter your Address",
+    "invoicePreference": "Invoice Preference",
+    "simpleInvoice": "Simple Receipt",
+    "simpleInvoiceDesc": "No tax details (recommended for most)",
+    "nitInvoice": "Business Invoice (NIT)",
+    "nitInvoiceDesc": "For companies (requires NIT)",
+    "documentInvoice": "Document Invoice",
+    "documentInvoiceDesc": "For individuals with ID or passport",
+    "businessName": "Business Name",
+    "enterBusinessName": "Enter Business Name",
+    "nitNumber": "NIT Number",
+    "nitHelper": "Check digit will be calculated automatically",
+    "documentType": "Document Type",
+    "documentNumber": "Document Number",
+    "fullName": "Full Name",
+    "enterFullName": "Enter Full Name",
+    "needInvoice": "Do you need an invoice with tax details?",
+    "yes": "Yes",
+    "no": "No",
+    "howDoYouIdentify": "How do you identify yourself?",
+    "selectDocumentType": "Select your document type",
     "success": {
       "order": "Order Successful",
       "payment": "Payment Successful",

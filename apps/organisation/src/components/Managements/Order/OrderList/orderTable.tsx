@@ -60,9 +60,12 @@ const columns = (
       field: 'orderNo',
       headerName: t('tableData.orderId'),
       flex: 1,
-      minWidth: 120,
+      minWidth: 250,
       renderCell: (params: GridRenderCellParams) => {
         const order = params.row.id;
+        const isEstado15 = params.row.edocStatus === '15';
+        const isEstado20 = params.row.edocStatus === '20';
+        
         return (
           <div className="flex items-center gap-2">
             <PrimaryButton
@@ -72,12 +75,21 @@ const columns = (
             >
               {params.row.orderNo}
             </PrimaryButton>
-            {params.row.edocNeedsVerification && (
-              <PrimaryButton
+            {isEstado15 && (
+              <Chip
+                label={t('order.invoiceError')}
+                color="error"
+                size="small"
+                title={params.row.edocErrorMessage || t('order.invoiceErrorTooltip')}
+              />
+            )}
+            {isEstado20 && params.row.edocNeedsVerification && (
+              <Chip
+                label={t('order.verifying')}
                 color="warning"
                 size="small"
-                tooltip={t('order.invoiceVerificationPending')}
-              >{t('order.verifying')}</PrimaryButton>
+                title={t('order.invoiceVerificationPending')}
+              />
             )}
           </div>
         );  

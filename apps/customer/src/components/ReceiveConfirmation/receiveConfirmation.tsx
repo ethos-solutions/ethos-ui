@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import styles from './receiveConfirmation.module.scss';
-import { Heading, Iconbutton, Label, PrimaryButton, Radio, TextField } from '@ethos-frontend/ui';
+import { Heading, Iconbutton, Label, PrimaryButton, Radio, TextField, Select } from '@ethos-frontend/ui';
 import { useRouter } from 'next/router';
 import { setStorage, getStorage } from '@ethos-frontend/utils';
 import { OrderNameInput } from './orderNameInput';
 import { CheckboxGroup } from './checkboxGroup';
 import { DetailsModal } from './detailsModal';
 import { useTranslation } from 'react-i18next';
-import { getToppingsOptions } from '@ethos-frontend/constants';
+import { getToppingsOptions, getDocumentTypes } from '@ethos-frontend/constants';
 
 export const ReceiveConfirmation = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const getToppings = getToppingsOptions();
+  const documentTypes = getDocumentTypes();
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // Invoice type selection
-  const [invoiceType, setInvoiceType] = useState<'simplified' | 'fiscal'>('simplified');
+  const [needsInvoice, setNeedsInvoice] = useState(false);
+  const [fiscalDocumentType, setFiscalDocumentType] = useState('13');
   const [fiscalName, setFiscalName] = useState('');
   const [fiscalId, setFiscalId] = useState('');
-  const [fiscalAddress, setFiscalAddress] = useState('');
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [checkboxOptions, setCheckboxOptions] = useState(getToppings);
@@ -35,15 +35,16 @@ export const ReceiveConfirmation = () => {
   const [isSmsValid, setIsSmsValid] = useState(false);
   const [isWhatsappValid, setIsWhatsappValid] = useState(false);
 
+  const isCompany = fiscalDocumentType === '31';
+
   useEffect(() => {
-    // Disable continue if no notification method selected
-    // OR if fiscal invoice selected but fields not filled
     const notificationSelected = selectedOptions.length > 0;
-    const fiscalFieldsValid = invoiceType === 'simplified' || 
+    const fiscalFieldsValid = 
+      !needsInvoice || 
       (fiscalName.trim() && fiscalId.trim());
     
     setIsContinueDisabled(!notificationSelected || !fiscalFieldsValid);
-  }, [selectedOptions, invoiceType, fiscalName, fiscalId]);
+  }, [selectedOptions, needsInvoice, fiscalName, fiscalId]);
 
   useEffect(() => {
     const storedSelectedOptions = JSON.parse(
@@ -53,10 +54,10 @@ export const ReceiveConfirmation = () => {
     const storedSms = getStorage('sms') || '';
     const storedWhatsapp = getStorage('whatsapp') || '';
     const storedOrderName = getStorage('orderName') || '';
-    const storedInvoiceType = getStorage('invoiceType') || 'simplified';
+    const storedNeedsInvoice = getStorage('needsInvoice') === 'true';
+    const storedFiscalDocumentType = getStorage('fiscalDocumentType') || '13';
     const storedFiscalName = getStorage('fiscalName') || '';
     const storedFiscalId = getStorage('fiscalId') || '';
-    const storedFiscalAddress = getStorage('fiscalAddress') || '';
     const { restaurantType } = JSON.parse(getStorage('restaurantData') || '{}');
     setRestaurantType(restaurantType);
 
@@ -67,10 +68,10 @@ export const ReceiveConfirmation = () => {
     setSms(storedSms);
     setWhatsapp(storedWhatsapp);
     setOrderName(storedOrderName);
-    setInvoiceType(storedInvoiceType);
+    setNeedsInvoice(storedNeedsInvoice);
+    setFiscalDocumentType(storedFiscalDocumentType);
     setFiscalName(storedFiscalName);
     setFiscalId(storedFiscalId);
-    setFiscalAddress(storedFiscalAddress);
     setIsWhatsappValid(storedWhatsapp ? true : false);
     setIsSmsValid(storedSms ? true : false);
 
@@ -156,12 +157,17 @@ export const ReceiveConfirmation = () => {
   const handleContinueClick = () => {
     if (orderName) setStorage('orderName', orderName);
     
-    // Store fiscal information
-    setStorage('invoiceType', invoiceType);
-    if (invoiceType === 'fiscal') {
+    // Store invoice information
+    setStorage('needsInvoice', needsInvoice.toString());
+    if (needsInvoice) {
+      setStorage('fiscalDocumentType', fiscalDocumentType);
       setStorage('fiscalName', fiscalName);
       setStorage('fiscalId', fiscalId);
-      setStorage('fiscalAddress', fiscalAddress);
+      // Determine invoice type based on document type
+      const invoiceType = fiscalDocumentType === '31' ? 'nit' : 'documento';
+      setStorage('invoiceType', invoiceType);
+    } else {
+      setStorage('invoiceType', 'simple');
     }
     
     if (
@@ -175,57 +181,105 @@ export const ReceiveConfirmation = () => {
     }
   };
 
-  const invoiceTypeOptions = [
-    { label: t('customer.simplifiedInvoice'), value: 'simplified' },
-    { label: t('customer.fiscalInvoice'), value: 'fiscal' },
-  ];
-
   return (
     <>
       <div className="pageHolder">
-        {/* Invoice Type Selection */}
         <div className="pb-4">
           <Heading className="pb-1" variant="h5" weight="semibold">
-            {t('customer.invoiceType')}
+            {t('customer.needInvoice') || '¿Necesitas factura con datos fiscales?'}
           </Heading>
           <Radio
-            name="invoice-type"
-            options={invoiceTypeOptions}
-            value={invoiceType}
-            onChange={(e) => setInvoiceType(e.target.value as 'simplified' | 'fiscal')}
+            name="needs-invoice"
+            options={[
+              { label: t('customer.yes') || 'Sí', value: 'yes' },
+              { label: t('customer.no') || 'No', value: 'no' },
+            ]}
+            value={needsInvoice ? 'yes' : 'no'}
+            onChange={(e) => {
+              const value = e.target.value === 'yes';
+              setNeedsInvoice(value);
+              if (!value) {
+                setFiscalName('');
+                setFiscalId('');
+                setFiscalDocumentType('13');
+              }
+            }}
           />
-          
-          {/* Fiscal Information Fields */}
-          {invoiceType === 'fiscal' && (
-            <div className="mt-4 space-y-3">
-              <TextField
-                label={t('customer.fiscalName')}
-                value={fiscalName}
-                onChange={(e) => setFiscalName(e.target.value)}
-                placeholder={t('customer.enterName')}
-                fullWidth
-                required
-              />
-              <TextField
-                label={t('customer.fiscalId')}
-                value={fiscalId}
-                onChange={(e) => setFiscalId(e.target.value)}
-                placeholder={t('customer.enterFiscalId')}
-                fullWidth
-                required
-              />
-              <TextField
-                label={t('customer.fiscalAddress')}
-                value={fiscalAddress}
-                onChange={(e) => setFiscalAddress(e.target.value)}
-                placeholder={t('customer.enterFiscalAddress')}
-                fullWidth
-              />
-            </div>
-          )}
         </div>
 
-        {/* Notification Preferences */}
+        {needsInvoice && (
+          <div className="pb-4">
+            <Heading className="pb-1" variant="h5" weight="semibold">
+              {t('customer.howDoYouIdentify') || '¿Cómo te identificas?'}
+            </Heading>
+            <Label className="pb-3 block" variant="subtitle2">
+              {t('customer.selectDocumentType') || 'Selecciona tu tipo de documento'}
+            </Label>
+            
+            <div className="mb-4">
+              <select
+                value={fiscalDocumentType}
+                onChange={(e) => {
+                  setFiscalDocumentType(e.target.value);
+                  setFiscalName('');
+                  setFiscalId('');
+                }}
+                className="w-full p-3 border rounded-lg text-base"
+                required
+              >
+                {documentTypes.map(type => (
+                  <option key={type.value} value={type.value}>
+                    {type.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {isCompany && (
+              <div className="space-y-3">
+                <TextField
+                  label={t('customer.businessName') || 'Razón Social'}
+                  value={fiscalName}
+                  onChange={(e) => setFiscalName(e.target.value)}
+                  placeholder="Mi Empresa S.A.S."
+                  fullWidth
+                  required
+                />
+                <TextField
+                  label="NIT"
+                  value={fiscalId}
+                  onChange={(e) => setFiscalId(e.target.value)}
+                  placeholder="901234567"
+                  fullWidth
+                  required
+                  helperText={t('customer.nitHelper') || 'Sin dígito de verificación'}
+                />
+              </div>
+            )}
+
+            {!isCompany && (
+              <div className="space-y-3">
+                <TextField
+                  label={t('customer.fullName') || 'Nombre Completo'}
+                  value={fiscalName}
+                  onChange={(e) => setFiscalName(e.target.value)}
+                  placeholder="Juan Pérez"
+                  fullWidth
+                  required
+                />
+                <TextField
+                  label={t('customer.documentNumber') || 'Número de Documento'}
+                  value={fiscalId}
+                  onChange={(e) => setFiscalId(e.target.value)}
+                  placeholder="123456789"
+                  fullWidth
+                  required
+                />
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="pb-4">
           <Heading className="pb-1" variant="h5" weight="semibold">
             {t('customer.receiveConfirmation')}
@@ -245,7 +299,6 @@ export const ReceiveConfirmation = () => {
           />
         </div>
 
-        {/* Order Name */}
         <div className="pt-4">
           <Heading className="pb-4" variant="h5" weight="semibold">
             {t('customer.identifyOrder')}

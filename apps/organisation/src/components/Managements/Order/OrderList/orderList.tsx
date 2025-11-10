@@ -37,6 +37,8 @@ export interface IOrder {
   status?: string;
   productItems?: any;
   edocNeedsVerification?: boolean;
+  edocStatus?: string;
+  edocErrorMessage?: string;
 }
 
 const transformData = (order: any): IOrder => ({
@@ -53,6 +55,8 @@ const transformData = (order: any): IOrder => ({
   invoiceUrl: order.invoiceUrl,
   paymentType: order.paymentType,
   edocNeedsVerification: order.edocNeedsVerification,
+  edocStatus: order.edocStatus,
+  edocErrorMessage: order.edocErrorMessage,
 });
 
 export const OrderList = ({ permissions }: { permissions?: string[] }) => {

@@ -88,6 +88,15 @@
     "sv": "Suédois",
     "fr": "Français"
   },
+  "documentTypes": {
+    "cedulaCiudadania": "Cédula de Ciudadanía",
+    "tarjetaExtranjeria": "Tarjeta de Extranjería",
+    "cedulaExtranjeria": "Cédula de Extranjería",
+    "pasaporte": "Passeport",
+    "documentoExtranjero": "Document Étranger",
+    "pep": "PEP (Permiso Especial)",
+    "ppt": "PPT (Permiso Protección Temporal)"
+  },
   "errors": {
     "invalidEmail": "E‑mail invalide",
     "requiredField": "Ce champ est obligatoire.",
@@ -511,13 +520,17 @@
     "progress": "Envoyer en cours",
     "markReady": "Marquer comme prêt",
     "completeOrder": "Terminer la commande",
-    "notPaidYet": "Cette commande n’est pas encore payée",
+    "notPaidYet": "Cette commande n'est pas encore payée",
     "cancelOrder": "Annuler la commande",
-    "sureToCancel": "Êtes-vous sûr de vouloir annuler cette commande ?",
-    "cannotBeUndone": "Cette action est irréversible !",
+    "sureToCancel": "Êtes-vous sûr de vouloir annuler cette commande ?",
+    "cannotBeUndone": "Cette action est irréversible !",
     "title": "Commandes",
     "exportOrders": "Exporter les commandes",
-    "exportOrdersReports": "Exporter le rapport des commandes"
+    "exportOrdersReports": "Exporter le rapport des commandes",
+    "verifying": "Vérification",
+    "invoiceVerificationPending": "Vérification de facture électronique en attente",
+    "invoiceError": "Erreur de Facture",
+    "invoiceErrorTooltip": "L'autorisation de facture électronique a échoué. Elle sera réessayée automatiquement."
   },
   "kitchen": {
     "combo": "Produits de la formule",
@@ -598,8 +611,18 @@
     "enterName": "Entrez votre nom",
     "fiscalId": "ID personnel / Numéro fiscal",
     "enterFiscalId": "Entrez votre ID personnel / numéro fiscal",
-    "fiscalAddress": "Adresse",
-    "enterFiscalAddress": "Entrez votre adresse",
+    "needInvoice": "Avez-vous besoin d'une facture avec détails fiscaux?",
+    "yes": "Oui",
+    "no": "Non",
+    "howDoYouIdentify": "Comment vous identifiez-vous?",
+    "selectDocumentType": "Sélectionnez votre type de document",
+    "fullName": "Nom complet",
+    "enterFullName": "Entrez le nom complet",
+    "documentType": "Type de document",
+    "documentNumber": "Numéro de document",
+    "businessName": "Raison sociale",
+    "enterBusinessName": "Entrez la raison sociale",
+    "nitHelper": "Sans chiffre de vérification",
     "success": {
       "order": "Commande réussie",
       "payment": "Paiement réussi",

@@ -182,11 +182,11 @@ export const Payment = () => {
       getStorage('selectedOptions') || '[]',
     ).filter((choice: string) => choice !== 'not');
 
-    // Get fiscal information
-    const invoiceType = getStorage('invoiceType') || 'simplified';
+    // Get fiscal information from localStorage
+    const invoiceType = getStorage('invoiceType') || 'simple';
     const fiscalName = getStorage('fiscalName') || '';
     const fiscalId = getStorage('fiscalId') || '';
-    const fiscalAddress = getStorage('fiscalAddress') || '';
+    const fiscalDocumentType = getStorage('fiscalDocumentType') || '';
 
     const orderData = {
       type: orderType,
@@ -208,11 +208,11 @@ export const Payment = () => {
       serviceTax: serviceCharge,
       name: orderName,
       totalTax: totalTax,
-      // Fiscal information for DIAN invoice
-      invoiceType: invoiceType,
+      // Fiscal information for DIAN invoice (Colombia)
+      invoiceType: invoiceType, // 'simple' | 'nit' | 'documento'
       fiscalName: fiscalName,
       fiscalId: fiscalId,
-      fiscalAddress: fiscalAddress,
+      fiscalDocumentType: fiscalDocumentType, // Document type code: '13', '21', '22', '31', '41', '42', '47', '48'
     };
 
     try {

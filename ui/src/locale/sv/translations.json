@@ -88,6 +88,15 @@
     "sv": "Svenska",
     "fr": "Franska"
   },
+  "documentTypes": {
+    "cedulaCiudadania": "Cédula de Ciudadanía",
+    "tarjetaExtranjeria": "Tarjeta de Extranjería",
+    "cedulaExtranjeria": "Cédula de Extranjería",
+    "pasaporte": "Pass",
+    "documentoExtranjero": "Utländskt Dokument",
+    "pep": "PEP (Permiso Especial)",
+    "ppt": "PPT (Permiso Protección Temporal)"
+  },
   "errors": {
     "invalidEmail": "Ogiltig e‑post",
     "requiredField": "Detta fält är obligatoriskt.",
@@ -516,7 +525,11 @@
     "cannotBeUndone": "Det här kan inte ångras!",
     "title": "Beställningar",
     "exportOrders": "Exportera beställningar",
-    "exportOrdersReports": "Exportera beställningsrapport"
+    "exportOrdersReports": "Exportera beställningsrapport",
+    "verifying": "Verifierar",
+    "invoiceVerificationPending": "Verifiering av elektronisk faktura pågår",
+    "invoiceError": "Fakturafel",
+    "invoiceErrorTooltip": "Auktorisering av elektronisk faktura misslyckades. Kommer att försöka igen automatiskt."
   },
   "kitchen": {
     "combo": "Komboprodukter",
@@ -597,8 +610,18 @@
     "enterName": "Ange ditt namn",
     "fiscalId": "Personnummer / Skatte-ID",
     "enterFiscalId": "Ange ditt personnummer / Skatte-ID",
-    "fiscalAddress": "Adress",
-    "enterFiscalAddress": "Ange din adress",
+    "needInvoice": "Behöver du faktura med skatteuppgifter?",
+    "yes": "Ja",
+    "no": "Nej",
+    "howDoYouIdentify": "Hur identifierar du dig?",
+    "selectDocumentType": "Välj din dokumenttyp",
+    "fullName": "Fullständigt namn",
+    "enterFullName": "Ange fullständigt namn",
+    "documentType": "Dokumenttyp",
+    "documentNumber": "Dokumentnummer",
+    "businessName": "Företagsnamn",
+    "enterBusinessName": "Ange företagsnamn",
+    "nitHelper": "Utan verifieringssiffra",
     "success": {
       "order": "Beställning lyckades",
       "payment": "Betalning lyckades",

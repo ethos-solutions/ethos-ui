@@ -21,6 +21,8 @@ export const ORDER_DETAILS_FRAGMENT = gql`
     createdAt
     invoiceUrl
     edocNeedsVerification
+    edocStatus
+    edocErrorMessage
     items {
       _id
       name

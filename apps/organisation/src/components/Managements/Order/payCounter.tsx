@@ -48,6 +48,8 @@ export interface IOrderDetails {
   statusHistory: IStatusHistory;
   paymentType?: string;
   status?: string;
+  edocStatus?: string;
+  edocErrorMessage?: string;
 }
 
 export const PayCounter = () => {

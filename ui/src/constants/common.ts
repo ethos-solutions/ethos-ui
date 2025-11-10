@@ -170,3 +170,15 @@ export const restaurantServiceFee = () => [
   { value: 'Percentage', label: i18n.t('account.preferenceTab.percentage') },
   { value: 'Value', label: i18n.t('account.preferenceTab.flatRatio') },
 ];
+
+// Colombian document types per DIAN
+export const getDocumentTypes = () => [
+  { value: '31', label: 'NIT - Solo Empresas', isCompany: true },
+  { value: '13', label: i18n.t('documentTypes.cedulaCiudadania'), isCompany: false },
+  { value: '21', label: i18n.t('documentTypes.tarjetaExtranjeria'), isCompany: false },
+  { value: '22', label: i18n.t('documentTypes.cedulaExtranjeria'), isCompany: false },
+  { value: '41', label: i18n.t('documentTypes.pasaporte'), isCompany: false },
+  { value: '42', label: i18n.t('documentTypes.documentoExtranjero'), isCompany: false },
+  { value: '47', label: i18n.t('documentTypes.pep'), isCompany: false },
+  { value: '48', label: i18n.t('documentTypes.ppt'), isCompany: false },
+];
