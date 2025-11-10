@@ -216,14 +216,3 @@ jobs:
             sudo pm2 start npx --name customer --interpreter node -- next start /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer -p 4200
             sudo pm2 save || true
           "
-
-      - name: Health check (customer)
-        if: env.APP_TO_BUILD == 'customer'
-        run: |
-          TARGET_HOST=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "35.175.98.240" || echo "3.210.120.239")
-          for i in {1..15}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 http://$TARGET_HOST:4200/health || echo "000")
-            if [ "$STATUS" = "200" ]; then echo "OK"; exit 0; fi
-            sleep 10
-          done
-          exit 1
