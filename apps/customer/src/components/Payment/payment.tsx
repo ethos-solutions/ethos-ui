@@ -281,7 +281,7 @@ export const Payment = () => {
     }
   }, [orderType, submitOrder]);
 
-  const handlePaymentSuccess = (paymentResult: any) => {
+  const handlePaymentSuccess = (paymentResult: unknown) => {
     console.log('Payment successful:', paymentResult);
     setStorage('orderNo', orderNumber);
     setStorage('paymentMethod', 'online');
@@ -301,7 +301,7 @@ export const Payment = () => {
     }
   };
 
-  const handlePaymentError = (error: any) => {
+  const handlePaymentError = (error: unknown) => {
     console.error('Payment failed:', error);
     toast.error('Payment failed. Please try again.');
     setShowPaymentBricks(false);
