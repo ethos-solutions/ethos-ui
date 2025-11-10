@@ -9,6 +9,7 @@ const nextConfig = {
   nx: {
     svgr: false,
   },
+  output: 'standalone',
   i18n: {
     locales: ['en-US', 'es', 'sv'],
     defaultLocale: 'en-US',

@@ -148,7 +148,10 @@ jobs:
               aws s3 sync dist/apps/organisation/ s3://$S3_BUCKET_NAME/artifacts/fe/latest/organisation/ --sse aws:kms --exclude "node_modules/*"
               ;;
             "customer")
-              tar -czf customer-runtime-${{ steps.version.outputs.version_sha }}.tgz -C dist/apps/customer .
+              # Create tarball with standalone output
+              cd dist/apps/customer
+              tar -czf ../../../customer-runtime-${{ steps.version.outputs.version_sha }}.tgz .next/standalone .next/static public
+              cd ../../..
               aws s3 cp customer-runtime-${{ steps.version.outputs.version_sha }}.tgz s3://$S3_BUCKET_NAME/${{ steps.version.outputs.artifact_path }}/customer-runtime.tgz --sse aws:kms
               aws s3 cp customer-runtime-${{ steps.version.outputs.version_sha }}.tgz s3://$S3_BUCKET_NAME/artifacts/customer/latest/customer-runtime.tgz --sse aws:kms
               rm -f customer-runtime-*.tgz
@@ -209,10 +212,16 @@ jobs:
             sudo mkdir -p /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer || true
             aws s3 cp s3://$S3_BUCKET_NAME/artifacts/customer/latest/customer-runtime.tgz /tmp/customer-runtime.tgz --sse aws:kms
             sudo tar -xzf /tmp/customer-runtime.tgz -C /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer
+            
+            # Copy static files to standalone server
+            sudo mkdir -p /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone/.next/static
+            sudo cp -r /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/static /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone/.next/
+            sudo cp -r /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/public /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone/
+            
             sudo chown -R www-data:www-data /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer || true
             echo '${{ needs.build.outputs.version_sha }}' | sudo tee /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/VERSION
-            cd /var/www/html/ethos-$TARGET_PREFIX
+            cd /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone
             sudo pm2 delete customer || true
-            sudo pm2 start npx --name customer --interpreter node -- next start /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer -p 4200
+            sudo PORT=4200 HOSTNAME=0.0.0.0 pm2 start node --name customer -- server.js
             sudo pm2 save || true
           "
