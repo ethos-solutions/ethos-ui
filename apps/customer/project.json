@@ -5,6 +5,12 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "type-check": {
+      "executor": "@nrwl/workspace:run-commands", 
+      "options": {
+        "command": "tsc -p apps/customer/tsconfig.json --noEmit"
+      }
+    },
     "build": {
       "executor": "@nx/next:build",
       "outputs": ["{options.outputPath}"],
