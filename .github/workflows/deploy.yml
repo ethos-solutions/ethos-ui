@@ -196,6 +196,44 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Deploy UI (Storybook)
+        if: env.APP_TO_BUILD == 'ui'
+        run: |
+          TARGET_HOST=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "35.175.98.240" || echo "3.210.120.239")
+          TARGET_PREFIX=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "stage" || echo "multi")
+
+          aws ssm get-parameter --name "ethos-fe" --query "Parameter.Value" --output text > /tmp/private_key.pem
+          chmod 400 /tmp/private_key.pem
+          
+          echo "📚 Syncing UI (Storybook) files to EC2..."
+          ssh -i /tmp/private_key.pem -p 7172 -o StrictHostKeyChecking=no ubuntu@$TARGET_HOST "
+            set -euo pipefail
+            sudo mkdir -p /var/www/html/ethos-$TARGET_PREFIX/dist/lib
+            aws s3 sync s3://$S3_BUCKET_NAME/artifacts/ui/latest/lib/ /var/www/html/ethos-$TARGET_PREFIX/dist/lib/ --exact-timestamps
+            sudo chown -R www-data:www-data /var/www/html/ethos-$TARGET_PREFIX/dist/lib || true
+            echo '${{ needs.build.outputs.version_sha }}' | sudo tee /var/www/html/ethos-$TARGET_PREFIX/dist/lib/VERSION
+          "
+          echo "✅ UI deployment completed"
+
+      - name: Deploy FE (Organisation)
+        if: env.APP_TO_BUILD == 'fe'
+        run: |
+          TARGET_HOST=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "35.175.98.240" || echo "3.210.120.239")
+          TARGET_PREFIX=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "stage" || echo "multi")
+
+          aws ssm get-parameter --name "ethos-fe" --query "Parameter.Value" --output text > /tmp/private_key.pem
+          chmod 400 /tmp/private_key.pem
+          
+          echo "🚀 Syncing FE (Organisation) files to EC2..."
+          ssh -i /tmp/private_key.pem -p 7172 -o StrictHostKeyChecking=no ubuntu@$TARGET_HOST "
+            set -euo pipefail
+            sudo mkdir -p /var/www/html/ethos-$TARGET_PREFIX/dist/apps/organisation
+            aws s3 sync s3://$S3_BUCKET_NAME/artifacts/fe/latest/organisation/ /var/www/html/ethos-$TARGET_PREFIX/dist/apps/organisation/ --exact-timestamps
+            sudo chown -R www-data:www-data /var/www/html/ethos-$TARGET_PREFIX/dist/apps/organisation || true
+            echo '${{ needs.build.outputs.version_sha }}' | sudo tee /var/www/html/ethos-$TARGET_PREFIX/dist/apps/organisation/VERSION
+          "
+          echo "✅ FE deployment completed"
+
       - name: Deploy CO to separate EC2 folder (production only)
         if: env.APP_TO_BUILD == 'co'
         run: |
