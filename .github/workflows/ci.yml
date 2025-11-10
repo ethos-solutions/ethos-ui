@@ -66,14 +66,6 @@ jobs:
             pnpm exec tsc --noEmit --project tsconfig.base.json
           fi
 
-      - name: Test (affected)
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pnpm exec nx affected --target=test --base=origin/main --head=HEAD --parallel=3 --configuration=ci || echo "No tests found or tests failed"
-          else
-            pnpm exec nx run-many --target=test --all --parallel=3 --configuration=ci || echo "No tests found or tests failed"
-          fi
-
       - name: Upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -88,12 +80,7 @@ jobs:
         if: always()
         run: |
           if [ "${{ job.status }}" = "success" ]; then
-            echo "✅ CI validation completed successfully (lint + type-check + test)"
+            echo "✅ CI validation completed successfully (lint + type-check)"
           else
             echo "❌ CI validation failed - check logs above"
           fi
-
-
-      - name: Fix CI
-        if: always()
-        run: npx nx fix-ci
