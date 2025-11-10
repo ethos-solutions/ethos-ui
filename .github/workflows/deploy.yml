@@ -163,6 +163,10 @@ jobs:
               ;;
           esac
 
+      - name: Nx Self-Healing CI (on failure)
+        if: failure()
+        run: npx nx fix-ci
+
   deploy:
     name: Deploy
     needs: build
