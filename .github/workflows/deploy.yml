@@ -198,7 +198,7 @@ jobs:
         if: env.APP_TO_BUILD == 'customer'
         run: |
           TARGET_HOST=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "35.175.98.240" || echo "3.210.120.239")
-          TARGET_PREFIX=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "stage" || echo "prod")
+          TARGET_PREFIX=$([[ "$BUILD_ENV" == "staging" || "$BUILD_ENV" == "stage" ]] && echo "stage" || echo "multi")
 
           aws ssm get-parameter --name "ethos-fe" --query "Parameter.Value" --output text > /tmp/private_key.pem
           chmod 400 /tmp/private_key.pem
