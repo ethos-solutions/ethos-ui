@@ -148,9 +148,20 @@ jobs:
               aws s3 sync dist/apps/organisation/ s3://$S3_BUCKET_NAME/artifacts/fe/latest/organisation/ --sse aws:kms --exclude "node_modules/*"
               ;;
             "customer")
-              # Create tarball with standalone output
+              # Copy package files needed for deployment
+              cp package.json dist/apps/customer/ || true
+              cp pnpm-lock.yaml dist/apps/customer/ || true
+              
+              # Package the entire .next directory (includes standalone), static, and public
               cd dist/apps/customer
-              tar -czf ../../../customer-runtime-${{ steps.version.outputs.version_sha }}.tgz .next/standalone .next/static public
+              if [ -d ".next/standalone" ]; then
+                echo "Standalone mode detected, packaging complete build..."
+                # Package everything: .next (with standalone), public, and package files
+                tar -czf ../../../customer-runtime-${{ steps.version.outputs.version_sha }}.tgz .next public package.json pnpm-lock.yaml
+              else
+                echo "No standalone output, packaging full build..."
+                tar -czf ../../../customer-runtime-${{ steps.version.outputs.version_sha }}.tgz .
+              fi
               cd ../../..
               aws s3 cp customer-runtime-${{ steps.version.outputs.version_sha }}.tgz s3://$S3_BUCKET_NAME/${{ steps.version.outputs.artifact_path }}/customer-runtime.tgz --sse aws:kms
               aws s3 cp customer-runtime-${{ steps.version.outputs.version_sha }}.tgz s3://$S3_BUCKET_NAME/artifacts/customer/latest/customer-runtime.tgz --sse aws:kms
@@ -212,16 +223,42 @@ jobs:
             sudo mkdir -p /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer || true
             aws s3 cp s3://$S3_BUCKET_NAME/artifacts/customer/latest/customer-runtime.tgz /tmp/customer-runtime.tgz --sse aws:kms
             sudo tar -xzf /tmp/customer-runtime.tgz -C /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer
+            rm /tmp/customer-runtime.tgz
             
-            # Copy static files to standalone server
-            sudo mkdir -p /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone/.next/static
-            sudo cp -r /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/static /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone/.next/
-            sudo cp -r /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/public /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone/
-            
-            sudo chown -R www-data:www-data /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer || true
-            echo '${{ needs.build.outputs.version_sha }}' | sudo tee /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/VERSION
-            cd /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone
-            sudo pm2 delete customer || true
-            sudo PORT=4200 HOSTNAME=0.0.0.0 pm2 start node --name customer -- server.js
+            # Check if standalone mode is available
+            if [ -f /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone/apps/customer/server.js ]; then
+              echo 'Deploying with standalone mode...'
+              
+              # Copy static assets to the correct location within standalone
+              sudo cp -r /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/static \
+                /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone/apps/customer/.next/
+              
+              # Copy public folder to standalone app directory
+              sudo cp -r /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/public \
+                /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone/apps/customer/
+              
+              sudo chown -R www-data:www-data /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer || true
+              echo '${{ needs.build.outputs.version_sha }}' | sudo tee /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/VERSION
+              
+              # Start from the NX monorepo app directory
+              cd /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/.next/standalone/apps/customer
+              sudo pm2 delete customer || true
+              sudo PORT=4200 HOSTNAME=0.0.0.0 pm2 start node --name customer -- server.js
+            else
+              echo 'No standalone mode, installing dependencies and using regular Next.js server...'
+              
+              # Install pnpm if not exists
+              command -v pnpm >/dev/null 2>&1 || sudo npm install -g pnpm@8
+              
+              # Install only production dependencies
+              cd /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer
+              sudo pnpm install --prod --frozen-lockfile || sudo pnpm install --prod
+              
+              sudo chown -R www-data:www-data /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer || true
+              echo '${{ needs.build.outputs.version_sha }}' | sudo tee /var/www/html/ethos-$TARGET_PREFIX/dist/apps/customer/VERSION
+              
+              sudo pm2 delete customer || true
+              sudo PORT=4200 pm2 start npx --name customer -- next start -p 4200
+            fi
             sudo pm2 save || true
           "
