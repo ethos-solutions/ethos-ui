@@ -281,13 +281,13 @@ export const Payment = () => {
     }
   }, [orderType, submitOrder]);
 
-  const handlePaymentSuccess = (paymentResult: unknown) => {
+  const handlePaymentSuccess = (paymentResult: { isPending?: boolean; status?: string }) => {
     console.log('Payment successful:', paymentResult);
     setStorage('orderNo', orderNumber);
     setStorage('paymentMethod', 'online');
     
     // Check if payment is pending review
-    if (paymentResult.isPending || paymentResult.status === 'pending' || paymentResult.status === 'in_process') {
+    if (paymentResult?.isPending || paymentResult?.status === 'pending' || paymentResult.status === 'in_process') {
       // Payment is being reviewed - show pending status
       setStorage('order-payment', 'pending');
       setStorage('payment-status', 'pending');
