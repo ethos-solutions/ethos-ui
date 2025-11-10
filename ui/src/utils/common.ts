@@ -126,11 +126,18 @@ export const isCustomerTokenExpired = (): boolean => {
 };
 
 export const handleCustomerExpiredToken = () => {
+  if (typeof window === 'undefined') return;
+  
   const orgId = getStorage('orgId');
   window.location.href = `/${orgId}`;
 };
 
 export const generateSessionKey = () => {
+  if (typeof window === 'undefined' || typeof window.crypto === 'undefined') {
+    // Fallback for SSR - generate a simple random string
+    return Math.random().toString(36).substring(2) + Date.now().toString(36);
+  }
+  
   const array = new Uint8Array(256);
   window.crypto.getRandomValues(array);
   return Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join(
@@ -165,8 +172,10 @@ export const setStorage = (name: string, value: string) => {
   if (typeof window !== 'undefined') {
     const encryptedValue = encryptData(value);
     sessionStorage.setItem(name, encryptedValue as string);
-    const event = new Event('storageUpdate');
-    window.dispatchEvent(event);
+    if (typeof window !== 'undefined' && typeof Event !== 'undefined') {
+      const event = new Event('storageUpdate');
+      window.dispatchEvent(event);
+    }
   }
   return null;
 };
@@ -180,7 +189,10 @@ export const getStorage = (name: string) => {
 };
 
 export const removeStorage = (name: string) => {
-  return sessionStorage.removeItem(name);
+  if (typeof window !== 'undefined' && typeof sessionStorage !== 'undefined') {
+    return sessionStorage.removeItem(name);
+  }
+  return null;
 };
 
 export const useIsMobile = () => {

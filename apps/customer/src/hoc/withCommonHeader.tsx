@@ -26,19 +26,27 @@ const withCommonHeader = <P extends object>(
     const [footerAvailable, setFooterAvailable] = useState(false);
 
     useEffect(() => {
-      const { logo } = JSON.parse(getStorage('restaurantData') || '{}');
-      setLogo(logo);
-    }, []);
-
-    useEffect(() => {
-      if (document.querySelector(`.${footerClass}`)) {
-        setFooterAvailable(true);
-      } else {
-        setFooterAvailable(false);
+      if (typeof window !== 'undefined') {
+        const { logo } = JSON.parse(getStorage('restaurantData') || '{}');
+        setLogo(logo);
       }
     }, []);
 
     useEffect(() => {
+      if (typeof document !== 'undefined') {
+        if (document.querySelector(`.${footerClass}`)) {
+          setFooterAvailable(true);
+        } else {
+          setFooterAvailable(false);
+        }
+      }
+    }, []);
+
+    useEffect(() => {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
+      
       const setDynamicHeight = () => {
         const elements = document.querySelectorAll('.sticky-footer');
         elements.forEach((element) => {

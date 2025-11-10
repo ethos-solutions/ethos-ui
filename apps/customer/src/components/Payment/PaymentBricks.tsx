@@ -38,6 +38,10 @@ export const PaymentBricks: React.FC<PaymentBricksProps> = ({
 
   // Load Mercado Pago SDK from CDN
   useEffect(() => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+    
     const loadMercadoPagoSDK = () => {
       if (window.MercadoPago) {
         setMpLoaded(true);
@@ -92,6 +96,10 @@ export const PaymentBricks: React.FC<PaymentBricksProps> = ({
 
   const initializePaymentBrick = async () => {
     try {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
+      
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       if (!window.MercadoPago) {

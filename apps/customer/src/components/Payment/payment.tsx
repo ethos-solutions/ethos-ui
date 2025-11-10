@@ -52,6 +52,8 @@ export const Payment = () => {
   const hasSubmittedRef = useRef(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const paymentStatus = getStorage('order-payment');
     if (paymentStatus === 'success') {
       setOpen(false);

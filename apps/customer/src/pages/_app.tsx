@@ -52,6 +52,10 @@ function CustomApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const updateThemeFromSession = async () => {
+      if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return;
+      }
+      
       const { colorCode: defaultColor } = JSON.parse(
         getStorage('restaurantData') || '{}',
       );
@@ -75,10 +79,13 @@ function CustomApp({ Component, pageProps }: AppProps) {
     };
 
     updateThemeFromSession();
-    window.addEventListener('storageUpdate', updateThemeFromSession);
-    return () => {
-      window.removeEventListener('storageUpdate', updateThemeFromSession);
-    };
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storageUpdate', updateThemeFromSession);
+      return () => {
+        window.removeEventListener('storageUpdate', updateThemeFromSession);
+      };
+    }
   }, [colorCode]);
 
   const theme = createTheme({

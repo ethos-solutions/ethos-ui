@@ -34,6 +34,7 @@ export const OrderDetails = () => {
   const [addTipAmount, setAddTipAmount] = useState(0);
   const [confirmationModal, setConfimationModal] = useState(false);
   const [invoiceChoice, setInvoiceChoice] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   useEffect(() => {
     const { taxMode, serviceFee, tips } = JSON.parse(
@@ -47,6 +48,7 @@ export const OrderDetails = () => {
     setSelectedTip(getStorage('selectedTip') || '');
     setSelectedTipValue(getStorage('selectedTipValue') || '');
     const selectedOptions = JSON.parse(getStorage('selectedOptions') || '[]');
+    setSelectedOptions(selectedOptions);
 
     setInvoiceChoice(
       selectedOptions.some(
@@ -277,10 +279,6 @@ export const OrderDetails = () => {
         <>
           <Paragraph variant="subtitle1" weight="medium" className="pb-2">
             {(() => {
-              const selectedOptions = JSON.parse(
-                getStorage('selectedOptions') || '[]',
-              );
-
               if (selectedOptions.includes('not')) {
                 return t('customer.notSelectedAnything');
               }
@@ -296,10 +294,6 @@ export const OrderDetails = () => {
           </Paragraph>
           <Paragraph variant="subtitle1" weight="medium">
             {(() => {
-              const selectedOptions = JSON.parse(
-                getStorage('selectedOptions') || '[]',
-              );
-
               if (selectedOptions.includes('not')) {
                 return t('customer.receiveReceiptQuestion');
               }

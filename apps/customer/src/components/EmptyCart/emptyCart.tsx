@@ -1,10 +1,12 @@
 import React from 'react';
-import Lottie from 'react-lottie';
+import dynamic from 'next/dynamic';
 import EmptyCartIcon from '../../assets/empty-cart.json';
 import styles from './emptyCart.module.scss';
 import { Label, PrimaryButton } from '@ethos-frontend/ui';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
+
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 
 export const EmptyCart = () => {
   const router = useRouter();

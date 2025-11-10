@@ -2,6 +2,10 @@ import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 
 export const handleJwtExpiration = (token: string | null): boolean => {
+  if (typeof window === 'undefined') {
+    return true; // During SSR, assume token is valid
+  }
+
   let isTokenValid = true;
 
   if (token) {

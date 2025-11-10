@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import styles from './homepage.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'react-toastify';
-import Lottie from 'react-lottie';
+import dynamic from 'next/dynamic';
 import {
   Heading,
   Iconbutton,
@@ -27,9 +27,10 @@ import { TableNumberModal } from './tableNumberModal';
 import { ORDER_TYPE, LANGUAGE_TYPE } from '../../constant';
 import Dinein from '../../assets/dinein.json';
 import Takeaway from '../../assets/takeaway.json';
-import { t } from 'i18next';
 import { clearSessionStorageExcept } from '../../utils';
 import { LanguageSwitcher } from './LanguageSwitcher';
+
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 
 interface IRestaurant {
   order_type: ORDER_TYPE[];
@@ -42,14 +43,10 @@ interface IRestaurant {
   businessType: string;
 }
 
-const validationSchema = Yup.object().shape({
-  tableNumber: Yup.string().required(t('errors.requiredField')),
-});
-
 export const HomePage = () => {
   const router = useRouter();
   const isMobile = useIsMobile();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const clearedOnce = useRef(false);
   const [open, setOpen] = useState(false);
   const [restaurantId, setRestaurantId] = useState<string | null>(null);
@@ -58,6 +55,14 @@ export const HomePage = () => {
   const [selectedOrderType, setSelectedOrderType] = useState<ORDER_TYPE>();
   const [restaurant, setRestaurant] = useState<IRestaurant | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const validationSchema = useMemo(
+    () =>
+      Yup.object().shape({
+        tableNumber: Yup.string().required(t('errors.requiredField')),
+      }),
+    [t]
+  );
 
   const handleClose = useCallback(() => setOpen(false), []);
 

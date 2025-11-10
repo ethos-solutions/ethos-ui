@@ -115,6 +115,8 @@ export function ProductList() {
   );
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const updateHeight = () => {
       const offsetTop = ref.current?.offsetTop || 0;
       const counterHeight = counterRef.current

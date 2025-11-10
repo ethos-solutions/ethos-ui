@@ -65,6 +65,8 @@ export const PaymentConfirmation = () => {
   );
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const homepageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${org}`;
     window.history.replaceState(null, '', homepageUrl);
     const handleBackButton = () => {

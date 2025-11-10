@@ -16,7 +16,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const [cart, setCart] = useState<IProductList[]>([]);
 
   useEffect(() => {
-    setCart(getCart());
+    if (typeof window !== 'undefined') {
+      setCart(getCart());
+    }
   }, []);
   
   const updateCart = (data: IProductList, newCount: number) => {

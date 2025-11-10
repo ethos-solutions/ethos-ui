@@ -19,6 +19,10 @@ export const getAuthHeaders = (): Record<string, string> => {
 export const getLangHeader = (
   moduleLanguage: Record<string, string>,
 ): string => {
+  if (typeof window === 'undefined') {
+    return 'en-US';
+  }
+  
   const pathSegments = window.location.pathname.split('/').filter(Boolean);
   const baseRoute = `/${pathSegments[0]}`;
   return moduleLanguage[baseRoute] || localStorage.getItem('i18nextLng') || 'en-US';

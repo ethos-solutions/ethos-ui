@@ -110,6 +110,10 @@ export const extrasRadioChangeHandler = (
 };
 
 export const clearSessionStorageExcept = (keysToKeep: string[]) => {
+  if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') {
+    return;
+  }
+  
   const preserved: Record<string,string> = {};
   keysToKeep.forEach((key) => {
     const val = sessionStorage.getItem(key);
