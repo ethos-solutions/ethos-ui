@@ -110,6 +110,7 @@ jobs:
               echo "NEXT_PUBLIC_API_GRAPH_URL=$(aws ssm get-parameter --name 'NEXT_PUBLIC_API_GRAPH_URL' --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
             fi
             echo "NEXT_PUBLIC_STRIPE_KEY=$(aws ssm get-parameter --name 'NEXT_PUBLIC_STRIPE_KEY' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_MP_PUBLIC_KEY=$(aws ssm get-parameter --name 'NEXT_PUBLIC_MP_PUBLIC_KEY' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
             echo "NEXT_PUBLIC_FIREBASE_VAPID_TOKEN=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_VAPID_TOKEN' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
             echo "NEXT_PUBLIC_FIREBASE_APP_API_KEY=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_APP_API_KEY' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
             echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$(aws ssm get-parameter --name 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN' --with-decryption --query 'Parameter.Value' --output text)" >> $GITHUB_ENV
